@@ -39,7 +39,7 @@ public class FileAreaServiceImpl implements FileAreaService {
 	public int insert(FileArea fileArea) {
 		int result = fileAreaMapper.insert(fileArea);
 		if(result > 0){
-			sendMessageService.sendMessage(fileArea.format("add"));
+			sendMessageService.onlySendMessage(fileArea.format("add"));
 		}
 		return result;
 	}
@@ -53,7 +53,7 @@ public class FileAreaServiceImpl implements FileAreaService {
 	public int update(FileArea fileArea) {
 		int result = fileAreaMapper.update(fileArea);
 		if(result > 0){
-			sendMessageService.sendMessage(fileArea.format("mod"));
+			sendMessageService.onlySendMessage(fileArea.format("mod"));
 		}
 		return result;
 	}
@@ -62,20 +62,18 @@ public class FileAreaServiceImpl implements FileAreaService {
 	public int detele(int id) {
 		int result = fileAreaMapper.delete(id);
 		if(result > 0){
-			sendMessageService.sendMessage("{\"opt\":\"rmv\",\"tbl_name\":\"tbl_file_area\",\"value\":{\"area_id\":" + id + "}}");
+			sendMessageService.onlySendMessage("{\"opt\":\"rmv\",\"tbl_name\":\"tbl_file_area\",\"value\":{\"area_id\":" + id + "}}");
 		}
 		return result;
 	}
 
 	@Override
 	public int countBySysId(int sys_id) {
-		// TODO Auto-generated method stub
 		return fileAreaMapper.countBySysId(sys_id);
 	}
 
 	@Override
 	public int countBySysIdExcept(int sys_id, int id) {
-		// TODO Auto-generated method stub
 		return fileAreaMapper.countBySysIdExcept(sys_id,id);
 	}
 

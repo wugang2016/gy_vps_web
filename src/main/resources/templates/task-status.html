@@ -39,13 +39,20 @@
                 <li><a href="{{ctx.contextPath}}/sub_system/list">分主控系统配置</a></li>
                 <li><a href="{{ctx.contextPath}}/file_area/list">文件切割及播放</a></li>
                 <li><a href="{{ctx.contextPath}}/realtime_area/list">PAD实时流配置</a></li>
-                <li class="active"><a href="#">任务状态</a></li>
+                <li class="active"><a href="{{ctx.contextPath}}/status/task">任务状态</a></li>
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <div class="page-header">
                 <h1>
-                    任务 <small>{{#task}}task-{{taskId}}{{/task}}</small>
+                    当前任务 
+                    <small>
+                    	<select name="taskMap" class="form-control">
+                    		{{#lastTasks}}
+                    			<option value="{{taskId}}">{{name}}-[{{#startTime}}{{startTime}}{{/startTime}}]</option>
+                    		{{/lastTasks}}
+                    	</select>
+                    </small>
                 </h1>
                 {{#task}}
                 <div class="panel panel-info">
@@ -64,7 +71,7 @@
                 <div class="panel panel-danger">
                     <div class="panel-heading">任务状态</div>
                     <div class="panel-body">
-                        任务不存在或已被清理
+                        无任务存在或已被清理
                     </div>
                 </div>
                 {{/task}}
@@ -75,6 +82,12 @@
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.js"></script>
 <script>
+$(function(){
+	{{#task}}$('select[name="taskMap"]').val('{{taskId}}');{{/task}}
+})
+$('select[name="taskMap"]').change(function(){
+	window.location.href="{{ctx.contextPath}}/status/task/"+$(this).val();
+})
 </script>
 </body>
 </html>

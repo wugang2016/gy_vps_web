@@ -17,6 +17,7 @@
 package com.bj.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.collections4.map.LRUMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -178,13 +180,18 @@ public class FileAreaController {
     	}
         if (!file.isEmpty()) {
         	String command = "{\"opt\":\"start_file_task\",\"filename\":\""+ file.getOriginalFilename() + "\"}";
-        	SendMessageJob task = sendCommandService.sendMessage(command, file, true);
+        	SendMessageJob task = sendCommandService.sendMessage("切割文件上传及通知("+file.getOriginalFilename()+")", command, file, true);
             return "redirect:/status/task/" + task.getTaskId();
         }else{
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "文件不能为空！");
         }
         return "redirect:/file_area/list";
+    }
+    
+    @GetMapping("/status/task")
+    public String getStatus(){
+        return "redirect:/status/task/0-0-0-0-0";
     }
 
     @GetMapping("/status/task/{taskId}")
@@ -194,6 +201,16 @@ public class FileAreaController {
         response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
         response.setHeader("Expires", "0");
         response.setHeader("Pragma", "no-cache");
+        List<AdminStatusTask> lastTasks  = new ArrayList<AdminStatusTask>();
+        LRUMap<UUID, AdminStatusTask> taskMap = sendCommandService.getTaskMap();
+        for(AdminStatusTask task:taskMap.values()){
+        	lastTasks.add(task);
+        }
+        model.put("lastTasks", lastTasks);
+        if("00000000-0000-0000-0000-000000000000".equals(taskId.toString())
+        		&& lastTasks.size() > 0){
+        	taskId = lastTasks.get(lastTasks.size()-1).getTaskId();
+        }
 
 	    AdminStatusTask task = sendCommandService.getAdminStatusTask(taskId);
         model.put("task", task);

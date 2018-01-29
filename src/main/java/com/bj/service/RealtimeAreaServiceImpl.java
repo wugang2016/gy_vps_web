@@ -39,7 +39,7 @@ public class RealtimeAreaServiceImpl implements RealtimeAreaService {
 	public int insert(RealtimeArea realtimeArea) {
 		int result = realtimeAreaMapper.insert(realtimeArea);
 		if(result > 0){
-			sendMessageService.sendMessage(realtimeArea.format("add"));
+			sendMessageService.onlySendMessage(realtimeArea.format("add"));
 		}
 		return result;
 	}
@@ -53,7 +53,7 @@ public class RealtimeAreaServiceImpl implements RealtimeAreaService {
 	public int update(RealtimeArea realtimeArea) {
 		int result = realtimeAreaMapper.update(realtimeArea);
 		if(result > 0){
-			sendMessageService.sendMessage(realtimeArea.format("mod"));
+			sendMessageService.onlySendMessage(realtimeArea.format("mod"));
 		}
 		return result;
 	}
@@ -62,20 +62,18 @@ public class RealtimeAreaServiceImpl implements RealtimeAreaService {
 	public int detele(int id) {
 		int result = realtimeAreaMapper.delete(id);
 		if(result > 0){
-			sendMessageService.sendMessage("{\"opt\":\"rmv\",\"tbl_name\":\"tbl_realtime_area\",\"value\":{\"area_id\":" + id + "}}");
+			sendMessageService.onlySendMessage("{\"opt\":\"rmv\",\"tbl_name\":\"tbl_realtime_area\",\"value\":{\"area_id\":" + id + "}}");
 		}
 		return result;
 	}
 
 	@Override
 	public int countBySysId(int sys_id) {
-		// TODO Auto-generated method stub
 		return realtimeAreaMapper.countBySysId(sys_id);
 	}
 
 	@Override
 	public int countBySysIdExcept(int sys_id, int id) {
-		// TODO Auto-generated method stub
 		return realtimeAreaMapper.countBySysIdExcept(sys_id,id);
 	}
 

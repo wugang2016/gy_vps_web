@@ -42,24 +42,32 @@ public class SendMessageServiceImpl implements SendMessageService {
     private String uploadFileDir;
 
     @Override
-    public SendMessageJob sendMessage(String message, MultipartFile file, boolean isQuery){
-    	SendMessageJob job = new SendMessageJob("上传文件"+UUID.randomUUID(), message, uploadFileDir, file, ip, port, isQuery);
+    public SendMessageJob sendMessage(String name, String message, MultipartFile file, boolean isQuery){
+    	SendMessageJob job = new SendMessageJob(name, message, uploadFileDir, file, ip, port, isQuery);
         lastStatusJobs.put(job.getTaskId(), job);
         statusExecutor.submit(job);
         return job;
     }
 
     @Override
-    public SendMessageJob sendMessage(String message, MultipartFile file){
-    	SendMessageJob job = new SendMessageJob("上传文件"+UUID.randomUUID(), message, uploadFileDir, file, ip, port, false);
+    public SendMessageJob sendMessage(String name, String message, MultipartFile file){
+    	SendMessageJob job = new SendMessageJob(name, message, uploadFileDir, file, ip, port, false);
         lastStatusJobs.put(job.getTaskId(), job);
         statusExecutor.submit(job);
         return job;
     }
 
     @Override
-    public SendMessageJob sendMessage(String message){
-    	SendMessageJob job = new SendMessageJob("发送消息"+UUID.randomUUID(), message, ip, port);
+    public SendMessageJob sendMessage(String name, String message){
+    	SendMessageJob job = new SendMessageJob(name, message, ip, port);
+        lastStatusJobs.put(job.getTaskId(), job);
+        statusExecutor.submit(job);
+        return job;
+    }
+
+    @Override
+    public SendMessageJob onlySendMessage(String message){
+    	SendMessageJob job = new SendMessageJob("SEND", message, ip, port);
         lastStatusJobs.put(job.getTaskId(), job);
         statusExecutor.submit(job);
         return job;
@@ -69,4 +77,9 @@ public class SendMessageServiceImpl implements SendMessageService {
     public AdminStatusTask getAdminStatusTask(UUID taskId) {
         return lastStatusJobs.get(taskId);
     }
+
+	@Override
+	public LRUMap<UUID, AdminStatusTask> getTaskMap() {
+		return lastStatusJobs;
+	}
 }

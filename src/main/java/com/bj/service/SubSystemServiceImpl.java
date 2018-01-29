@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.bj.dao.mapper.SubSystemMapper;
-import com.bj.job.SendMessageJob;
 import com.bj.pojo.SubSystemInfo;
 
 /**
@@ -44,7 +43,7 @@ public class SubSystemServiceImpl implements SubSystemService {
 	public int insert(SubSystemInfo subSystemInfo) {
 		int result = subSystemInfoMapper.insert(subSystemInfo);
 		if(result > 0){
-			sendMessageService.sendMessage(subSystemInfo.format("add"));
+			sendMessageService.onlySendMessage(subSystemInfo.format("add"));
 		}
 		return result;
 	}
@@ -58,7 +57,7 @@ public class SubSystemServiceImpl implements SubSystemService {
 	public int update(SubSystemInfo subSystemInfo) {
 		int result = subSystemInfoMapper.update(subSystemInfo);
 		if(result > 0){
-			sendMessageService.sendMessage(subSystemInfo.format("mod"));
+			sendMessageService.onlySendMessage(subSystemInfo.format("mod"));
 		}
 		return result;
 	}
@@ -67,7 +66,7 @@ public class SubSystemServiceImpl implements SubSystemService {
 	public int detele(int id) {
 		int result = subSystemInfoMapper.delete(id);
 		if(result > 0){
-			sendMessageService.sendMessage("{\"opt\":\"rmv\",\"tbl_name\":\"tbl_sub_sys_info\",\"value\":{\"sub_sys_id\":" + id + "}}");
+			sendMessageService.onlySendMessage("{\"opt\":\"rmv\",\"tbl_name\":\"tbl_sub_sys_info\",\"value\":{\"sub_sys_id\":" + id + "}}");
 		}
 		return result;
 	}
@@ -79,7 +78,6 @@ public class SubSystemServiceImpl implements SubSystemService {
 
 	@Override
 	public int countByIpExcept(String ip, int id) {
-		// TODO Auto-generated method stub
 		return subSystemInfoMapper.countByIpExcept(ip,id);
 	}
 }
