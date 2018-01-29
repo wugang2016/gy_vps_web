@@ -68,7 +68,6 @@ public class SendMessageServiceImpl implements SendMessageService {
     @Override
     public SendMessageJob onlySendMessage(String message){
     	SendMessageJob job = new SendMessageJob("SEND", message, ip, port);
-        lastStatusJobs.put(job.getTaskId(), job);
         statusExecutor.submit(job);
         return job;
     }
