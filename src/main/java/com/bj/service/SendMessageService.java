@@ -3,6 +3,7 @@
  */
 package com.bj.service;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import org.apache.commons.collections4.map.LRUMap;
@@ -16,8 +17,8 @@ import com.bj.job.SendMessageJob;
  *
  */
 public interface SendMessageService {
-	SendMessageJob sendMessage(String name,String message,MultipartFile file, boolean isQuery);
-	SendMessageJob sendMessage(String name,String message,MultipartFile file);
+	SendMessageJob sendMessage(String name,String message,MultipartFile file, boolean isQuery) throws IOException;
+	SendMessageJob sendMessage(String name,String message,MultipartFile file) throws IOException;
 	SendMessageJob sendMessage(String name,String message);
 	SendMessageJob onlySendMessage(String message);
 	AdminStatusTask getAdminStatusTask(UUID taskId);

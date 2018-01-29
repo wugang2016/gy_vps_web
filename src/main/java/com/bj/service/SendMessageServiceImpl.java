@@ -3,6 +3,7 @@
  */
 package com.bj.service;
 
+import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bj.job.AdminStatusTask;
 import com.bj.job.SendMessageJob;
+import com.bj.util.FileUtil;
 
 /**
  * @author LQK
@@ -42,16 +44,18 @@ public class SendMessageServiceImpl implements SendMessageService {
     private String uploadFileDir;
 
     @Override
-    public SendMessageJob sendMessage(String name, String message, MultipartFile file, boolean isQuery){
-    	SendMessageJob job = new SendMessageJob(name, message, uploadFileDir, file, ip, port, isQuery);
+    public SendMessageJob sendMessage(String name, String message, MultipartFile file, boolean isQuery) throws IOException{
+    	FileUtil.doSaveFile(uploadFileDir, file);
+    	SendMessageJob job = new SendMessageJob(name, message, ip, port, isQuery, true);
         lastStatusJobs.put(job.getTaskId(), job);
         statusExecutor.submit(job);
         return job;
     }
 
     @Override
-    public SendMessageJob sendMessage(String name, String message, MultipartFile file){
-    	SendMessageJob job = new SendMessageJob(name, message, uploadFileDir, file, ip, port, false);
+    public SendMessageJob sendMessage(String name, String message, MultipartFile file) throws IOException{
+    	FileUtil.doSaveFile(uploadFileDir, file);
+    	SendMessageJob job = new SendMessageJob(name, message, ip, port, false, true);
         lastStatusJobs.put(job.getTaskId(), job);
         statusExecutor.submit(job);
         return job;

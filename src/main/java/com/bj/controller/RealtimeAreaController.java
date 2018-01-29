@@ -166,6 +166,7 @@ public class RealtimeAreaController {
             Map<String, Object> model,
             final RedirectAttributes redirectAttributes) throws IOException {
         if (!file.isEmpty()) {
+        	LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>file size={}", file.getSize());
         	SendMessageJob task = sendCommandService.sendMessage("上传PAD背景图案("+file.getOriginalFilename()+")", null, file);
             return "redirect:/status/task/" + task.getTaskId();
         }else{
