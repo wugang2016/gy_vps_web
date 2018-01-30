@@ -20,5 +20,4 @@ public interface SubSystemService {
 	int update(SubSystemInfo subSystemInfo);
 	int detele(int id);
 	SubSystemInfo findById(int id);
-	
 }

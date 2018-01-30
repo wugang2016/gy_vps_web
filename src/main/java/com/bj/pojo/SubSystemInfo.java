@@ -28,7 +28,7 @@ public class SubSystemInfo {
 	@NotNull(message = "端口不能为空")
 	@Range(min=1, max=65656, message = "端口范围是1-65536")
 	private Integer port;
-	@NotBlank(message = "挂载地址不能为空")
+	//@NotBlank(message = "挂载地址不能为空")
 	private String mntPath;
 	@NotEmpty(message = "盒子IP不能为空")
 	@Pattern(regexp="^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$", message = "IP地址非法") 
@@ -57,6 +57,7 @@ public class SubSystemInfo {
 	}
 	public void setIp(String ip) {
 		this.ip = ip;
+		this.mntPath = "/mnt/"+ip;
 	}
 	public Integer getPort() {
 		return port;
