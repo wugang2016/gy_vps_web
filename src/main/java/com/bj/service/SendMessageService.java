@@ -17,7 +17,7 @@ import com.bj.job.SendMessageJob;
  *
  */
 public interface SendMessageService {
-	SendMessageJob sendMessage(String name,String message,MultipartFile file, boolean isQuery) throws IOException;
+	SendMessageJob sendMessage(String name,String message,MultipartFile file,String newFileName,boolean isQuery) throws IOException;
 	SendMessageJob sendMessage(String name,String message,MultipartFile file) throws IOException;
 	SendMessageJob sendMessage(String name,String message);
 	SendMessageJob onlySendMessage(String message);

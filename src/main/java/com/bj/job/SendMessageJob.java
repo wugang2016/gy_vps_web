@@ -8,8 +8,13 @@ import java.net.SocketException;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.tomcat.jdbc.pool.interceptor.SlowQueryReport.QueryStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.bj.pojo.QueryResult;
+
+import net.sf.json.JSONObject;
 
 public class SendMessageJob implements AdminStatusTask, Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(SendMessageJob.class);
@@ -51,7 +56,7 @@ public class SendMessageJob implements AdminStatusTask, Runnable {
     public void run() {
         this.status = "初始化";
         this.startTime = new Date();
-        LOGGER.info("Task:{} 任务开始执行 -", this.taskId, this.name);
+        LOGGER.info("Task:{} 任务开始执行 -{}", this.taskId, this.name);
         
         String uploadStatus = "";
         String sendStatus = "";
@@ -77,16 +82,17 @@ public class SendMessageJob implements AdminStatusTask, Runnable {
             	String _message = "{\"opt\":\"query_task_status\",\"task_id\":0}";
             	for(int i=0; i<300; i++){
             		Thread.sleep(1000);
-            		String result = udpSend(_message);
-            		if(result != null){
-            			//2:成功完成 1：进行中 3： 失败
-            			if(result.indexOf("\"status\" : 2") != -1){
+            		String json = udpSend(_message);
+            		if(json != null){
+            			JSONObject obj = JSONObject.fromObject(json);
+            			QueryResult result = (QueryResult)JSONObject.toBean(obj, QueryResult.class);
+            			if(result.getStatus() == 0){
             				this.status = uploadStatus + sendStatus + "查询状态完成...[成功]";
                             break;
-            			}else if(result.indexOf("\"status\" : 1") != -1){
+            			}else if(result.getStatus() == 1){
                             this.status = uploadStatus + sendStatus + "查询状态中...[进行中]";
-            			}else if(result.indexOf("\"status\" : 3") != -1){
-            				this.status = uploadStatus + sendStatus + "查询状态完成...[失败]";
+            			}else if(result.getStatus() == 2){
+            				this.status = uploadStatus + sendStatus + "查询状态完成...[失败:" + result.getErrmsg() + "]";
                             break;
             			}
             		}

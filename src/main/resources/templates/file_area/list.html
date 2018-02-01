@@ -137,6 +137,7 @@
                  		<i class="glyphicon glyphicon-upload"></i>
                     	<span>选择切割文件并启动</span>
                			<input type="file" name="file">
+               			<input type="hidden" name="newFileName" id="newFileName">
                      </label>
                 </div>
              	<span id="loading"></span>
@@ -144,21 +145,61 @@
         </div>
     </div>
 </div>
+<!-- 模态框（Modal） -->  
+<div class="modal fade" id="modify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">  
+    <div class="modal-dialog">  
+        <div class="modal-content">  
+            <div class="modal-header">  
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>  
+                <h4 class="modal-title" id="myModalLabel">修改文件名</h4>
+                <span style="color:red" id="errMsg"></span>
+            </div>  
+            <div class="modal-body">  
+                新文件名称：<input type="text" name="inputFileName" id="inputFileName" style="width:80%"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>  
+                <button type="button" class="btn btn-primary" onclick="goSubmit()">提交</button>  
+            </div>  
+        </div>  
+        <!-- /.modal-content -->  
+    </div>  
+    <!-- /.modal -->  
+</div>  
+<!-- 模态框（Modal）end -->
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script>
+$(function() {
+    //选择文件后提交
+    $(".fileinput-button").on("change", "input[type='file']", function(){
+    	var path = $(this).val();
+    	var _name = path.substring(path.lastIndexOf("\\")+1,path.length);
+    	$('#inputFileName').val(_name);
+    	$('#modify').modal("show");
+    });
+    
+    $('#modify').on('hide.bs.modal', function(){
+    	$("input[name='file']").val('');
+    	$('#errMsg').html("")
+	})
+});
+function goSubmit(){
+	var inputFileName = $.trim($('#inputFileName').val());
+	if(inputFileName != ''){
+		$('#newFileName').val(inputFileName);
+	    $('#fileForm').submit();
+	    $("#upload_div").hide();
+	    $("input[name='file']").attr('disabled','disabled');
+	    $('#loading').html(" 上传中...<img src='{{ctx.contextPath}}/css/img/small-loading.gif'>");
+    	$('#modify').modal("hide");
+    }else{
+    	$('#errMsg').html("文件名称不能为空！")
+    }
+}
 function delCheck(){
 	return confirm("确认要删除此记录？");
 }
-$(function() {
-    //选择文件后提交
-    $(".fileinput-button").on("change", "input[type='file']", function() {
-        $('#fileForm').submit();
-        $("#upload_div").hide();
-        $("input[name='file']").attr('disabled','disabled');
-        $('#loading').html(" 上传中...<img src='{{ctx.contextPath}}/css/img/small-loading.gif'>");
-    });
-});
 </script>
 </body>
 </html>

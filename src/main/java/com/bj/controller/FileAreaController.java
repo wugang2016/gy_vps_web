@@ -169,6 +169,7 @@ public class FileAreaController {
     @PostMapping("/file_area/upload_and_send")
     public String doUploadAndSend(
             HttpServletRequest request,
+            @RequestParam(value = "newFileName") String newFileName,
             @RequestParam(value = "radio", defaultValue = "0") int radio,
             final @RequestParam("file") MultipartFile file,
             Map<String, Object> model,
@@ -179,8 +180,9 @@ public class FileAreaController {
             return "redirect:/file_area/list";
     	}
         if (!file.isEmpty()) {
-        	String command = "{\"opt\":\"start_file_task\",\"filename\":\""+ file.getOriginalFilename() + "\"}";
-        	SendMessageJob task = sendCommandService.sendMessage("切割文件上传及通知("+file.getOriginalFilename()+")", command, file, true);
+        	LOGGER.info("文件名称：{} --> {}",file.getOriginalFilename(),newFileName);
+        	String command = "{\"opt\":\"start_file_task\",\"filename\":\""+ newFileName + "\"}";
+        	SendMessageJob task = sendCommandService.sendMessage("切割文件上传及通知("+newFileName+")", command, file, newFileName, true);
             return "redirect:/status/task/" + task.getTaskId();
         }else{
             redirectAttributes.addFlashAttribute("hasError", true);

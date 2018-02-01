@@ -21,12 +21,15 @@ public class FileUtil {
     /**
      * 保存文件到本地
      */
-    public static void doSaveFile(String path, MultipartFile file) throws IOException {
+    public static void doSaveFile(String path, MultipartFile file, String newFileName) throws IOException {
         File subDir = new File(path);
         if (!subDir.exists()) {
             subDir.mkdirs();
         }
-        File destFile = new File(subDir, file.getOriginalFilename());
+        if(newFileName == null || newFileName.trim().length() == 0) {
+        	newFileName = file.getOriginalFilename();
+        }
+        File destFile = new File(subDir, newFileName);
         OutputStream out = null;
         try {
             out = new BufferedOutputStream(new FileOutputStream(destFile));

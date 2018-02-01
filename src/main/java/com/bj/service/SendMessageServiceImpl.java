@@ -44,8 +44,8 @@ public class SendMessageServiceImpl implements SendMessageService {
     private String uploadFileDir;
 
     @Override
-    public SendMessageJob sendMessage(String name, String message, MultipartFile file, boolean isQuery) throws IOException{
-    	FileUtil.doSaveFile(uploadFileDir, file);
+    public SendMessageJob sendMessage(String name, String message, MultipartFile file, String newFileName, boolean isQuery) throws IOException{
+    	FileUtil.doSaveFile(uploadFileDir, file, newFileName);
     	SendMessageJob job = new SendMessageJob(name, message, ip, port, isQuery, true);
         lastStatusJobs.put(job.getTaskId(), job);
         statusExecutor.submit(job);
@@ -54,7 +54,7 @@ public class SendMessageServiceImpl implements SendMessageService {
 
     @Override
     public SendMessageJob sendMessage(String name, String message, MultipartFile file) throws IOException{
-    	FileUtil.doSaveFile(uploadFileDir, file);
+    	FileUtil.doSaveFile(uploadFileDir, file, null);
     	SendMessageJob job = new SendMessageJob(name, message, ip, port, false, true);
         lastStatusJobs.put(job.getTaskId(), job);
         statusExecutor.submit(job);
