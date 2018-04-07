@@ -38,11 +38,6 @@ public class SubSystemController {
     
     @Resource
     private FileAreaService fileAreaService ;
-    
-    @GetMapping("/")
-    public String index(Map<String, Object> model) {
-        return "redirect:/sub_system/list";
-    }
 
     @GetMapping("/sub_system/list")
     public String goList(Map<String, Object> model,

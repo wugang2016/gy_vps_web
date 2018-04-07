@@ -174,3 +174,7 @@ body.signin {
 .error{
 	color:red;
 }
+
+.w_300{
+	width: 300px;
+}

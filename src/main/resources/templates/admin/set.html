@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>登录 - 管理后台</title>
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.css">
+    <!--[if lt IE 9]>
+    <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
+    <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bijie.css">
+    <style></style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">管理后台 - 高级设置</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a>使用完毕后，请及时关闭此页面</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+        {{#message}}
+        <p/><p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}"
+           role="alert"><em>系统提示：</em>{{message}}</p>
+        {{/message}}
+        
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+         	<!-- ###############################视频码率设置################################# -->
+            <div class="page-header">
+                <h1>视频码率设置
+                    <small>切割视频码率参数</small>
+                </h1>
+            </div>
+            <form class="form-horizontal" action="{{ctx.contextPath}}/admin/setML" method="post">
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">1080P码率(kbps)</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control w_300"  name="1080p" placeholder="1080P码率(kbps)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">720P码率(kbps)</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control w_300"  name="720p" placeholder="720P码率(kbps)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">小于720P码率(kbps)</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control w_300"  name="l720p" placeholder="小于720P码率(kbps)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <input type="submit" class="btn btn-primary" value="提 交"/>
+                    </div>
+                </div>
+         	</form>
+         	
+         	<!-- ###############################管理员密码修改################################# -->
+         	<div class="page-header">
+                <h1>修改管理员密码
+                    <small>高级设置登录密码</small>
+                </h1>
+            </div>
+            <form class="form-horizontal" action="{{ctx.contextPath}}/admin/setPwd" method="post">
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">旧密码</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control w_300" name="oldPassword" placeholder="旧密码" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">新密码</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control w_300"  name="password" placeholder="新密码" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">重复新密码</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control w_300" name="password2" placeholder="重复新密码" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <input type="submit" class="btn btn-primary" value="提 交"/>
+                    </div>
+                </div>
+         	</form>
+         	
+         	<!-- ###############################任务密码修改################################# -->
+         	<div class="page-header">
+                <h1>修改任务密码
+                    <small>任务下发密码</small>
+                </h1>
+            </div>
+            <form class="form-horizontal" action="{{ctx.contextPath}}/admin/setDoPwd" method="post">
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">旧密码</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control w_300" name="oldDoPassword" placeholder="旧密码" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">新密码</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control w_300"  name="doPassword" placeholder="新密码" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">重复新密码</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control w_300" name="doPassword2" placeholder="重复新密码" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <input type="submit" class="btn btn-primary" value="提 交"/>
+                    </div>
+                </div>
+         	</form>
+         </div>
+</div> <!-- /container -->
+<script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrap.js"></script>
+<script>
+</script>
+</body>
+</html>

@@ -1,6 +1,8 @@
 package com.bj;
 
-import com.samskivert.mustache.Mustache;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.springframework.boot.autoconfigure.mustache.MustacheEnvironmentCollector;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,14 +11,12 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.samskivert.mustache.Mustache;
 
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
     private static ThreadLocal<SimpleDateFormat> DATE_FORMAT_THREAD_LOCAL = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
     private static ThreadLocal<SimpleDateFormat> DATETIME_FORMAT_THREAD_LOCAL = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-
 
     private final Environment environment;
 
@@ -26,38 +26,15 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/login").setViewName("login");
+//        registry.addViewController("/admin/login").setViewName("admin/login");
 //        registry.addViewController("/hello").setViewName("hello");
     }
 
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/static/**").addResourceLocations("/resources/static/").setCachePeriod(31556926);
-//    }
-
-    //    @Override
-//    public void configurePathMatch(PathMatchConfigurer configurer) {
-//        configurer.setUseTrailingSlashMatch(true);
-//    }
-
-//
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new HandlerInterceptorAdapter() {
-//            @Override
-//            public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-//                if (modelAndView != null) {
-//                    String viewName = modelAndView.getViewName();
-//                    if (viewName != null) {
-//                        if (!viewName.startsWith("redirect:")) {
-//                            modelAndView.addObject("basePath", request.getContextPath());
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//    }
-
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
+    }
+    
     @Bean
     public Mustache.Compiler mustacheCompiler(Mustache.TemplateLoader mustacheTemplateLoader) {
         return Mustache.compiler().withLoader(mustacheTemplateLoader)
@@ -79,10 +56,5 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         MustacheEnvironmentCollector collector = new MustacheEnvironmentCollector();
         collector.setEnvironment(this.environment);
         return collector;
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
     }
 }

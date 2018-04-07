@@ -51,7 +51,6 @@ import com.bj.util.Pagination;
 
 @Controller
 public class FileAreaController {
-    @SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileAreaController.class);
 
     @Resource
