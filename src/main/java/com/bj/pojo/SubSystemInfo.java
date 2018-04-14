@@ -10,6 +10,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import net.sf.json.JSONObject;
 
@@ -39,6 +41,10 @@ public class SubSystemInfo {
 	@Range(min=1, max=2160, message = "高度范围1-2160")
 	@NotNull(message = "高度不能为空")
 	private Integer height;
+	
+	private Double longitude;
+	private Double latitude;
+	private String picPath;
 	
 	public Integer getId() {
 		return id;
@@ -88,6 +94,43 @@ public class SubSystemInfo {
 	}
 	public void setHeight(Integer height) {
 		this.height = height;
+	}
+	
+	/**
+	 * @return the longitude
+	 */
+	public Double getLongitude() {
+		return longitude;
+	}
+	/**
+	 * @param longitude the longitude to set
+	 */
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+	/**
+	 * @return the latitude
+	 */
+	public Double getLatitude() {
+		return latitude;
+	}
+	/**
+	 * @param latitude the latitude to set
+	 */
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+	/**
+	 * @return the picPath
+	 */
+	public String getPicPath() {
+		return picPath;
+	}
+	/**
+	 * @param picPath the picPath to set
+	 */
+	public void setPicPath(String picPath) {
+		this.picPath = picPath;
 	}
 	public String format(String opt){
 		String str = "{ \"opt\":\""+opt+"\",\"tbl_name\":\"tbl_sub_sys_info\",\"value\":";

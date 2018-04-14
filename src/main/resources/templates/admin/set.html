@@ -3,12 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>登录 - 管理后台</title>
+    <title>高级设置 - 管理系统</title>
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.css">
     <!--[if lt IE 9]>
     <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
     <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
     <![endif]-->
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/jquery.fileupload.css">
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bijie.css">
     <style></style>
 </head>
@@ -18,7 +19,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">管理后台 - 高级设置</a>
+            <a class="navbar-brand" href="#">管理系统 - 高级设置</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
@@ -30,8 +31,8 @@
 
 <div class="container">
         {{#message}}
-        <p/><p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}"
-           role="alert"><em>系统提示：</em>{{message}}</p>
+        <p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}" role="alert">
+        	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
         {{/message}}
         
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -45,19 +46,19 @@
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-3 control-label">1080P码率(kbps)</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control w_300"  name="1080p" placeholder="1080P码率(kbps)">
+                        <input type="text" class="form-control w_300"  name="b1080" placeholder="1080P码率(kbps)" value="{{#b1080}}{{.}}{{/b1080}}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">720P码率(kbps)</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control w_300"  name="720p" placeholder="720P码率(kbps)">
+                        <input type="text" class="form-control w_300"  name="b720" placeholder="720P码率(kbps)" value="{{#b720}}{{.}}{{/b720}}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">小于720P码率(kbps)</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control w_300"  name="l720p" placeholder="小于720P码率(kbps)">
+                        <input type="text" class="form-control w_300"  name="b4cif" placeholder="小于720P码率(kbps)" value="{{#b4cif}}{{.}}{{/b4cif}}">
                     </div>
                 </div>
                 <div class="form-group">
@@ -69,7 +70,7 @@
          	
          	<!-- ###############################管理员密码修改################################# -->
          	<div class="page-header">
-                <h1>修改管理员密码
+                <h1>修改管理密码
                     <small>高级设置登录密码</small>
                 </h1>
             </div>
@@ -77,19 +78,19 @@
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-3 control-label">旧密码</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control w_300" name="oldPassword" placeholder="旧密码" required>
+                        <input type="password" class="form-control w_300" name="oldPassword" placeholder="旧密码" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">新密码</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control w_300"  name="password" placeholder="新密码" required>
+                        <input type="password" class="form-control w_300"  name="password" placeholder="新密码" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">重复新密码</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control w_300" name="password2" placeholder="重复新密码" required>
+                        <input type="password" class="form-control w_300" name="password2" placeholder="重复新密码" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -105,23 +106,23 @@
                     <small>任务下发密码</small>
                 </h1>
             </div>
-            <form class="form-horizontal" action="{{ctx.contextPath}}/admin/setDoPwd" method="post">
+            <form class="form-horizontal" action="{{ctx.contextPath}}/admin/setTaskPwd" method="post">
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-3 control-label">旧密码</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control w_300" name="oldDoPassword" placeholder="旧密码" required>
+                        <input type="password" class="form-control w_300" name="oldTaskPassword" placeholder="旧密码" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">新密码</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control w_300"  name="doPassword" placeholder="新密码" required>
+                        <input type="password" class="form-control w_300"  name="taskPassword" placeholder="新密码" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">重复新密码</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control w_300" name="doPassword2" placeholder="重复新密码" required>
+                        <input type="password" class="form-control w_300" name="taskPassword2" placeholder="重复新密码" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -130,6 +131,43 @@
                     </div>
                 </div>
          	</form>
+         	
+         	<!-- ###############################任务密码修改################################# -->
+         	<div class="page-header">
+                <h1>License状态
+                    <small></small>
+                </h1>
+            </div>
+			<form class="form-horizontal" action="{{ctx.contextPath}}/admin/upload_license" method="post">
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">有效时间</label>
+	                <div class="col-sm-9">
+	                    xxxx
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">实时呈现功能开关</label>
+	                <div class="col-sm-9">
+	                    xxxx
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">文件切割功能开关</label>
+	                <div class="col-sm-9">
+	                    xxxx
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label"></label>
+	                <div class="col-sm-9">
+	                    <label title="License文件选择" class="btn btn-primary fileinput-button" style="width:200px">
+	                 		<i class="glyphicon glyphicon-upload"></i>
+	                    	<span>上传License文件</span>
+	               			<input type="file" name="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,image/bmp">
+	                     </label>
+	                </div>
+	            </div>
+			</form>
          </div>
 </div> <!-- /container -->
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>

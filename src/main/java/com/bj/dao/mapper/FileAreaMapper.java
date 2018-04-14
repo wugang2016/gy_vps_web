@@ -24,28 +24,52 @@ public interface FileAreaMapper {
 	@Select("SELECT * FROM tbl_file_area where area_id=#{id}")
     @Results(value = {
             @Result(property = "id", column = "area_id"),
+            @Result(property = "templateId", column = "template_id"),
             @Result(property = "x", column = "pos_x"),
             @Result(property = "y", column = "pos_y"),
             @Result(property = "subSystem", javaType = SubSystemInfo.class, column = "sub_sys_id", one = @One(select = "com.bj.dao.mapper.SubSystemMapper.findById"))})
     FileArea findById(@Param("id") int id);
-    
+
+    @Select("SELECT * FROM tbl_file_area " +
+            "where template_id = #{templateId} ")
+    @Results(value = {
+            @Result(property = "id", column = "area_id"),
+            @Result(property = "templateId", column = "template_id"),
+            @Result(property = "x", column = "pos_x"),
+            @Result(property = "y", column = "pos_y"),
+            @Result(property = "subSystem", javaType = SubSystemInfo.class, column = "sub_sys_id", one = @One(select = "com.bj.dao.mapper.SubSystemMapper.findById"))})
+	List<FileArea> findByTemplateId(@Param("templateId") int templateId);
+	
+	
     @Select("SELECT * FROM tbl_file_area " +
             "LIMIT #{offset}, #{rowCount} ")
     @Results(value = {
             @Result(property = "id", column = "area_id"),
+            @Result(property = "templateId", column = "template_id"),
             @Result(property = "x", column = "pos_x"),
             @Result(property = "y", column = "pos_y"),
             @Result(property = "subSystem", javaType = SubSystemInfo.class, column = "sub_sys_id", one = @One(select = "com.bj.dao.mapper.SubSystemMapper.findById"))})
     List<FileArea> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
-
+    
     @Insert("INSERT INTO tbl_file_area " +
-            "   (pos_x, pos_y, width, height,sub_sys_id) " +
+            "   (template_id,pos_x, pos_y, width, height,sub_sys_id) " +
             "VALUES " +
-            "   (#{x}, #{y}, #{width}, #{height}, #{subSystem.id})")
+            "   (#{templateId}, #{x}, #{y}, #{width}, #{height}, #{subSystem.id})")
     @Options(useGeneratedKeys=true,keyColumn="area_id")
     int insert(FileArea fileArea);
+    
+    @Insert("<script>" +
+            "INSERT INTO tbl_file_area " +
+            "   (template_id,pos_x, pos_y, width, height,sub_sys_id) " +
+            "VALUES " +
+            "<foreach item='fileAreas' collection='list' separator=','>" +
+            "   (#{fileAreas.templateId}, #{fileAreas.x}, #{fileAreas.y}, #{fileAreas.width}, #{fileAreas.height}, #{fileAreas.subSystem.id}) " +
+            "</foreach>" +
+            "</script>")
+    int batchInsert(@Param("list") List<FileArea> fileAreas);
 
     @Update("UPDATE tbl_file_area t set" +
+    		"   t.template_id = #{templateId}, " +
     		"   t.pos_x = #{x}, " +
     		"   t.pos_y = #{y}, " +
     		"   t.width = #{width}, " +
@@ -65,4 +89,7 @@ public interface FileAreaMapper {
 
     @Select("SELECT count(1) FROM tbl_file_area where sub_sys_id =#{sys_id} and area_id!=#{id}")
 	int countBySysIdExcept(@Param("sys_id") int sys_id , @Param("id") int id);
+
+    @Delete("DELETE FROM tbl_file_area where template_id=#{templateId}")
+	int deteleByTemplateId(int templateId);
 }

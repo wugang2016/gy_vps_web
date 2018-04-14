@@ -23,8 +23,8 @@ public interface SubSystemMapper {
     @Results(value = {
             @Result(property = "id", column = "sub_sys_id"),
             @Result(property = "name", column = "sub_sys_name"),
-            @Result(property = "mntPath", column = "mnt_path"),
-            @Result(property = "boxIp", column = "box_ip")})
+            @Result(property = "boxIp", column = "box_ip"),
+            @Result(property = "picPath", column = "pic_path")})
     SubSystemInfo findById(@Param("id") int id);
     
     @Select("SELECT * FROM tbl_sub_sys_info " +
@@ -32,22 +32,21 @@ public interface SubSystemMapper {
     @Results(value = {
             @Result(property = "id", column = "sub_sys_id"),
             @Result(property = "name", column = "sub_sys_name"),
-            @Result(property = "mntPath", column = "mnt_path"),
-            @Result(property = "boxIp", column = "box_ip")})
+            @Result(property = "boxIp", column = "box_ip"),
+            @Result(property = "picPath", column = "pic_path")})
     List<SubSystemInfo> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
     
     @Select("SELECT * FROM tbl_sub_sys_info where ip=#{ip}" )
     @Results(value = {
             @Result(property = "id", column = "sub_sys_id"),
             @Result(property = "name", column = "sub_sys_name"),
-            @Result(property = "mntPath", column = "mnt_path"),
             @Result(property = "boxIp", column = "box_ip")})
     List<SubSystemInfo> findByIp(@Param("ip") String ip);
     
     @Insert("INSERT INTO tbl_sub_sys_info " +
-            "   (sub_sys_name, ip, port, mnt_path, box_ip, width, height) " +
+            "   (sub_sys_name, ip, port, box_ip, width, height, longitude, latitude, pic_path) " +
             "VALUES " +
-            "   (#{name}, #{ip}, #{port}, #{mntPath}, #{boxIp}, #{width}, #{height})")
+            "   (#{name}, #{ip}, #{port}, #{boxIp}, #{width}, #{height}, #{longitude}, #{latitude}, #{picPath})")
     @Options(useGeneratedKeys=true,keyColumn="sub_sys_id")
     int insert(SubSystemInfo subSystemInfo);
 
@@ -55,10 +54,12 @@ public interface SubSystemMapper {
     		"   t.sub_sys_name = #{name}, " +
     		"   t.ip = #{ip}, " +
     		"   t.port = #{port}, " +
-    		"   t.mnt_path = #{mntPath}, " +
     		"   t.box_ip = #{boxIp}, " +
     		"   t.width = #{width}, " +
-    		"   t.height = #{height}" +
+    		"   t.height = #{height}," +
+    		"   t.longitude = #{longitude}," +
+    		"   t.latitude = #{latitude}," +
+    		"   t.pic_path = #{picPath}" +
             "   where sub_sys_id=#{id}")
     int update(SubSystemInfo subSystemInfo);
 

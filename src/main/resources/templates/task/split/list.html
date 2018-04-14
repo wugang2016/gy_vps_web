@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>管理平台</title>
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.min.css">
+    <!--[if lt IE 9]>
+    <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
+    <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bijie.css">
+    <style></style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">分主控系统 - 管理平台</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a target="blank" href="{{ctx.contextPath}}/admin/login">高级设置</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active submenu open">
+                    <a href="#">任务管理</a>
+                    <ul style="display: block;">
+                        <li class="active"><a href="{{ctx.contextPath}}/task/split/list">切割任务</a></li>
+                        <li><a href="{{ctx.contextPath}}/task/dispatch/list">分发任务</a></li>
+                        <li><a href="{{ctx.contextPath}}/task/file_play/list">实时文件播放任务</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ctx.contextPath}}/sub_system/list">通用管理</a></li>
+            </ul>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            {{#message}}
+            <p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}" role="alert">
+            	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
+            {{/message}}
+            <div class="page-header">
+                <h1>切割任务
+                    <small>列表</small>
+                </h1>
+            </div>
+
+            <div class="form-group">
+                <a href="{{ctx.contextPath}}/task/split/new" type="button" class="btn btn-primary"> 新增 </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <!--<th>#ID</th>  -->
+                        <th>任务名称</th>
+                        <th>模板名称</th>
+                        <th>状态</th>
+                        <th>开始时间</th>
+                        <!-- <th>结束时间</th> -->
+                        <th>任务描述</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#splitTasks}}
+                    <tr>
+                        <!--<td>{{id}}</td>-->
+                        <td>{{taskName}}</td>
+                        <td>{{splitTemplate.name}}</td>
+                        <td>{{statusText}}</td>
+                        <td>{{#startTime}}{{.}}{{/startTime}}</td>
+                        <!-- <td>{{#endTime}}{{.}}{{/endTime}}</td> -->
+                        <td>{{#taskDesc}}{{.}}{{/taskDesc}}</td>
+                        <td>
+                        	<form id="delForm" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/split/{{id}}/delete" onsubmit="return delCheck()">
+	                            <a href="{{ctx.contextPath}}/task/split/{{id}}/view" data-toggle="modal" data-target="#myModal">详细</a>
+	                            {{#isDispatch}}<a href="#" onclick="">分发</a>{{/isDispatch}}
+	                            {{#isDelete}}<a href="#" onclick="$('#delForm').submit()">删除</a>{{/isDelete}}
+                            </form>
+                        </td>
+                    </tr>
+                    {{/splitTasks}}
+                    </tbody>
+                </table>
+                {{#pagination}}
+                <nav aria-label="Page navigation" class="text-center">
+                    <ul class="pagination">
+                        {{#hasPreviousPage}}
+                        <li>
+                            <a href="{{previousPageUri}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {{/hasPreviousPage}}
+                        {{#pageList}}
+                        {{#isCurrent}}
+                        <li class="active"><a>{{pageNo}}</a></li>
+                        {{/isCurrent}}
+                        {{^isCurrent}}
+                        <li><a href="{{pageUri}}">{{pageNo}}</a></li>
+                        {{/isCurrent}}
+                        {{/pageList}}
+                        {{#hasNextPage}}
+                        <li>
+                            <a href="{{nextPageUri}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {{/hasNextPage}}
+                    </ul>
+                </nav>
+                {{/pagination}}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:800px">
+		<div class="modal-content"></div>
+	</div>
+</div>
+<script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
+<script>
+function delCheck(){
+	return confirm("确认要删除此记录？");
+}
+</script>
+</body>
+</html>

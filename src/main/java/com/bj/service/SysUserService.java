@@ -12,5 +12,4 @@ import com.bj.pojo.SysUser;
 public interface SysUserService {
 	SysUser findByUsername(String username);
 	void updatePassword(String password);
-	void updateDoPassword(String doPassword);
 }

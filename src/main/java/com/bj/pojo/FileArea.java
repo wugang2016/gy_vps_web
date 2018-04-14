@@ -20,6 +20,9 @@ public class FileArea {
 	@NotNull(message = "高度不能为空")
 	private Integer height;
 	private SubSystemInfo subSystem;
+	private Integer templateId;
+	
+	private String customFileName;
 	
 	public Integer getId() {
 		return id;
@@ -56,6 +59,18 @@ public class FileArea {
 	}
 	public void setSubSystem(SubSystemInfo subSystem) {
 		this.subSystem = subSystem;
+	}
+	public Integer getTemplateId() {
+		return templateId;
+	}
+	public void setTemplateId(Integer templateId) {
+		this.templateId = templateId;
+	}
+	public String getCustomFileName() {
+		return customFileName;
+	}
+	public void setCustomFileName(String customFileName) {
+		this.customFileName = customFileName;
 	}
 	public String format(String opt){
 		String str = "{\"opt\":\""+opt+"\",\"tbl_name\":\"tbl_file_area\",\"value\":{" 

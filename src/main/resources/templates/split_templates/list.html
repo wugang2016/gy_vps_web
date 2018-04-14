@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>管理平台</title>
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.min.css">
+    <!--[if lt IE 9]>
+    <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
+    <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bijie.css">
+    <style></style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">分主控系统 - 管理平台</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a target="blank" href="{{ctx.contextPath}}/admin/login">高级设置</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="{{ctx.contextPath}}/task/split/list">任务管理</a></li>
+                <li class="active submenu open">
+                    <a href="#">通用管理</a>
+                    <ul style="display: block;">
+                        <li><a href="{{ctx.contextPath}}/sub_system/list">ECUE设备</a></li>
+                        <li class="active"><a href="{{ctx.contextPath}}/split_templates/list">切割模板</a></li>
+                        <li><a href="">Android实时流模板</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            {{#message}}
+            <p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}" role="alert">
+            	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
+            {{/message}}
+            <div class="page-header">
+                <h1>文件切割模板
+                    <small>列表</small>
+                </h1>
+            </div>
+
+            <div class="form-group">
+                <a href="{{ctx.contextPath}}/split_templates/new" type="button" class="btn btn-primary"> 新增 </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <!--<th>#ID</th>  -->
+                        <th>模板名称</th>
+                        <th>描述</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#splitTemplates}}
+                    <tr>
+                        <!--<td>{{id}}</td>-->
+                        <td>{{name}}</td>
+                        <td>{{desc}}</td>
+                        <td>
+                        	<form id="delForm" class="form-horizontal" method="post" action="{{ctx.contextPath}}/split_templates/{{id}}/delete" onsubmit="return delCheck()">
+	                            <a href="{{ctx.contextPath}}/split_templates/{{id}}/edit">编辑</a>
+	                            <a href="#" onclick="$('#delForm').submit()">删除</a>
+                            </form>
+                        </td>
+                    </tr>
+                    {{/splitTemplates}}
+                    </tbody>
+                </table>
+                {{#pagination}}
+                <nav aria-label="Page navigation" class="text-center">
+                    <ul class="pagination">
+                        {{#hasPreviousPage}}
+                        <li>
+                            <a href="{{previousPageUri}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {{/hasPreviousPage}}
+                        {{#pageList}}
+                        {{#isCurrent}}
+                        <li class="active"><a>{{pageNo}}</a></li>
+                        {{/isCurrent}}
+                        {{^isCurrent}}
+                        <li><a href="{{pageUri}}">{{pageNo}}</a></li>
+                        {{/isCurrent}}
+                        {{/pageList}}
+                        {{#hasNextPage}}
+                        <li>
+                            <a href="{{nextPageUri}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {{/hasNextPage}}
+                    </ul>
+                </nav>
+                {{/pagination}}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
+<script>
+function delCheck(){
+	return confirm("确认要删除此记录？");
+}
+</script>
+</body>
+</html>

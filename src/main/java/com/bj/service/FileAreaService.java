@@ -20,4 +20,7 @@ public interface FileAreaService {
 	FileArea findById(int id);
 	int countBySysId(int sys_id);
 	int countBySysIdExcept(int sys_id,int id);
+	int deteleByTemplateId(int templateId);
+	List<FileArea> findByTemplateId(int templateId);
+	int batchInsert(List<FileArea> fileAreas);
 }

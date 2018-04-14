@@ -77,4 +77,19 @@ public class FileAreaServiceImpl implements FileAreaService {
 		return fileAreaMapper.countBySysIdExcept(sys_id,id);
 	}
 
+	@Override
+	public int deteleByTemplateId(int templateId) {
+		return fileAreaMapper.deteleByTemplateId(templateId);
+	}
+
+	@Override
+	public int batchInsert(List<FileArea> fileAreas) {
+		return fileAreaMapper.batchInsert(fileAreas);
+	}
+
+	@Override
+	public List<FileArea> findByTemplateId(int templateId) {
+		return fileAreaMapper.findByTemplateId(templateId);
+	}
+
 }

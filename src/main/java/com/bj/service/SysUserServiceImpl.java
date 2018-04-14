@@ -29,9 +29,4 @@ public class SysUserServiceImpl implements SysUserService {
 		sysUserMapper.updatePassword(password);
 	}
 
-	@Override
-	public void updateDoPassword(String doPassword) {
-		sysUserMapper.updateDoPassword(doPassword);
-	}
-
 }

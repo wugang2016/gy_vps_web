@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class IndexController {
 
-    @GetMapping("/")
+    @GetMapping({"", "/"})
     public String index(Map<String, Object> model) {
-        return "redirect:/sub_system/list";
+        return "redirect:/task/split/list";
     }
 }

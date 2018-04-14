@@ -8,7 +8,6 @@ public class SysUser {
 	private Integer id;
 	private String username;
 	private String password;
-	private String doPassword;
 	
 	/**
 	 * @return the id
@@ -46,17 +45,5 @@ public class SysUser {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	/**
-	 * @return the doPassword
-	 */
-	public String getDoPassword() {
-		return doPassword;
-	}
-	/**
-	 * @param doPassword the doPassword to set
-	 */
-	public void setDoPassword(String doPassword) {
-		this.doPassword = doPassword;
-	}
-	
+
 }
