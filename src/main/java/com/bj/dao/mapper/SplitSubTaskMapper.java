@@ -12,8 +12,8 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
+import com.bj.pojo.FileArea;
 import com.bj.pojo.SplitSubTask;
-import com.bj.pojo.SubSystemInfo;
 
 /**
  * Created by LQK on 2018-1-25.
@@ -26,7 +26,7 @@ public interface SplitSubTaskMapper {
             @Result(property = "fileName", column = "file_name"),
             @Result(property = "filePath", column = "file_path"),
             @Result(property = "errCode", column = "err_code"),
-            @Result(property = "fileArea", javaType = SubSystemInfo.class, column = "area_id", one = @One(select = "com.bj.dao.mapper.FileAreaMapper.findById"))})
+            @Result(property = "fileArea", javaType = FileArea.class, column = "area_id", one = @One(select = "com.bj.dao.mapper.FileAreaMapper.findById"))})
 	SplitSubTask findById(@Param("id") int id);
 	
     @Select("SELECT * FROM tbl_file_split_subtask " +
@@ -36,7 +36,7 @@ public interface SplitSubTaskMapper {
             @Result(property = "fileName", column = "file_name"),
             @Result(property = "filePath", column = "file_path"),
             @Result(property = "errCode", column = "err_code"),
-            @Result(property = "fileArea", javaType = SubSystemInfo.class, column = "area_id", one = @One(select = "com.bj.dao.mapper.FileAreaMapper.findById"))})
+            @Result(property = "fileArea", javaType = FileArea.class, column = "area_id", one = @One(select = "com.bj.dao.mapper.FileAreaMapper.findById"))})
     List<SplitSubTask> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
 
     @Select("SELECT * FROM tbl_file_split_subtask " +
@@ -46,7 +46,7 @@ public interface SplitSubTaskMapper {
             @Result(property = "fileName", column = "file_name"),
             @Result(property = "filePath", column = "file_path"),
             @Result(property = "errCode", column = "err_code"),
-            @Result(property = "fileArea", javaType = SubSystemInfo.class, column = "area_id", one = @One(select = "com.bj.dao.mapper.FileAreaMapper.findById"))})
+            @Result(property = "fileArea", javaType = FileArea.class, column = "area_id", one = @One(select = "com.bj.dao.mapper.FileAreaMapper.findById"))})
     List<SplitSubTask> findByTaskId(@Param("taskId") int taskId);
     
     @Insert("INSERT INTO tbl_file_split_subtask " +
@@ -54,21 +54,14 @@ public interface SplitSubTaskMapper {
             "VALUES " +
             "   (#{taskId}, #{fileName}, #{fileArea.id}, #{status})")
     @Options(useGeneratedKeys=true,keyColumn="subtask_id")
-    int insert(SplitSubTask SplitSubTask);
-    
-    @Insert("<script>" +
-            "INSERT INTO tbl_file_split_subtask " +
-            "   (task_id, file_name, area_id, status) " +
-            "VALUES " +
-            "<foreach item='subTask' collection='list' separator=','>" +
-            "   (#{subTask.taskId}, #{subTask.fileName}, #{subTask.fileArea.id}, #{subTask.status}) " +
-            "</foreach>" +
-            "</script>")
-    int batchInsert(@Param("list") List<SplitSubTask> splitSubTasks);
+    int insert(SplitSubTask splitSubTask);
 
     @Select("SELECT count(1) FROM tbl_file_split_subtask")
     int countAll();
     
     @Delete("DELETE FROM tbl_file_split_subtask where subtask_id=#{id}")
     int delete(int id);
+    
+    @Delete("DELETE FROM tbl_file_split_subtask where task_id=#{taskId}")
+    int deleteByTaskId(int taskId);
 }

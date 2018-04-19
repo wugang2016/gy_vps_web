@@ -8,7 +8,6 @@ public interface SplitSubTaskService {
 	SplitSubTask findById(int id);
     List<SplitSubTask> findAll(int offset,int rowCount);
     int insert(SplitSubTask SplitSubTask);
-    int batchInsert(List<SplitSubTask> splitSubTask);
     int countAll();
     int delete(int id);
     List<SplitSubTask> findByTaskId(int taskId);

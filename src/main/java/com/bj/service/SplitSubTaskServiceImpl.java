@@ -48,11 +48,6 @@ public class SplitSubTaskServiceImpl implements SplitSubTaskService {
 	}
 
 	@Override
-	public int batchInsert(List<SplitSubTask> splitSubTasks) {
-		return splitSubTaskMapper.batchInsert(splitSubTasks);
-	}
-
-	@Override
 	public List<SplitSubTask> findByTaskId(int taskId) {
 		return splitSubTaskMapper.findByTaskId(taskId);
 	}

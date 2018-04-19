@@ -1,7 +1,5 @@
 package com.bj.pojo;
 
-import java.io.File;
-
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -10,7 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * The persistent class for the tbl_file_split_task database table.
  * 
  */
-public class SplitTask extends BaseTask{
+public class DispatchTask extends BaseTask{
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
@@ -21,17 +19,13 @@ public class SplitTask extends BaseTask{
 
 	private String endTime;
 
-	private String srcFilePath;
-
 	private String startTime;
 
 	private Integer status;
 
 	private String taskDesc;
 
-	private SplitTemplates splitTemplate;
-
-	private String defaultFileName;
+	private SplitTask splitTask;
 	
 	public Integer getId() {
 		return id;
@@ -47,14 +41,6 @@ public class SplitTask extends BaseTask{
 
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
-	}
-
-	public String getSrcFilePath() {
-		return this.srcFilePath;
-	}
-
-	public void setSrcFilePath(String srcFilePath) {
-		this.srcFilePath = srcFilePath;
 	}
 
 	public String getStartTime() {
@@ -89,34 +75,19 @@ public class SplitTask extends BaseTask{
 		this.taskName = taskName;
 	}
 
-	public SplitTemplates getSplitTemplate() {
-		return splitTemplate;
+	public SplitTask getSplitTask() {
+		return splitTask;
 	}
 
-	public void setSplitTemplate(SplitTemplates splitTemplate) {
-		this.splitTemplate = splitTemplate;
-	}
-	
-	public String getDefaultFileName() {
-		return defaultFileName;
-	}
-
-	public void setDefaultFileName(String defaultFileName) {
-		this.defaultFileName = defaultFileName;
+	public void setSplitTask(SplitTask splitTask) {
+		this.splitTask = splitTask;
 	}
 
 	/****** 自定义 *********/
 	public String getStatusText() {
 		return TaskStatus.values()[status].text();
 	}
-	
-	public String getFileName() {
-		if(this.srcFilePath != null) {
-			return this.srcFilePath.substring(this.srcFilePath.lastIndexOf(File.separator)+1);
-		}
-		return "";
-	}
-	
+
 	public boolean getIsFail() {
 		return TaskStatus.values()[status].isFail();
 	}
@@ -126,7 +97,6 @@ public class SplitTask extends BaseTask{
 	}
 	
 	public boolean getIsDispatch() {
-		return TaskStatus.values()[status].allowDispatch();
+		return TaskStatus.values()[status].allowDispatchForDispatchTask();
 	}
-
 }

@@ -11,7 +11,6 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import com.bj.pojo.SplitTask;
 import com.bj.pojo.SubSystemInfo;
@@ -45,25 +44,17 @@ public interface SplitTaskMapper {
     List<SplitTask> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
     
     @Insert("INSERT INTO tbl_file_split_task " +
-            "   (task_name, task_desc, src_file_path, status, start_time, end_time, template_id) " +
+            "   (task_name, task_desc, src_file_path, status, start_time, template_id) " +
             "VALUES " +
-            "   (#{taskName}, #{taskDesc}, #{srcFilePath}, #{status}, #{startTime}, #{endTime}, #{splitTemplate.id})")
+            "   (#{taskName}, #{taskDesc}, #{srcFilePath}, #{status}, #{startTime}, #{splitTemplate.id})")
     @Options(useGeneratedKeys=true,keyColumn="task_id")
     int insert(SplitTask splitTask);
 
-    @Update("UPDATE tbl_file_split_task t set" +
-    		"   t.task_name = #{taskName}, " +
-    		"   t.task_desc = #{taskDesc}, " +
-    		"   t.src_file_path = #{srcFilePath}, " +
-    		"   t.status = #{status}, " +
-    		"   t.start_time = #{startTime}, " +
-    		"   t.end_time = #{endTime} " +
-    		"   t.template_id = #{splitTemplate.id}, " +
-            "   where task_id= #{id}")
-    int update(SplitTask splitTask);
-
     @Select("SELECT count(1) FROM tbl_file_split_task")
     int countAll();
+    
+    @Select("SELECT count(1) FROM tbl_file_split_task where template_id = #{templateId}")
+    int countByTemplateId(int templateId);
     
     @Delete("DELETE FROM tbl_file_split_task where task_id=#{id}")
     int delete(int id);

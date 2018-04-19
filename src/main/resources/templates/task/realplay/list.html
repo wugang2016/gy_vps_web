@@ -18,7 +18,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">分主控系统 - 管理平台</a>
+            <a class="navbar-brand" href="#">欧司朗视频切割系统 - 管理平台</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
@@ -33,15 +33,15 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li><a href="{{ctx.contextPath}}/task/split/list">任务管理</a></li>
                 <li class="active submenu open">
-                    <a href="#">通用管理</a>
+                    <a href="#">任务管理</a>
                     <ul style="display: block;">
-                        <li><a href="{{ctx.contextPath}}/sub_system/list">ECUE设备</a></li>
-                        <li class="active"><a href="{{ctx.contextPath}}/split_templates/list">切割模板</a></li>
-                        <li><a href="">Android实时流模板</a></li>
+                        <li><a href="{{ctx.contextPath}}/task/split/list">切割任务</a></li>
+                        <li><a href="{{ctx.contextPath}}/task/dispatch/list">分发任务</a></li>
+                        <li class="active"><a href="{{ctx.contextPath}}/task/realplay/list">实时文件播放任务</a></li>
                     </ul>
                 </li>
+                <li><a href="{{ctx.contextPath}}/manage/sub_system/list">通用管理</a></li>
             </ul>
         </div>
 
@@ -51,13 +51,13 @@
             	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
             {{/message}}
             <div class="page-header">
-                <h1>文件切割模板
+                <h1>实时文件播放任务
                     <small>列表</small>
                 </h1>
             </div>
 
             <div class="form-group">
-                <a href="{{ctx.contextPath}}/split_templates/new" type="button" class="btn btn-primary"> 新增 </a>
+                <a href="{{ctx.contextPath}}/task/realplay/new" type="button" class="btn btn-primary"> 新增 </a>
             </div>
 
             <div class="table-responsive">
@@ -65,25 +65,32 @@
                     <thead>
                     <tr>
                         <!--<th>#ID</th>  -->
-                        <th>模板名称</th>
-                        <th>描述</th>
+                        <th>文件名称</th>
+                        <th>切割模板</th>
+                        <th>播放状态</th>
+                        <th>循环播放</th>
+                        <th>开始时间</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {{#splitTemplates}}
+                    {{#realplayTasks}}
                     <tr>
                         <!--<td>{{id}}</td>-->
-                        <td>{{name}}</td>
-                        <td>{{desc}}</td>
+                        <td>{{fileResource.fileName}}</td>
+                        <td>{{splitTemplate.name}}</td>
+                        <td class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
+                        <td>{{#repeate}}是{{/repeate}}{{^repeate}}否{{/repeate}}</td>
+                        <td>{{#startTime}}{{.}}{{/startTime}}</td>
                         <td>
-                        	<form id="delForm" class="form-horizontal" method="post" action="{{ctx.contextPath}}/split_templates/{{id}}/delete" onsubmit="return delCheck()">
-	                            <a href="{{ctx.contextPath}}/split_templates/{{id}}/edit">编辑</a>
-	                            <a href="#" onclick="$('#delForm').submit()">删除</a>
+                        	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/realplay/{{id}}/delete" onsubmit="return delCheck()">
+	                            {{#allowStop}}<a href="#" onclick="stopPlay('/task/realplay/{{id}}/stop')">结束播放</a>{{/allowStop}}
+	                            {{#allowReplay}}<a href="#" onclick="stopPlay('/task/realplay/{{id}}/replay')">再次播放</a>{{/allowReplay}}
+	                            {{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}
                             </form>
                         </td>
                     </tr>
-                    {{/splitTemplates}}
+                    {{/realplayTasks}}
                     </tbody>
                 </table>
                 {{#pagination}}
@@ -118,12 +125,33 @@
         </div>
     </div>
 </div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:800px">
+		<div class="modal-content"></div>
+	</div>
 </div>
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script>
 function delCheck(){
 	return confirm("确认要删除此记录？");
+}
+function stopPlay(url){
+    $.ajax({
+        url: url,
+        type: "POST",
+        async: true,
+        success: function(data){
+            if(data == "1"){
+            	alert("发送成功！");
+            	location.reload();
+            }else{
+            	alert("发送失败！")
+            }
+        }
+    });
 }
 </script>
 </body>

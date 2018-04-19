@@ -20,10 +20,6 @@ public class SplitSubTask extends BaseTask  {
 	private int status;
 	
 	private FileArea fileArea;
-	
-	public String getStatusText() {
-		return SubTaskStatus.values()[status].text();
-	}
 
 	public int getId() {
 		return id;
@@ -79,6 +75,18 @@ public class SplitSubTask extends BaseTask  {
 
 	public void setFileArea(FileArea fileArea) {
 		this.fileArea = fileArea;
+	}
+	
+	public String getStatusText() {
+		return SubTaskStatus.values()[status].text();
+	}
+	
+	public boolean getAllowDispatch() {
+		return SubTaskStatus.values()[status].allowDispatch();
+	}
+
+	public boolean getIsFail() {
+		return SubTaskStatus.values()[status].isFail();
 	}
 
 }

@@ -33,15 +33,15 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
+                <li><a href="{{ctx.contextPath}}/task/split/list">任务管理</a></li>
                 <li class="active submenu open">
-                    <a href="#">任务管理</a>
+                    <a href="#">通用管理</a>
                     <ul style="display: block;">
-                        <li class="active"><a href="{{ctx.contextPath}}/task/split/list">切割任务</a></li>
-                        <li><a href="{{ctx.contextPath}}/task/dispatch/list">分发任务</a></li>
-                        <li><a href="{{ctx.contextPath}}/task/realplay/list">实时文件播放任务</a></li>
+                        <li class="active"><a href="{{ctx.contextPath}}/manage/sub_system/list">ECUE设备</a></li>
+                        <li><a href="{{ctx.contextPath}}/manage/split_templates/list">文件切割模板</a></li>
+                        <li><a href="">Android实时流模板</a></li>
                     </ul>
                 </li>
-                <li><a href="{{ctx.contextPath}}/manage/sub_system/list">通用管理</a></li>
             </ul>
         </div>
 
@@ -51,13 +51,13 @@
             	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
             {{/message}}
             <div class="page-header">
-                <h1>切割任务
+                <h1>ECUE设备
                     <small>列表</small>
                 </h1>
             </div>
 
             <div class="form-group">
-                <a href="{{ctx.contextPath}}/task/split/new" type="button" class="btn btn-primary"> 新增 </a>
+                <a href="{{ctx.contextPath}}/manage/sub_system/new" type="button" class="btn btn-primary"> 新增 </a>
             </div>
 
             <div class="table-responsive">
@@ -65,34 +65,35 @@
                     <thead>
                     <tr>
                         <!--<th>#ID</th>  -->
-                        <th>切割任务名称</th>
-                        <th>模板名称</th>
-                        <th>状态</th>
-                        <th>开始时间</th>
-                        <!-- <th>结束时间</th> -->
-                        <th>任务描述</th>
+                        <th>ECUE设备名称</th>
+                        <th>IP地址</th>
+                        <th>通知端口</th>
+                        <!-- <th>挂载点</th> -->
+                        <th>盒子IP地址</th>
+                        <th>区域宽度</th>
+                        <th>区域高度</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {{#splitTasks}}
+                    {{#subSystems}}
                     <tr>
                         <!--<td>{{id}}</td>-->
-                        <td>{{taskName}}</td>
-                        <td>{{splitTemplate.name}}</td>
-                        <td class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
-                        <td>{{#startTime}}{{.}}{{/startTime}}</td>
-                        <!-- <td>{{#endTime}}{{.}}{{/endTime}}</td> -->
-                        <td>{{#taskDesc}}{{.}}{{/taskDesc}}</td>
+                        <td>{{name}}</td>
+                        <td>{{ip}}</td>
+                        <td>{{port}}</td>
+                        <!-- <td>{{mntPath}}</td> -->
+                        <td>{{boxIp}}</td>
+                        <td>{{width}}</td>
+                        <td>{{height}}</td>
                         <td>
-                        	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/split/{{id}}/delete" onsubmit="return delCheck()">
-	                            <a href="{{ctx.contextPath}}/task/split/{{id}}/view" data-toggle="modal" data-target="#myModal">详细</a>
-	                            {{#isDispatch}}<a href="{{ctx.contextPath}}/task/split/{{id}}/dispatch" target="self">分发</a>{{/isDispatch}}
-	                            {{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}
+                        	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/manage/sub_system/{{id}}/delete" onsubmit="return delCheck()">
+	                            <a href="{{ctx.contextPath}}/manage/sub_system/{{id}}/edit">编辑</a>
+	                            <a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>
                             </form>
                         </td>
                     </tr>
-                    {{/splitTasks}}
+                    {{/subSystems}}
                     </tbody>
                 </table>
                 {{#pagination}}
@@ -127,13 +128,6 @@
         </div>
     </div>
 </div>
-
-
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog" style="width:800px">
-		<div class="modal-content"></div>
-	</div>
 </div>
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>

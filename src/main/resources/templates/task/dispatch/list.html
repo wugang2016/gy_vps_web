@@ -9,7 +9,6 @@
     <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
     <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
     <![endif]-->
-    <link rel="stylesheet" href="{{ctx.contextPath}}/css/jquery.fileupload.css">
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bijie.css">
     <style></style>
 </head>
@@ -19,11 +18,11 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">分主控系统 - 管理平台</a>
+            <a class="navbar-brand" href="#">欧司朗视频切割系统 - 管理平台</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a>BIJIE</a></li>
+                <li><a target="blank" href="{{ctx.contextPath}}/admin/login">高级设置</a></li>
             </ul>
         </div>
     </div>
@@ -34,58 +33,62 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li><a href="{{ctx.contextPath}}/sub_system/list">分主控系统配置</a></li>
-                <li><a href="{{ctx.contextPath}}/file_area/list">文件切割及播放</a></li>
-                <li class="active"><a href="{{ctx.contextPath}}/realtime_area/list">PAD实时流配置</a></li>
-                <li><a href="{{ctx.contextPath}}/status/task">任务状态</a></li>
+                <li class="active submenu open">
+                    <a href="#">任务管理</a>
+                    <ul style="display: block;">
+                        <li><a href="{{ctx.contextPath}}/task/split/list">切割任务</a></li>
+                        <li class="active"><a href="{{ctx.contextPath}}/task/dispatch/list">分发任务</a></li>
+                        <li><a href="{{ctx.contextPath}}/task/realplay/list">实时文件播放任务</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ctx.contextPath}}/manage/sub_system/list">通用管理</a></li>
             </ul>
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             {{#message}}
-            <p/><p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}"
-               role="alert"><em>系统提示：</em>{{message}}</p>
+            <p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}" role="alert">
+            	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
             {{/message}}
             <div class="page-header">
-                <h1>PAD实时流配置
+                <h1>分发任务
                     <small>列表</small>
                 </h1>
             </div>
 
             <div class="form-group">
-                <a href="{{ctx.contextPath}}/realtime_area/new" type="button" class="btn btn-primary"> 新增 </a>
+                <a href="{{ctx.contextPath}}/task/dispatch/new" type="button" class="btn btn-primary"> 新增 </a>
             </div>
 
             <div class="table-responsive">
-                <table class="table table-bordered table-striped">
+                <table class="table table-striped">
                     <thead>
                     <tr>
-                        <!--<th>#ID</th> -->
-                        <th>分主控名称</th>
-                        <th>左上角横坐标</th>
-                        <th>左上角纵坐标</th>
-                        <th>区域宽度</th>
-                        <th>区域高度</th>
+                        <!--<th>#ID</th>  -->
+                        <th>分发任务名称</th>
+                        <th>切割任务名称</th>
+                        <th>状态</th>
+                        <th>开始时间</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {{#realtimeAreas}}
+                    {{#dispatchTasks}}
                     <tr>
-                        <!--<td>{{id}}</td> -->
-                        <td>{{#subSystem.name}}{{subSystem.name}}{{/subSystem.name}}</td>
-                        <td>{{x}}</td>
-                        <td>{{y}}</td>
-                        <td>{{width}}</td>
-                        <td>{{height}}</td>
+                        <!--<td>{{id}}</td>-->
+                        <td>{{taskName}}</td>
+                        <td>{{#splitTask}}{{splitTask.taskName}}{{/splitTask}}</td>
+                        <td class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
+                        <td>{{#startTime}}{{.}}{{/startTime}}</td>
                         <td>
-                        	<form class="form-horizontal" method="post" action="{{ctx.contextPath}}/realtime_area/{{id}}/delete" onsubmit="return delCheck()">
-	                            <a type="button" class="btn btn-warning btn-xs" href="{{ctx.contextPath}}/realtime_area/{{id}}/edit">编辑</a>
-	                            <button type="submit" class="btn btn-danger btn-xs">删除</button>
+                        	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/dispatch/{{id}}/delete" onsubmit="return delCheck()">
+	                            <a href="{{ctx.contextPath}}/task/dispatch/{{id}}/view" data-toggle="modal" data-target="#myModal">详细</a>
+	                            {{#isDispatch}}<a href="#" onclick="dispatchAgain({{id}})">再次分发</a>{{/isDispatch}}
+	                            {{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}
                             </form>
                         </td>
                     </tr>
-                    {{/realtimeAreas}}
+                    {{/dispatchTasks}}
                     </tbody>
                 </table>
                 {{#pagination}}
@@ -117,25 +120,15 @@
                 </nav>
                 {{/pagination}}
             </div>
-                        
-            <div class="page-header">
-                <h3>PAD背景图案
-                    <small>文件上传</small>
-                </h3>
-            </div>
-            <form class="form-horizontal" action="{{ctx.contextPath}}/realtime_area/upload" method="post" enctype="multipart/form-data" id="fileForm">
-                <div class="form-group" id="upload_div">
-                    <label title="PAD背景图案上传" class="btn btn-primary fileinput-button" style="width:200px">
-                 		<i class="glyphicon glyphicon-upload"></i>
-                    	<span>PAD背景图案上传</span>
-               			<input type="file" name="file">
-                     </label>
-                </div>
-               	<span id="loading"></span>
-        	</form>
         </div>
     </div>
 </div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:800px">
+		<div class="modal-content"></div>
+	</div>
 </div>
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
@@ -143,15 +136,21 @@
 function delCheck(){
 	return confirm("确认要删除此记录？");
 }
-$(function() {
-    //选择文件后提交
-    $(".fileinput-button").on("change", "input[type='file']", function() {
-        $('#fileForm').submit();
-        $("#upload_div").hide();
-        $("input[name='file']").attr('disabled','disabled');
-        $('#loading').html(" 上传中...<img src='{{ctx.contextPath}}/css/img/small-loading.gif'>");
+function dispatchAgain(id){
+    $.ajax({
+        url: "/task/dispatch/"+id+"/again",
+        type: "POST",
+        async: true,
+        success: function(data){
+            if(data == "1"){
+            	alert("发送成功！");
+            	location.reload();
+            }else{
+            	alert("发送失败！")
+            }
+        }
     });
-})
+}
 </script>
 </body>
 </html>

@@ -8,7 +8,6 @@ import java.net.SocketException;
 import java.util.Date;
 import java.util.UUID;
 
-import org.apache.tomcat.jdbc.pool.interceptor.SlowQueryReport.QueryStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

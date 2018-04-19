@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.bj.dao.mapper.SplitSubTaskMapper;
 import com.bj.dao.mapper.SplitTaskMapper;
 import com.bj.pojo.SplitTask;
 
@@ -21,6 +22,9 @@ public class SplitTaskServiceImpl implements SplitTaskService {
 
     @Resource
     private SplitTaskMapper splitTaskMapper;
+    
+    @Resource
+    private SplitSubTaskMapper splitSubTaskMapper;
 
 	@Override
 	public SplitTask findById(int id) {
@@ -38,18 +42,18 @@ public class SplitTaskServiceImpl implements SplitTaskService {
 	}
 
 	@Override
-	public int update(SplitTask splitTask) {
-		return splitTaskMapper.update(splitTask);
-	}
-
-	@Override
 	public int countAll() {
 		return splitTaskMapper.countAll();
 	}
 
 	@Override
 	public int delete(int id) {
-		return splitTaskMapper.delete(id);
+		return splitSubTaskMapper.deleteByTaskId(id) * splitTaskMapper.delete(id);
+	}
+
+	@Override
+	public int countByTemplateId(int templateId) {
+		return splitTaskMapper.countByTemplateId(templateId);
 	}
     
 

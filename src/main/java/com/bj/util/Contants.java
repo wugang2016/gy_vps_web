@@ -3,8 +3,6 @@
  */
 package com.bj.util;
 
-import java.io.File;
-
 /**
  * @author LQK
  *

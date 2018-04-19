@@ -36,9 +36,9 @@
                 <li class="active submenu open">
                     <a href="#">任务管理</a>
                     <ul style="display: block;">
-                        <li class="active"><a href="{{ctx.contextPath}}/task/split/list">切割任务</a></li>
+                        <li><a href="{{ctx.contextPath}}/task/split/list">切割任务</a></li>
                         <li><a href="{{ctx.contextPath}}/task/dispatch/list">分发任务</a></li>
-                        <li><a href="{{ctx.contextPath}}/task/realplay/list">实时文件播放任务</a></li>
+                        <li class="active"><a href="{{ctx.contextPath}}/task/realplay/list">实时文件播放任务</a></li>
                     </ul>
                 </li>
                 <li><a href="{{ctx.contextPath}}/manage/sub_system/list">通用管理</a></li>
@@ -51,47 +51,19 @@
             	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
             {{/message}}
             <div class="page-header">
-                <h1>切割任务
+                <h1>文件播放任务
                     <small>新增</small>
                 </h1>
             </div>
             <form class="form-horizontal" method="post" id="form" enctype="multipart/form-data" onsubmit="return onSubmit()">
                 <div class="form-group">
-                    <label for="inputCode" class="col-sm-2 control-label">任务名称</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="taskName" placeholder="任务名称" value="{{#splitTask}}{{#taskName}}{{.}}{{/taskName}}{{/splitTask}}"  required>
-                        {{#taskNameErr}}<span class="error">{{.}}</span>{{/taskNameErr}}
-                    </div>
-                </div>
-                <div class="form-group">
                     <label for="inputName" class="col-sm-2 control-label">文件切割模板</label>
                     <div class="col-sm-10">
-                        <select class="form-control" name="splitTemplate.id" id="templateId" onchange="changeTemplate()" required>
+                        <select class="form-control" name="splitTemplate.id" id="templateId" required>
                         	{{#templates}}
                         	<option value="{{id}}">{{name}}</option>
                         	{{/templates}}
                         </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputName" class="col-sm-2 control-label">模板切割区域</label>
-                    <div class="col-sm-10">
-                        <div class="table-responsive">
-			                <table class="table table-striped">
-			                    <thead>
-			                    <tr>
-			                        <!--<th>#ID</th> -->
-			                        <th>ECUE主机</th>
-			                        <th>左上角横坐标</th>
-			                        <th>左上角纵坐标</th>
-			                        <th>区域宽度</th>
-			                        <th>区域高度</th>
-			                        <th>文件名称</th>
-			                    </tr>
-			                    </thead>
-			                    <tbody id="area_div"></tbody>
-			                </table>
-			            </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -105,10 +77,19 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputCode" class="col-sm-2 control-label">默认文件名称</label>
+                    <label for="inputCode" class="col-sm-2 control-label"></label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="defaultFileName" placeholder="默认文件名称" value="{{#splitTask}}{{#defaultFileName}}{{.}}{{/defaultFileName}}{{/splitTask}}">
-                        {{#defaultFileNameErr}}<span class="error">{{.}}</span>{{/defaultFileNameErr}}
+                        <input type="checkbox" name="repeate" {{#realplayTask}}{{#repeate}}checked{{/repeate}}{{/realplayTask}}>
+                        是否循环播放
+                        {{#repeateErr}}<span class="error">{{.}}</span>{{/repeateErr}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-2 control-label">文件描述</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control"  name="fileResource.fileDesc" placeholder="文件描述" 
+                        		value="{{#realplayTask}}{{#realplayTask.fileResource}}{{#realplayTask.fileResource.fileDesc}}{{.}}{{/realplayTask.fileResource.fileDesc}}{{/realplayTask.fileResource}}{{/realplayTask}}">
+                        {{#fileResource.fileErr}}<span class="error">{{.}}</span>{{/fileResource.fileErr}}
                     </div>
                 </div>
                 <div class="form-group">
@@ -118,21 +99,13 @@
                         {{#taskPasswordErr}}<span class="error">{{.}}</span>{{/taskPasswordErr}}
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="inputCode" class="col-sm-2 control-label">描述</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="taskDesc" placeholder="任务描述" value="{{#splitTask}}{{#taskDesc}}{{.}}{{/taskDesc}}{{/splitTask}}">
-                        {{#taskDescErr}}<span class="error">{{.}}</span>{{/taskDescErr}}
-                    </div>
-                </div>
                 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <input type="submit" class="btn btn-primary" value="提 交"/>
-                        <a href="{{ctx.contextPath}}/task/split/list" class="btn btn-default">返 回</a>
+                        <a href="{{ctx.contextPath}}/task/realplay/list" class="btn btn-default">返 回</a>
                     </div>
                 </div>
-                <input type="hidden" name="areaJson" id="areaJson"/>
             </form>
         </div>
     </div>
@@ -148,52 +121,12 @@ $(function() {
     	$('.fileinput-button').attr('data-original-title',fileName);
     	$('.fileinput-button').tooltip("show");
     });
-    $('#templateId').val({{#splitTask}}{{#splitTemplate.id}}{{.}}{{/splitTemplate.id}}{{/splitTask}});
-    changeTemplate();
+	$('#templateId').val({{#realplayTask}}{{#realplayTask.splitTemplate}}{{realplayTask.splitTemplate.id}}{{/realplayTask.splitTemplate}}{{/realplayTask}});
 });
 
-var area_json = [];
-function changeTemplate(){
-	var templateId = $('#templateId').val();
-    $.ajax({
-        url: "/manage/split_templates/"+templateId+"/getAreas",
-        type: "POST",
-        async: true,
-        dataType: "JSON",
-        success: function(data){
-        	area_json = data;
-        	$('#area_div').html("");
-            if(data.length > 0){
-            	$.each(data, function(n, obj){
-            		putArea(obj);
-            	})
-            }
-        }
-    });
-}
-
-function putArea(obj){
-	var newArea = "<tr><td>" + obj.subSystem.name +" [" + obj.subSystem.ip + "]</td><td>";
-	newArea += obj.x + "</td><td>";
-	newArea += obj.y + "</td><td>";
-	newArea += obj.width + "</td><td>";
-	newArea += obj.height + "</td><td>";
-	newArea += "<input type='text' class='form-control' data-id='"+obj.id+"' placeholder='自定义文件名称' value='" + obj.subSystem.name + "'></td></tr>";
-	$('#area_div').append(newArea);
-}
 
 function onSubmit(){
 	if(confirm("一旦创建成功不可修改，确认提交？")){
-		$("input[data-id]").each(function(){
-			var areaId = $(this).attr("data-id");
-			var customName = $(this).val();
-			$.each(area_json, function(n, obj){
-	    		if(obj.id == areaId){
-	    			area_json[n].customFileName = customName;
-	    		}
-	    	})
-		});
-		$('#areaJson').val(JSON.stringify(area_json));
 		return true;
 	}else{
 		return false;

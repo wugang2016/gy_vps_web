@@ -28,17 +28,19 @@
             <div class="form-group">
                 <label for="inputCode" class="col-sm-3 control-label">任务名称</label>
                 <div class="col-sm-9">
-                    <p class="form-control-static">{{#splitTask}}{{#taskName}}{{.}}{{/taskName}}{{/splitTask}}</p>
+                    <p class="form-control-static">{{#dispatchTask}}{{#taskName}}{{.}}{{/taskName}}{{/dispatchTask}}</p>
                 </div>
             </div>
+            <!-- 
             <div class="form-group">
-                <label for="inputName" class="col-sm-3 control-label">文件切割模板</label>
+                <label for="inputName" class="col-sm-3 control-label">切割任务</label>
                 <div class="col-sm-9">
-                    <p class="form-control-static">{{#splitTask}}{{#splitTemplate.name}}{{.}}{{/splitTemplate.name}}{{/splitTask}}</p>
+                    <p class="form-control-static">{{#dispatchTask}}{{#splitTask.taskName}}{{.}}{{/splitTask.taskName}}{{/dispatchTask}}</p>
                 </div>
             </div>
+             -->
             <div class="form-group">
-                <label for="inputName" class="col-sm-3 control-label">切割区域状态</label>
+                <label for="inputName" class="col-sm-3 control-label">分发状态</label>
                 <div class="col-sm-9">
                     <div class="table-responsive">
                <table class="table table-striped">
@@ -47,7 +49,7 @@
                        <!--<th>#ID</th> -->
                        <th>ECUE主机</th>
                        <th>文件名称</th>
-                       <th>切割状态</th>
+                       <th>分发状态</th>
                        <!-- <th>左上角横坐标</th>
                        <th>左上角纵坐标</th> -->
                        <th>区域宽度</th>
@@ -60,21 +62,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="inputCode" class="col-sm-3 control-label">视频文件</label>
-                <div class="col-sm-9">
-                    <p class="form-control-static">{{#splitTask}}{{fileName}}{{/splitTask}}</p>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="inputCode" class="col-sm-3 control-label">默认文件名称</label>
-                <div class="col-sm-9">
-                    <p class="form-control-static">{{#splitTask}}{{#defaultFileName}}{{.}}{{/defaultFileName}}{{/splitTask}}</p>
-                </div>
-            </div>
-            <div class="form-group">
                 <label for="inputCode" class="col-sm-3 control-label">描述</label>
                 <div class="col-sm-9">
-                    <p class="form-control-static">{{#splitTask}}{{#taskDesc}}{{.}}{{/taskDesc}}{{/splitTask}}</p>
+                    <p class="form-control-static">{{#dispatchTask}}{{#taskDesc}}{{.}}{{/taskDesc}}{{/dispatchTask}}</p>
                 </div>
             </div>
         </div>
@@ -93,7 +83,7 @@ $(function() {
 
 function loadSubTask(){
     $.ajax({
-        url: "/task/split/{{#splitTask}}{{id}}{{/splitTask}}/subTask",
+        url: "/task/dispatch/{{#dispatchTask}}{{id}}{{/dispatchTask}}/subTask",
         type: "POST",
         async: true,
         dataType: "JSON",
@@ -109,13 +99,13 @@ function loadSubTask(){
 
 function putSubTask(obj){
 	var statusClass = (obj.isFail)?"error":"";
-	var subTask = "<tr><td>" + obj.fileArea.subSystem.name +" [" + obj.fileArea.subSystem.ip + "]</td><td>";
-	subTask += obj.fileName + "</td><td class='" + statusClass + "'>";
+	var subTask = "<tr><td>" + obj.subSystem.name +" [" + obj.subSystem.ip + "]</td><td>";
+	subTask += obj.splitSubTask.fileName + "</td><td class='" + statusClass + "'>";
 	subTask += obj.statusText + "</td><td>";
 /* 	subTask += obj.fileArea.x + "</td><td>";
 	subTask += obj.fileArea.y + "</td><td>"; */
-	subTask += obj.fileArea.width + "</td><td>";
-	subTask += obj.fileArea.height + "</td><td></tr>";
+	subTask += obj.splitSubTask.fileArea.width + "</td><td>";
+	subTask += obj.splitSubTask.fileArea.height + "</td><td></tr>";
 	$('#subTask_div').append(subTask);
 }
 </script>

@@ -32,7 +32,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bj.pojo.SubSystemInfo;
 import com.bj.service.FileAreaService;
-import com.bj.service.RealtimeAreaService;
 import com.bj.service.SubSystemService;
 import com.bj.util.BaseUtil;
 import com.bj.util.Contants;
@@ -41,16 +40,13 @@ import com.bj.util.FileTypeUtil.FileType;
 import com.bj.util.Pagination;
 
 @Controller
+@RequestMapping("/manage")
 public class SubSystemController {
-    @SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(SubSystemController.class);
 
     @Resource
     private SubSystemService subSystemService;
-    
-    @Resource
-    private RealtimeAreaService realtimeAreaService;
-    
+        
     @Resource
     private FileAreaService fileAreaService ;
     
@@ -68,12 +64,12 @@ public class SubSystemController {
         model.put("subSystems", subs);
         model.put("pagination", pagination);
     	
-        return "sub_system/list";
+        return "manage/sub_system/list";
     }
 
     @GetMapping("/sub_system/new")
     public String goNew(Map<String, Object> model) {
-        return "sub_system/new";
+        return "manage/sub_system/new";
     }
 
     @PostMapping("/sub_system/new")
@@ -87,7 +83,7 @@ public class SubSystemController {
             	model.put(error.getField()+"Err", error.getDefaultMessage());
         	}
         	model.put("subSystem", subSystem);
-            return "sub_system/new";
+            return "manage/sub_system/new";
     	}
 
     	if(subSystemService.countByIp(subSystem.getIp()) > 0) {
@@ -109,7 +105,7 @@ public class SubSystemController {
         	}
     	}
     	
-        return "redirect:/sub_system/list";
+        return "redirect:/manage/sub_system/list";
     }
 
     @GetMapping("/sub_system/{id}/edit")
@@ -117,7 +113,7 @@ public class SubSystemController {
             				@PathVariable("id") int id) {
     	SubSystemInfo subSystem = subSystemService.findById(id);
     	model.put("subSystem", subSystem);
-        return "sub_system/edit";
+        return "manage/sub_system/edit";
     }
 
     @PostMapping("/sub_system/{id}/edit")
@@ -131,14 +127,13 @@ public class SubSystemController {
             	model.put(error.getField()+"Err", error.getDefaultMessage());
         	}
         	model.put("subSystem", subSystem);
-            return "sub_system/edit";
+            return "manage/sub_system/edit";
     	}
     	
     	if(subSystemService.countByIpExcept(subSystem.getIp(),subSystem.getId()) > 0) {
     		redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "IP地址与其它系统冲突！");
-    	}
-    	else {
+    	} else {
     		if(file != null) {
     			String newFileName = BaseUtil.getStrRandom(Contants.FILE_NAME_LENGTH);
     			String path = Contants.PIC_FILE_SUB_PATH + File.separator + BaseUtil.format(new Date());
@@ -152,7 +147,7 @@ public class SubSystemController {
                 redirectAttributes.addFlashAttribute("message", "保存失败！");
         	}
     	}
-        return "redirect:/sub_system/list";
+        return "redirect:/manage/sub_system/list";
     }
 
     @PostMapping("/sub_system/{id}/delete")
@@ -161,10 +156,7 @@ public class SubSystemController {
     	if(fileAreaService.countBySysId(id) > 0) {
     		redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "该系统被文件切割模板占用，请先调整对应模板后再操作!");
-    	}else if(realtimeAreaService.countBySysId(id) > 0){
-    		redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "该系统被实时流切割模板占用，请先调整对应模板后再操作!");
-    	}else {
+    	} else {
     		if(subSystemService.detele(id) > 0){
                 redirectAttributes.addFlashAttribute("message", "删除成功！");
         	}else{
@@ -172,7 +164,7 @@ public class SubSystemController {
                 redirectAttributes.addFlashAttribute("message", "删除失败！");
         	}
     	}
-        return "redirect:/sub_system/list";
+        return "redirect:/manage/sub_system/list";
     }
 
     /** 
@@ -188,7 +180,7 @@ public class SubSystemController {
         HttpHeaders he = new HttpHeaders();
     	byte[] pic = FileTypeUtil.getBytes(path);
         try {
-            FileType imgType = FileTypeUtil.getType(path);  
+            FileType imgType = FileTypeUtil.getType(path);
             switch(imgType.name()){
                 case "PNG":  
                     he.setContentType(MediaType.IMAGE_PNG);  
@@ -209,9 +201,11 @@ public class SubSystemController {
                     he.setContentType(MediaType.IMAGE_JPEG);  
                     break;  
             }
-        } catch (IOException e) {  
-            e.printStackTrace();  
-        }  
+        } catch (IOException e) {
+        	LOGGER.error(e.toString());
+        } catch (Exception e) {
+        	LOGGER.error(e.getMessage(),e);
+		}
         return new ResponseEntity<>(pic,he,HttpStatus.OK);  
-    }  
+    }
 }

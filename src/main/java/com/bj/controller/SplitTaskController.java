@@ -32,6 +32,7 @@ import com.bj.pojo.SplitTask;
 import com.bj.pojo.SplitTemplates;
 import com.bj.pojo.SubTaskStatus;
 import com.bj.pojo.TaskStatus;
+import com.bj.service.DispatchTaskService;
 import com.bj.service.FileAreaService;
 import com.bj.service.SplitSubTaskService;
 import com.bj.service.SplitTaskService;
@@ -55,6 +56,9 @@ public class SplitTaskController {
     
     @Resource
     private SplitSubTaskService splitSubTaskService;
+    
+    @Resource
+    private DispatchTaskService dispatchTaskService;
 
     @Resource
     private SplitTemplatesService splitTemplatesService;
@@ -139,6 +143,7 @@ public class SplitTaskController {
     	}
 
     	splitTask.setStatus(TaskStatus.PENDING.index());
+    	splitTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		if(splitTaskService.insert(splitTask) > 0){
 			//存入子任务表
 			for(int i=0; i<areaList.size(); i++) {
@@ -169,11 +174,16 @@ public class SplitTaskController {
     @PostMapping("/split/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {
-		if(splitTaskService.delete(id) > 0){
-            redirectAttributes.addFlashAttribute("message", "删除成功！");
-    	}else{
+    	if(dispatchTaskService.countBySplitTaskId(id) == 0){
+			if(splitTaskService.delete(id) > 0){
+	            redirectAttributes.addFlashAttribute("message", "删除成功！");
+	    	}else{
+	            redirectAttributes.addFlashAttribute("hasError", true);
+	            redirectAttributes.addFlashAttribute("message", "删除失败！");
+	    	}
+    	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "删除失败！");
+            redirectAttributes.addFlashAttribute("message", "有分发任务使用此切割任务，禁止删除！");
     	}
         return "redirect:/task/split/list";
     }
@@ -184,5 +194,13 @@ public class SplitTaskController {
     	List<SplitSubTask> subTasks = splitSubTaskService.findByTaskId(taskId);
     	JSONArray obj = JSONArray.fromObject(subTasks);
         return obj.toString();
+    }
+
+    @GetMapping("/split/{id}/dispatch")
+    public String goDispatch(@PathVariable("id") int id,
+			final RedirectAttributes redirectAttributes) throws IOException {
+    	SplitTask splitTask = splitTaskService.findById(id);
+    	redirectAttributes.addFlashAttribute("tz_splitTask", splitTask);
+        return "redirect:/task/dispatch/new";
     }
 }

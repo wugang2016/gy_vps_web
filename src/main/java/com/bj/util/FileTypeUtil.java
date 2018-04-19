@@ -8,7 +8,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;  
+import java.io.InputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;  
 
 /**
  * @author LQK
@@ -17,6 +20,8 @@ import java.io.InputStream;
  * 
  */  
 public class FileTypeUtil {  
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileTypeUtil.class);
   
     /** 
      * 文件头类型 
@@ -290,14 +295,13 @@ public class FileTypeUtil {
             inputStream = new FileInputStream(filePath);  
             inputStream.read(b, 0, 28);  
         } catch (IOException e) {  
-            e.printStackTrace();  
-            throw e;  
+        	LOGGER.error(e.getMessage(),e);
         } finally {  
             if (inputStream != null) {  
                 try {  
                     inputStream.close();  
                 } catch (IOException e) {  
-                    e.printStackTrace();  
+                	LOGGER.error(e.getMessage(),e);
                     throw e;  
                 }  
             }  
@@ -345,9 +349,9 @@ public class FileTypeUtil {
             bos.close();    
             buffer = bos.toByteArray();    
         } catch (FileNotFoundException e) {    
-            e.printStackTrace();    
-        } catch (IOException e) {    
-            e.printStackTrace();    
+        	LOGGER.error(e.toString());
+        } catch (IOException e) {
+        	LOGGER.error(e.toString());
         }    
         return buffer;    
     } 

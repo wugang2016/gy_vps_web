@@ -19,7 +19,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">分主控系统 - 管理平台</a>
+            <a class="navbar-brand" href="#">欧司朗视频切割系统 - 管理平台</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
@@ -38,8 +38,8 @@
                 <li class="active submenu open">
                     <a href="#">通用管理</a>
                     <ul style="display: block;">
-                        <li class="active"><a href="{{ctx.contextPath}}/sub_system/list">ECUE设备</a></li>
-                        <li><a href="{{ctx.contextPath}}/split_templates/list">切割模板</a></li>
+                        <li class="active"><a href="{{ctx.contextPath}}/manage/sub_system/list">ECUE设备</a></li>
+                        <li><a href="{{ctx.contextPath}}/manage/split_templates/list">文件切割模板</a></li>
                         <li><a href="">Android实时流模板</a></li>
                     </ul>
                 </li>
@@ -56,21 +56,21 @@
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-2 control-label">分系统名称</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="name" placeholder="分系统名称" value="{{#subSystem}}{{#name}}{{.}}{{/name}}{{/subSystem}}">
+                        <input type="text" class="form-control"  name="name" placeholder="分系统名称" value="{{#subSystem}}{{#name}}{{.}}{{/name}}{{/subSystem}}" required>
                         {{#nameErr}}<span class="error">{{.}}</span>{{/nameErr}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-2 control-label">子系统IP地址</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="ip" placeholder="子系统IP地址" value="{{#subSystem}}{{#ip}}{{.}}{{/ip}}{{/subSystem}}">
+                        <input type="text" class="form-control"  name="ip" placeholder="子系统IP地址" value="{{#subSystem}}{{#ip}}{{.}}{{/ip}}{{/subSystem}}" required>
                         {{#ipErr}}<span class="error">{{.}}</span>{{/ipErr}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-2 control-label">端口</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="port" placeholder="端口" value="{{#subSystem}}{{#port}}{{.}}{{/port}}{{/subSystem}}">
+                        <input type="text" class="form-control" name="port" placeholder="端口" value="{{#subSystem}}{{#port}}{{.}}{{/port}}{{/subSystem}}" required>
                         {{#portErr}}<span class="error">{{.}}</span>{{/portErr}}
                     </div>
                 </div>
@@ -85,21 +85,21 @@
                 <div class="form-group">
                     <label for="inputSubmittingEnd" class="col-sm-2 control-label">盒子地址</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="boxIp" placeholder="盒子IP地址" value="{{#subSystem}}{{#boxIp}}{{.}}{{/boxIp}}{{/subSystem}}">
+                        <input type="text" class="form-control"  name="boxIp" placeholder="盒子IP地址" value="{{#subSystem}}{{#boxIp}}{{.}}{{/boxIp}}{{/subSystem}}" required>
                         {{#boxIpErr}}<span class="error">{{.}}</span>{{/boxIpErr}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEditingEnd" class="col-sm-2 control-label">区域宽度</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control " name="width" placeholder="区域宽度" value="{{#subSystem}}{{#width}}{{.}}{{/width}}{{/subSystem}}">
+                        <input type="text" class="form-control " name="width" placeholder="区域宽度" value="{{#subSystem}}{{#width}}{{.}}{{/width}}{{/subSystem}}" required>
                         {{#widthErr}}<span class="error">{{.}}</span>{{/widthErr}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputClosingDate" class="col-sm-2 control-label">区域高度</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control " name="height" placeholder="区域高度" value="{{#subSystem}}{{#height}}{{.}}{{/height}}{{/subSystem}}">
+                        <input type="text" class="form-control " name="height" placeholder="区域高度" value="{{#subSystem}}{{#height}}{{.}}{{/height}}{{/subSystem}}" required>
                         {{#heightErr}}<span class="error">{{.}}</span>{{/heightErr}}
                     </div>
                 </div>
@@ -137,7 +137,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <input type="submit" class="btn btn-primary" value="提 交"/>
-                        <a href="{{ctx.contextPath}}/sub_system/list" class="btn btn-default">返 回</a>
+                        <a href="{{ctx.contextPath}}/manage/sub_system/list" class="btn btn-default">返 回</a>
                     </div>
                 </div>
             </form>

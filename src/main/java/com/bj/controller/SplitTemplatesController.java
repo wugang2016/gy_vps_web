@@ -17,6 +17,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -25,6 +26,8 @@ import com.bj.pojo.FileArea;
 import com.bj.pojo.SplitTemplates;
 import com.bj.pojo.SubSystemInfo;
 import com.bj.service.FileAreaService;
+import com.bj.service.RealplayTaskService;
+import com.bj.service.SplitTaskService;
 import com.bj.service.SplitTemplatesService;
 import com.bj.service.SubSystemService;
 import com.bj.util.Pagination;
@@ -33,6 +36,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
+@RequestMapping("/manage")
 public class SplitTemplatesController {
     @SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(SplitTemplatesController.class);
@@ -46,7 +50,12 @@ public class SplitTemplatesController {
     @Resource
     private FileAreaService fileAreaService ;
     
-
+    @Resource
+    private SplitTaskService splitTaskService;
+    
+    @Resource
+    private RealplayTaskService realplayTaskService;
+    
     @GetMapping("/split_templates/list")
     public String goList(Map<String, Object> model,
             HttpServletRequest request,
@@ -58,14 +67,14 @@ public class SplitTemplatesController {
         model.put("splitTemplates", subs);
         model.put("pagination", pagination);
     	
-        return "split_templates/list";
+        return "manage/split_templates/list";
     }
 
     @GetMapping("/split_templates/new")
     public String goNew(Map<String, Object> model) {
     	List<SubSystemInfo> lists = subSystemService.findAll(0, 200);
     	model.put("subSystems", lists);
-        return "split_templates/new";
+        return "manage/split_templates/new";
     }
 
     @PostMapping("/split_templates/new")
@@ -79,7 +88,7 @@ public class SplitTemplatesController {
             	model.put(error.getField()+"Err", error.getDefaultMessage());
         	}
         	model.put("splitTemplates", splitTemplates);
-            return "split_templates/new";
+            return "manage/split_templates/new";
     	}
 
 		List<FileArea> areaList = new ArrayList<FileArea>();
@@ -94,7 +103,7 @@ public class SplitTemplatesController {
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "至少新增一条切割区域！");
             redirectAttributes.addFlashAttribute("splitTemplates", splitTemplates);
-            return "redirect:/split_templates/new";
+            return "redirect:/manage/split_templates/new";
     	}
 
 		if(splitTemplatesService.insert(splitTemplates) > 0){
@@ -111,7 +120,7 @@ public class SplitTemplatesController {
             redirectAttributes.addFlashAttribute("message", "保存失败！");
     	}
     	
-        return "redirect:/split_templates/list";
+        return "redirect:/manage/split_templates/list";
     }
 
     @GetMapping("/split_templates/{id}/edit")
@@ -123,7 +132,7 @@ public class SplitTemplatesController {
     	model.put("fileAreas", fileAreas);
     	model.put("subSystems", subSystems);
     	model.put("splitTemplates", splitTemplates);
-        return "split_templates/edit";
+        return "manage/split_templates/edit";
     }
 
     @PostMapping("/split_templates/{id}/edit")
@@ -137,7 +146,7 @@ public class SplitTemplatesController {
             	model.put(error.getField()+"Err", error.getDefaultMessage());
         	}
         	model.put("splitTemplates", splitTemplates);
-            return "split_templates/edit";
+            return "manage/split_templates/edit";
     	}
     	
     	List<FileArea> areaList = new ArrayList<FileArea>();
@@ -152,7 +161,7 @@ public class SplitTemplatesController {
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "至少新增一条切割区域！");
             redirectAttributes.addFlashAttribute("splitTemplates", splitTemplates);
-            return "redirect:/split_templates/"+splitTemplates.getId()+"/edit";
+            return "redirect:/manage/split_templates/"+splitTemplates.getId()+"/edit";
     	}
     	
 		if(splitTemplates.getId() != null && splitTemplatesService.update(splitTemplates) > 0){
@@ -170,13 +179,24 @@ public class SplitTemplatesController {
             redirectAttributes.addFlashAttribute("message", "保存失败！");
     	}
     	
-        return "redirect:/split_templates/list";
+        return "redirect:/manage/split_templates/list";
     }
 
     @PostMapping("/split_templates/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {
-    	//删除模板对应的切割区域
+    	if(splitTaskService.countByTemplateId(id) > 0) {
+            redirectAttributes.addFlashAttribute("hasError", true);
+            redirectAttributes.addFlashAttribute("message", "有切割任务使用此模板，禁止删除！");
+            return "redirect:/manage/split_templates/list";
+    	}
+    	if(realplayTaskService.countByTemplateId(id) > 0) {
+            redirectAttributes.addFlashAttribute("hasError", true);
+            redirectAttributes.addFlashAttribute("message", "有实时文件播放任务使用此模板，禁止删除！");
+            return "redirect:/manage/split_templates/list";
+    	}
+    	
+    	//先删除模板对应的切割区域
     	if(fileAreaService.deteleByTemplateId(id) >= 0) {
 			if(splitTemplatesService.delete(id) > 0){
 	            redirectAttributes.addFlashAttribute("message", "删除成功！");
@@ -188,7 +208,7 @@ public class SplitTemplatesController {
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "删除对应切割区域失败！");
     	}
-        return "redirect:/split_templates/list";
+        return "redirect:/manage/split_templates/list";
     }
 
     @PostMapping("/split_templates/{templateId}/getAreas")

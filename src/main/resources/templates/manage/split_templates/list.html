@@ -18,7 +18,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">分主控系统 - 管理平台</a>
+            <a class="navbar-brand" href="#">欧司朗视频切割系统 - 管理平台</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
@@ -37,8 +37,8 @@
                 <li class="active submenu open">
                     <a href="#">通用管理</a>
                     <ul style="display: block;">
-                        <li class="active"><a href="{{ctx.contextPath}}/sub_system/list">ECUE设备</a></li>
-                        <li><a href="{{ctx.contextPath}}/split_templates/list">切割模板</a></li>
+                        <li><a href="{{ctx.contextPath}}/manage/sub_system/list">ECUE设备</a></li>
+                        <li class="active"><a href="{{ctx.contextPath}}/manage/split_templates/list">文件切割模板</a></li>
                         <li><a href="">Android实时流模板</a></li>
                     </ul>
                 </li>
@@ -51,13 +51,13 @@
             	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
             {{/message}}
             <div class="page-header">
-                <h1>ECUE设备
+                <h1>文件切割模板
                     <small>列表</small>
                 </h1>
             </div>
 
             <div class="form-group">
-                <a href="{{ctx.contextPath}}/sub_system/new" type="button" class="btn btn-primary"> 新增 </a>
+                <a href="{{ctx.contextPath}}/manage/split_templates/new" type="button" class="btn btn-primary"> 新增 </a>
             </div>
 
             <div class="table-responsive">
@@ -65,35 +65,25 @@
                     <thead>
                     <tr>
                         <!--<th>#ID</th>  -->
-                        <th>ECUE设备名称</th>
-                        <th>IP地址</th>
-                        <th>通知端口</th>
-                        <!-- <th>挂载点</th> -->
-                        <th>盒子IP地址</th>
-                        <th>区域宽度</th>
-                        <th>区域高度</th>
+                        <th>模板名称</th>
+                        <th>描述</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {{#subSystems}}
+                    {{#splitTemplates}}
                     <tr>
                         <!--<td>{{id}}</td>-->
                         <td>{{name}}</td>
-                        <td>{{ip}}</td>
-                        <td>{{port}}</td>
-                        <!-- <td>{{mntPath}}</td> -->
-                        <td>{{boxIp}}</td>
-                        <td>{{width}}</td>
-                        <td>{{height}}</td>
+                        <td>{{desc}}</td>
                         <td>
-                        	<form id="delForm" class="form-horizontal" method="post" action="{{ctx.contextPath}}/sub_system/{{id}}/delete" onsubmit="return delCheck()">
-	                            <a href="{{ctx.contextPath}}/sub_system/{{id}}/edit">编辑</a>
-	                            <a href="#" onclick="$('#delForm').submit()">删除</a>
+                        	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/manage/split_templates/{{id}}/delete" onsubmit="return delCheck()">
+	                            <a href="{{ctx.contextPath}}/manage/split_templates/{{id}}/edit">编辑</a>
+	                            <a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>
                             </form>
                         </td>
                     </tr>
-                    {{/subSystems}}
+                    {{/splitTemplates}}
                     </tbody>
                 </table>
                 {{#pagination}}

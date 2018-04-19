@@ -26,4 +26,16 @@ public enum SubTaskStatus {
     public int index() {
     	return this.ordinal();
     }
+	
+	public boolean isFail() {
+		return this.compareTo(FAILED) == 0;
+	}
+	
+	public boolean allowDelete() {
+		return (this.compareTo(SUCCESS) == 0 || this.compareTo(FAILED) == 0);
+	}
+	
+	public boolean allowDispatch() {
+		return this.compareTo(SUCCESS) == 0;
+	}
 }

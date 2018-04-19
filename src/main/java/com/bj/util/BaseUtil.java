@@ -15,15 +15,17 @@ import java.util.Date;
 import java.util.Random;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.ApplicationHome;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.bj.pojo.TaskStatus;
 
 /**
  * @author LQK
  *
  */
 public class BaseUtil {
+	private static final Logger LOGGER = LoggerFactory.getLogger(BaseUtil.class);
 
     /**
      * 保存文件到本地
@@ -71,7 +73,7 @@ public class BaseUtil {
 			// 标准的md5加密后的结果
 			return buffer.toString();
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+        	LOGGER.error(e.getMessage(),e);
 			return "";
 		}
 	}
@@ -127,9 +129,23 @@ public class BaseUtil {
     	}
     	return "";
     }
+	
+    /**
+     * 格式化日期
+     * @param date
+     * @return
+     */
+    public static String format(Date date, String foramt) {
+    	if(date != null) {
+    		SimpleDateFormat df = new SimpleDateFormat(foramt);
+    		return df.format(date);
+    	}
+    	return "";
+    }
     
 	public static void main(String[] args) {
-		TaskStatus b = TaskStatus.values()[1];
-		System.out.println(format(new Date()));
+		ApplicationHome home = new ApplicationHome(BaseUtil.class);
+	    File jarFile = home.getSource();
+	    System.out.println("currentPath=" + jarFile.getParentFile());
 	}
 }

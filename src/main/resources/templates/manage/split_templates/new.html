@@ -19,7 +19,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">分主控系统 - 管理平台</a>
+            <a class="navbar-brand" href="#">欧司朗视频切割系统 - 管理平台</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
@@ -38,8 +38,8 @@
                 <li class="active submenu open">
                     <a href="#">通用管理</a>
                     <ul style="display: block;">
-                        <li><a href="{{ctx.contextPath}}/sub_system/list">ECUE设备</a></li>
-                        <li class="active"><a href="{{ctx.contextPath}}/split_templates/list">切割模板</a></li>
+                        <li><a href="{{ctx.contextPath}}/manage/sub_system/list">ECUE设备</a></li>
+                        <li class="active"><a href="{{ctx.contextPath}}/manage/split_templates/list">文件切割模板</a></li>
                         <li><a href="">Android实时流模板</a></li>
                     </ul>
                 </li>
@@ -103,7 +103,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <input type="submit" class="btn btn-primary" value="保 存"/>
-                        <a href="{{ctx.contextPath}}/split_templates/list" class="btn btn-default">返 回</a>
+                        <a href="{{ctx.contextPath}}/manage/split_templates/list" class="btn btn-default">返 回</a>
                     </div>
                 </div>
                 <input type="hidden" name="areaJson" id="areaJson"/>
