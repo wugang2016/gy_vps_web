@@ -6,8 +6,6 @@ import java.util.Date;
 
 import javax.servlet.MultipartConfigElement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationHome;
 import org.springframework.boot.autoconfigure.mustache.MustacheEnvironmentCollector;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
@@ -21,9 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import com.samskivert.mustache.Mustache;
 
 @Configuration
-public class WebMvcConfig extends WebMvcConfigurerAdapter {
-	private static final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfig.class);
-	
+public class WebMvcConfig extends WebMvcConfigurerAdapter {	
 	private static ThreadLocal<SimpleDateFormat> DATE_FORMAT_THREAD_LOCAL = ThreadLocal
 			.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
 	private static ThreadLocal<SimpleDateFormat> DATETIME_FORMAT_THREAD_LOCAL = ThreadLocal
@@ -77,7 +73,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	    if(!tmpDir.exists()) {
 	    	tmpDir.mkdirs();
 	    }
-	    LOGGER.info("## location_tmp_dir = {}", tmpDir);
 		MultipartConfigFactory factory = new MultipartConfigFactory();
 		factory.setLocation(tmpPath);
 		return factory.createMultipartConfig();

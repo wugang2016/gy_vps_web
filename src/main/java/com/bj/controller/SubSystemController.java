@@ -90,7 +90,7 @@ public class SubSystemController {
             redirectAttributes.addFlashAttribute("message", "IP地址与其它系统冲突！");
     	}
     	else {
-    		if(file != null) {
+    		if(file.getSize() > 0) {
     			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
     			String newFileName = BaseUtil.getStrRandom(Contants.FILE_NAME_LENGTH) + ext;
     			String path = Contants.PIC_FILE_SUB_PATH + File.separator + BaseUtil.format(new Date());
@@ -134,7 +134,7 @@ public class SubSystemController {
     		redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "IP地址与其它系统冲突！");
     	} else {
-    		if(file != null) {
+    		if(file.getSize() > 0) {
     			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
     			String newFileName = BaseUtil.getStrRandom(Contants.FILE_NAME_LENGTH) + ext;
     			String path = Contants.PIC_FILE_SUB_PATH + File.separator + BaseUtil.format(new Date());

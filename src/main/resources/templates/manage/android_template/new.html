@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>编辑切割模板 - 欧司朗视频切割系统</title>
+    <title>新增Android模板 - 欧司朗视频切割系统</title>
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.css">
     <!--[if lt IE 9]>
     <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
@@ -29,7 +29,6 @@
     </div>
 </nav>
 
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
@@ -39,11 +38,10 @@
                     <a href="#">通用管理</a>
                     <ul style="display: block;">
                         <li><a href="{{ctx.contextPath}}/manage/sub_system/list">ECUE设备</a></li>
-                        <li class="active"><a href="{{ctx.contextPath}}/manage/split_templates/list">文件切割模板</a></li>
-                        <li><a href="{{ctx.contextPath}}/manage/android_template/list">Android实时流模板</a></li>
+                        <li><a href="{{ctx.contextPath}}/manage/split_templates/list">文件切割模板</a></li>
+                        <li class="active"><a href="{{ctx.contextPath}}/manage/android_template/list">Android实时流模板</a></li>
                     </ul>
                 </li>
-            </ul>
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -52,15 +50,15 @@
             	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
             {{/message}}
             <div class="page-header">
-                <h1>文件切割模板
-                    <small>编辑</small>
+                <h1>Android实时流模板
+                    <small>新增</small>
                 </h1>
             </div>
-            <form class="form-horizontal" method="post" id="form">
+            <form class="form-horizontal" method="post" id="form" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-2 control-label">模板名称</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="name" placeholder="模板名称" value="{{#splitTemplates}}{{#name}}{{.}}{{/name}}{{/splitTemplates}}" required>
+                        <input type="text" class="form-control"  name="name" placeholder="模板名称" value="{{#androidRealplayTemplate}}{{#name}}{{.}}{{/name}}{{/androidRealplayTemplate}}" required>
                         {{#nameErr}}<span class="error">{{.}}</span>{{/nameErr}}
                     </div>
                 </div>
@@ -87,37 +85,79 @@
 			                    </tr>
 			                    </thead>
 			                    <tbody id="area_div">
-			                    	{{#fileAreas}}
-			                    	<tr id="tr_{{id}}">
-				                        <!--<td>{{id}}</td>-->
-				                        <td>{{#subSystem.name}}{{subSystem.name}}{{/subSystem.name}} {{#subSystem.ip}}[{{subSystem.ip}}]{{/subSystem.ip}}</td>
-				                        <td>{{x}}</td>
-				                        <td>{{y}}</td>
-				                        <td>{{width}}</td>
-				                        <td>{{height}}</td>
-				                        <td>
-					                    	<a href="#" onclick='deleteArea({{id}})'>删除</a>
-				                        </td>
-				                    </tr>
-			                    	{{/fileAreas}}
 			                    </tbody>
 			                </table>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="inputClosingDate" class="col-sm-2 control-label">签名界面图选择</label>
+                    <div class="col-sm-3">
+				        <div class="thumbnail">
+				            <img id="file1" src="{{ctx.contextPath}}/css/img/default.jpg" alt="效果图">
+				            <div class="caption text-center">
+				                <p>
+				                    <label title="效果图选择" class="btn btn-primary fileinput-button" style="width:200px">
+				                 		<i class="glyphicon glyphicon-upload"></i>
+				                    	<span>签名界面效果图</span>
+				               			<input type="file" name="file1" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,image/bmp">
+				                     </label>
+				                </p>
+				            </div>
+				        </div>
+                    </div>
+                    <div class="col-sm-3">
+				        <div class="thumbnail">
+				            <img id="file2" src="{{ctx.contextPath}}/css/img/default.jpg" alt="缩略图">
+				            <div class="caption text-center">
+				                <p>
+				                    <label title="缩略图选择" class="btn btn-primary fileinput-button" style="width:200px">
+				                 		<i class="glyphicon glyphicon-upload"></i>
+				                    	<span>签名界面缩略图</span>
+				               			<input type="file" name="file2" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,image/bmp">
+				                     </label>
+				                </p>
+				            </div>
+				        </div>
+                    </div>
+                    <div class="col-sm-3">
+				        <div class="thumbnail">
+				            <img id="file3" src="{{ctx.contextPath}}/css/img/default.jpg" alt="签名框图片">
+				            <div class="caption text-center">
+				                <p>
+				                    <label title="签名框图片选择" class="btn btn-primary fileinput-button" style="width:200px">
+				                 		<i class="glyphicon glyphicon-upload"></i>
+				                    	<span>签名界面签名框图片</span>
+				               			<input type="file" name="file3" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,image/bmp">
+				                     </label>
+				                </p>
+				            </div>
+				        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-2 control-label">签名界面背景视频</label>
+                    <div class="col-sm-10">
+	                    <label class="btn btn-primary fileinput-button video_label" style="width:200px" data-placement="auto right" data-trigger="manual">
+	                 		<i class="glyphicon glyphicon-upload"></i>
+	                    	<span>视频文件选择</span>
+	               			<input type="file" name="file4" accept="video/mpeg,video/mp4,video/mkv,video/rm,video/rmvb,video/mov,video/wmv,video/avi,video/flv">
+	                     </label>
+                    </div>
+                </div>
+                                
+                <div class="form-group">
                     <label for="inputName" class="col-sm-2 control-label">描述</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="desc" placeholder="模板描述" value="{{#splitTemplates}}{{#desc}}{{.}}{{/desc}}{{/splitTemplates}}" required>
+                        <input type="text" class="form-control" name="desc" placeholder="模板描述" value="{{#androidRealplayTemplate}}{{#desc}}{{.}}{{/desc}}{{/androidRealplayTemplate}}" required>
                         {{#descErr}}<span class="error">{{.}}</span>{{/descErr}}
                     </div>
                 </div>
-                
-                
+                                
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <input type="submit" class="btn btn-primary" value="保 存"/>
-                        <a href="{{ctx.contextPath}}/manage/split_templates/list" class="btn btn-default">返 回</a>
+                        <a href="{{ctx.contextPath}}/manage/android_template/list" class="btn btn-default">返 回</a>
                     </div>
                 </div>
                 <input type="hidden" name="areaJson" id="areaJson"/>
@@ -147,9 +187,7 @@
                         	{{#subSystems}}
                         	<option value="{{id}}">{{name}} [{{ip}}]</option>
                         	{{/subSystems}}
-                        </select>
-                        {{#subSystemErr}}<span class="error">{{.}}</span>{{/subSystemErr}}
-                        
+                        </select>                        
                         {{#subSystems}}
                         <input type="hidden" id="sub_id_{{id}}" width-data="{{width}}" height-data="{{height}}">
                         {{/subSystems}}
@@ -158,13 +196,13 @@
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">左上角横坐标</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control"  name="x" placeholder="左上角横坐标" >
+                        <input type="text" class="form-control"  name="x" placeholder="左上角横坐标" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">左上角纵坐标</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" name="y" placeholder="左上角纵坐标" >
+                        <input type="text" class="form-control" name="y" placeholder="左上角纵坐标" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -180,13 +218,13 @@
                 <div class="form-group">
                     <label for="inputEditingEnd" class="col-sm-3 control-label">区域宽度</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control " name="width" placeholder="区域宽度">
+                        <input type="text" class="form-control" name="width" placeholder="区域宽度" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputClosingDate" class="col-sm-3 control-label">区域高度</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control " name="height" placeholder="区域高度">
+                        <input type="text" class="form-control" name="height" placeholder="区域高度" required>
                     </div>
                 </div>
 				<!-- 内容 -->
@@ -201,6 +239,34 @@
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script>
+$(function() {
+	//选择文件后提交
+    $("input[type='file']").on("change", function() {
+    	var name = $(this).attr("name");
+        showPreview($(this), name);
+    });
+
+    $("input[name='file4']").on("change", function() {
+		var fileName = $(this).val();
+		fileName = fileName.substr(fileName.lastIndexOf("\\")+1);
+		$('.video_label').attr('data-original-title',fileName);
+		$('.video_label').tooltip("show");
+    });
+});
+
+function showPreview(source,name) { 
+    var file = $(source).get(0).files[0]; 
+    if(window.FileReader) {
+        var fr = new FileReader(); 
+        fr.onloadend = function(e) { 
+            $("#"+name).attr("src",e.target.result); 
+        }; 
+        fr.readAsDataURL(file); 
+    }else{
+    	//浏览器不支持图片预览 
+    }
+}
+
 function setWH(isChecked){
 	if(isChecked){
 		$('input[name="width"]').val($('#sub_id_'+$('select[name="subSystem_id"]').val()).attr('width-data'));
@@ -225,7 +291,7 @@ function setArea(){
 	var y = $('input[name="y"]').val();
 	var width = $('input[name="width"]').val();
 	var height = $('input[name="height"]').val();
-	var index = parseInt(Math.random() * 100000000); 
+	var index = parseInt(Math.random() * 10000); 
 	var newArea = "<tr id='tr_"+index+"'><td>" + subSystem_name + "</td><td>";
 	newArea += x + "</td><td>";
 	newArea += y + "</td><td>";
@@ -244,7 +310,7 @@ function setArea(){
 	$('input[name="height"]').val('');
 	
 	//存入json
-	area_json.push({"index1":index,"x":x,"y":y,"width":width,"height":height,"subSystem":{"id":subSystem_id}});
+	area_json.push({"index1":index,"x":x,"y":y,"w":width,"h":height,"subSystem":{"id":subSystem_id}});
 	$('#areaJson').val(JSON.stringify(area_json));
 }
 
@@ -259,13 +325,6 @@ function deleteArea(index){
 	})
 	$('#areaJson').val(JSON.stringify(area_json));
 }
-
-$(function() {
-	{{#fileAreas}}
-	area_json.push({"index1":{{id}},"x":{{x}},"y":{{y}},"width":{{width}},"height":{{height}},"subSystem":{"id":{{subSystem.id}}}});
-	{{/fileAreas}}
-	$('#areaJson').val(JSON.stringify(area_json));
-});
 </script>
 </body>
 </html>

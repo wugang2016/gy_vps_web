@@ -48,16 +48,18 @@ public interface AndroidRealplayTemplateMapper {
     @Options(useGeneratedKeys=true,keyColumn="template_id",keyProperty="id")
     int insert(AndroidRealplayTemplate androidRealplayTemplate);
 
-    @Update("UPDATE tbl_android_realplay_template t set" +
-    		"   t.name = #{name}, " +
-    		"   t.desc = #{desc}  " +
-    		"   t.longitude = #{longitude}  " +
-    		"   t.latitude = #{latitude}  " +
-    		"   t.mini_pic_path = #{miniPicPath}  " +
-    		"   t.pic_path = #{picPath}  " +
-    		"   t.backgroud_video = #{backgroudVideo}  " +
-    		"   t.sig_pic_boder_path = #{sigPicBoderPath}  " +
-    		"   where t.template_id = #{id}")
+    @Update("<script>" + 
+    		"UPDATE tbl_android_realplay_template t " +
+    		"<trim prefix=\"set\" suffixOverrides=\",\">" +
+    		"   <if test=\"name != null\"> t.name = #{name}, </if>" +
+    		"   <if test=\"desc != null\"> t.desc = #{desc}, </if>" +
+    		"   <if test=\"miniPicPath != null\"> t.mini_pic_path = #{miniPicPath}, </if>" +
+    		"   <if test=\"picPath != null\"> t.pic_path = #{picPath}, </if>" +
+    		"   <if test=\"backgroudVideo != null\"> t.backgroud_video = #{backgroudVideo}, </if>" +
+    		"   <if test=\"sigPicBoderPath != null\"> t.sig_pic_boder_path = #{sigPicBoderPath}, </if>" +
+    		"</trim>" +
+    		"   where t.template_id = #{id}" +
+    		"</script>")
     int update(AndroidRealplayTemplate androidRealplayTemplate);
 
     @Select("SELECT count(1) FROM tbl_android_realplay_template")

@@ -1,5 +1,6 @@
 package com.bj.pojo;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,10 +15,12 @@ public class AndroidRealplayTemplate implements Serializable {
 	//Column(name="template_id")
 	private Integer id;
 
-	//Column(name="backgroud_video")
-	private String backgroudVideo;
+	private String name;
 
 	private String desc;
+
+	//Column(name="backgroud_video")
+	private String backgroudVideo;
 
 	private String latitude;
 
@@ -25,8 +28,6 @@ public class AndroidRealplayTemplate implements Serializable {
 
 	//Column(name="mini_pic_path")
 	private String miniPicPath;
-
-	private String name;
 
 	//Column(name="pic_path")
 	private String picPath;
@@ -50,6 +51,13 @@ public class AndroidRealplayTemplate implements Serializable {
 
 	public void setBackgroudVideo(String backgroudVideo) {
 		this.backgroudVideo = backgroudVideo;
+	}
+	
+	public String getVideoName() {
+		if(this.backgroudVideo != null) {
+			return this.backgroudVideo.substring(this.backgroudVideo.lastIndexOf(File.separator)+1);
+		}
+		return "";
 	}
 
 	public String getDesc() {
