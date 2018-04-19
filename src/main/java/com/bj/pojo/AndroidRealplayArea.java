@@ -13,64 +13,64 @@ public class AndroidRealplayArea implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	//Column(name="area_id")
-	private int id;
+	private Integer id;
 
 	//Column(name="pos_x")
-	private int x;
+	private Integer x;
 
 	//Column(name="pos_y")
-	private int y;
+	private Integer y;
 
 	//Column(name="w")
-	private int w;
+	private Integer w;
 	
 	//Column(name="h")
-	private int h;
+	private Integer h;
 
 	//Column(name="sub_sys_id")
 	private SubSystemInfo subSystem;
 
 	//Column(name="template_id")
-	private AndroidRealplayTemplate template;
+	private Integer templateId;
 
-	public int getH() {
-		return this.h;
-	}
-
-	public void setH(int h) {
-		this.h = h;
-	}
-
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public int getW() {
-		return w;
-	}
-
-	public void setW(int w) {
-		this.w = w;
-	}
-
-	public int getX() {
+	public Integer getX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(Integer x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public Integer getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(Integer y) {
 		this.y = y;
+	}
+
+	public Integer getW() {
+		return w;
+	}
+
+	public void setW(Integer w) {
+		this.w = w;
+	}
+
+	public Integer getH() {
+		return h;
+	}
+
+	public void setH(Integer h) {
+		this.h = h;
 	}
 
 	public SubSystemInfo getSubSystem() {
@@ -81,15 +81,12 @@ public class AndroidRealplayArea implements Serializable {
 		this.subSystem = subSystem;
 	}
 
-	public void setTemplate(AndroidRealplayTemplate template) {
-		this.template = template;
+	public Integer getTemplateId() {
+		return templateId;
 	}
 
-	public AndroidRealplayTemplate getTemplate() {
-		return template;
+	public void setTemplateId(Integer templateId) {
+		this.templateId = templateId;
 	}
 
-	public void setTemplateId(AndroidRealplayTemplate template) {
-		this.template = template;
-	}
 }

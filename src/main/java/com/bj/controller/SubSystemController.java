@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -92,7 +91,8 @@ public class SubSystemController {
     	}
     	else {
     		if(file != null) {
-    			String newFileName = BaseUtil.getStrRandom(Contants.FILE_NAME_LENGTH);
+    			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+    			String newFileName = BaseUtil.getStrRandom(Contants.FILE_NAME_LENGTH) + ext;
     			String path = Contants.PIC_FILE_SUB_PATH + File.separator + BaseUtil.format(new Date());
     			BaseUtil.doSaveFile(uploadFileDir + File.separator + path, file, newFileName);
     			subSystem.setPicPath(path + File.separator +  newFileName);
@@ -135,7 +135,8 @@ public class SubSystemController {
             redirectAttributes.addFlashAttribute("message", "IP地址与其它系统冲突！");
     	} else {
     		if(file != null) {
-    			String newFileName = BaseUtil.getStrRandom(Contants.FILE_NAME_LENGTH);
+    			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+    			String newFileName = BaseUtil.getStrRandom(Contants.FILE_NAME_LENGTH) + ext;
     			String path = Contants.PIC_FILE_SUB_PATH + File.separator + BaseUtil.format(new Date());
     			BaseUtil.doSaveFile(uploadFileDir + File.separator + path, file, newFileName);
     			subSystem.setPicPath(path + File.separator +  newFileName);
@@ -172,7 +173,7 @@ public class SubSystemController {
      * @param request 
      * @return 
      */  
-    @RequestMapping(value = "/sub_system/{id}/pic", method = RequestMethod.GET)  
+    @GetMapping("/sub_system/{id}/pic")
     public ResponseEntity<byte[]> getBomImg(HttpServletRequest request,HttpServletResponse response,
 									    		@PathVariable Integer id) {  
     	SubSystemInfo subSystem = subSystemService.findById(id);

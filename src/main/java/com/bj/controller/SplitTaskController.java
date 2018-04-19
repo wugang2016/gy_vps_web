@@ -188,19 +188,18 @@ public class SplitTaskController {
         return "redirect:/task/split/list";
     }
 
-    @PostMapping("/split/{taskId}/subTask")
-    @ResponseBody
-    public String getAreas(@PathVariable("taskId") int taskId) throws IOException {
-    	List<SplitSubTask> subTasks = splitSubTaskService.findByTaskId(taskId);
-    	JSONArray obj = JSONArray.fromObject(subTasks);
-        return obj.toString();
-    }
-
     @GetMapping("/split/{id}/dispatch")
     public String goDispatch(@PathVariable("id") int id,
 			final RedirectAttributes redirectAttributes) throws IOException {
     	SplitTask splitTask = splitTaskService.findById(id);
     	redirectAttributes.addFlashAttribute("tz_splitTask", splitTask);
         return "redirect:/task/dispatch/new";
+    }
+
+    @PostMapping("/split/{taskId}/subTask")
+    public @ResponseBody String getAreas(@PathVariable("taskId") int taskId) throws IOException {
+    	List<SplitSubTask> subTasks = splitSubTaskService.findByTaskId(taskId);
+    	JSONArray obj = JSONArray.fromObject(subTasks);
+        return obj.toString();
     }
 }

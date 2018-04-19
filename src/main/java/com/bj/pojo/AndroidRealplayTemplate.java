@@ -1,6 +1,7 @@
 package com.bj.pojo;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * The persistent class for the tbl_android_realplay_template database table.
@@ -11,7 +12,7 @@ public class AndroidRealplayTemplate implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	//Column(name="template_id")
-	private int id;
+	private Integer id;
 
 	//Column(name="backgroud_video")
 	private String backgroudVideo;
@@ -32,12 +33,14 @@ public class AndroidRealplayTemplate implements Serializable {
 
 	//Column(name="sig_pic_boder_path")
 	private String sigPicBoderPath;
+	
+	private List<AndroidRealplayArea> realplayAreas;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -103,6 +106,14 @@ public class AndroidRealplayTemplate implements Serializable {
 
 	public void setSigPicBoderPath(String sigPicBoderPath) {
 		this.sigPicBoderPath = sigPicBoderPath;
+	}
+
+	public List<AndroidRealplayArea> getRealplayAreas() {
+		return realplayAreas;
+	}
+
+	public void setRealplayAreas(List<AndroidRealplayArea> realplayAreas) {
+		this.realplayAreas = realplayAreas;
 	}
 
 }

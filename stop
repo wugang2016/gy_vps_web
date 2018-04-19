@@ -1,4 +1,5 @@
 #! /bin/sh        
 ps -ef|grep java|grep bj-18a001|grep -v grep|awk '{print "kill -9 "$2}' |sh
 sleep 1
+echo "stop successful!"
  

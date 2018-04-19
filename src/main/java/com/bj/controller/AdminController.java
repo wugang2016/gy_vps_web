@@ -167,9 +167,6 @@ public class AdminController {
      */
     private boolean isLogin(HttpServletRequest request) {
     	Object obj = request.getSession().getAttribute(LOGIN_PASS);
-    	if(obj != null && Boolean.parseBoolean(obj.toString())){
-    		return true;
-    	}
-    	return false;
+    	return (obj != null && Boolean.parseBoolean(obj.toString()));
     }
 }

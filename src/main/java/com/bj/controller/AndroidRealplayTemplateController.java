@@ -22,13 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.bj.pojo.FileArea;
-import com.bj.pojo.SplitTemplates;
+import com.bj.pojo.AndroidRealplayTemplate;
+import com.bj.pojo.AndroidRealplayArea;
 import com.bj.pojo.SubSystemInfo;
-import com.bj.service.FileAreaService;
-import com.bj.service.RealplayTaskService;
-import com.bj.service.SplitTaskService;
-import com.bj.service.SplitTemplatesService;
+import com.bj.service.AndroidRealplayAreaService;
+import com.bj.service.AndroidRealplayTemplateService;
 import com.bj.service.SubSystemService;
 import com.bj.util.Pagination;
 
@@ -37,48 +35,42 @@ import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/manage")
-public class SplitTemplatesController {
+public class AndroidRealplayTemplateController {
     @SuppressWarnings("unused")
-	private static final Logger LOGGER = LoggerFactory.getLogger(SplitTemplatesController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AndroidRealplayTemplateController.class);
 
     @Resource
-    private SplitTemplatesService splitTemplatesService;
+    private AndroidRealplayTemplateService androidRealplayTemplateService;
     
     @Resource
     private SubSystemService subSystemService;
     
     @Resource
-    private FileAreaService fileAreaService ;
+    private AndroidRealplayAreaService androidRealplayAreaService ;
     
-    @Resource
-    private SplitTaskService splitTaskService;
-    
-    @Resource
-    private RealplayTaskService realplayTaskService;
-    
-    @GetMapping("/split_templates/list")
+    @GetMapping("/android_templates/list")
     public String goList(Map<String, Object> model,
             HttpServletRequest request,
             @RequestParam(value = "p", defaultValue = "1") int page) {
-    	int count = splitTemplatesService.countAll();
-    	List<SplitTemplates> subs = splitTemplatesService.findAll((page - 1) * Pagination.DEFAULT_PAGE_SIZE, Pagination.DEFAULT_PAGE_SIZE);
+    	int count = androidRealplayTemplateService.countAll();
+    	List<AndroidRealplayTemplate> list = androidRealplayTemplateService.findAll((page - 1) * Pagination.DEFAULT_PAGE_SIZE, Pagination.DEFAULT_PAGE_SIZE);
 
         Pagination pagination = new Pagination(request, page, count, Pagination.DEFAULT_PAGE_SIZE);
-        model.put("splitTemplates", subs);
+        model.put("androidRealplayTemplate", list);
         model.put("pagination", pagination);
     	
-        return "manage/split_templates/list";
+        return "manage/android_templates/list";
     }
 
-    @GetMapping("/split_templates/new")
+    @GetMapping("/android_templates/new")
     public String goNew(Map<String, Object> model) {
     	List<SubSystemInfo> lists = subSystemService.findAll(0, 200);
     	model.put("subSystems", lists);
-        return "manage/split_templates/new";
+        return "manage/android_templates/new";
     }
 
-    @PostMapping("/split_templates/new")
-    public String doNew(@Valid SplitTemplates splitTemplates,
+    @PostMapping("/android_templates/new")
+    public String doNew(@Valid AndroidRealplayTemplate androidRealplayTemplate,
     							Errors result,
     							Map<String, Object> model,
                 	            @RequestParam(value = "areaJson",defaultValue = "") String areaJson,
@@ -87,32 +79,32 @@ public class SplitTemplatesController {
         	for(FieldError error:result.getFieldErrors()){
             	model.put(error.getField()+"Err", error.getDefaultMessage());
         	}
-        	model.put("splitTemplates", splitTemplates);
-            return "manage/split_templates/new";
+        	model.put("androidRealplayTemplate", androidRealplayTemplate);
+            return "manage/android_templates/new";
     	}
 
-		List<FileArea> areaList = new ArrayList<FileArea>();
+		List<AndroidRealplayArea> areaList = new ArrayList<AndroidRealplayArea>();
     	if(areaJson != null && areaJson.length() > 10) {
     		JSONArray jsonArray = JSONArray.fromObject(areaJson);
             for(int i=0 ; i<jsonArray.size(); i++){
             	JSONObject jsonObject = jsonArray.getJSONObject(i);  
-            	FileArea area = (FileArea)JSONObject.toBean(jsonObject,FileArea.class);  
+            	AndroidRealplayArea area = (AndroidRealplayArea)JSONObject.toBean(jsonObject,AndroidRealplayArea.class);  
             	areaList.add(area);
             }
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "至少新增一条切割区域！");
-            redirectAttributes.addFlashAttribute("splitTemplates", splitTemplates);
-            return "redirect:/manage/split_templates/new";
+            redirectAttributes.addFlashAttribute("androidRealplayTemplate", androidRealplayTemplate);
+            return "redirect:/manage/android_templates/new";
     	}
 
-		if(splitTemplatesService.insert(splitTemplates) > 0){
+		if(androidRealplayTemplateService.insert(androidRealplayTemplate) > 0){
 			if(areaList.size() > 0) {
 				for(int i=0; i<areaList.size(); i++) {
-					FileArea area = areaList.get(i);
-					area.setTemplateId(splitTemplates.getId());
+					AndroidRealplayArea area = areaList.get(i);
+					area.setTemplateId(androidRealplayTemplate.getId());
 				}
-				fileAreaService.batchInsert(areaList);
+				androidRealplayAreaService.batchInsert(areaList);
 			}
             redirectAttributes.addFlashAttribute("message", "保存成功！");
     	}else{
@@ -120,23 +112,23 @@ public class SplitTemplatesController {
             redirectAttributes.addFlashAttribute("message", "保存失败！");
     	}
     	
-        return "redirect:/manage/split_templates/list";
+        return "redirect:/manage/android_templates/list";
     }
 
-    @GetMapping("/split_templates/{id}/edit")
+    @GetMapping("/android_templates/{id}/edit")
     public String goEdit(Map<String, Object> model,
             				@PathVariable("id") int id) {
-    	SplitTemplates splitTemplates = splitTemplatesService.findById(id);
+    	AndroidRealplayTemplate androidRealplayTemplate = androidRealplayTemplateService.findById(id);
     	List<SubSystemInfo> subSystems = subSystemService.findAll(0, 200);
-    	List<FileArea> fileAreas = fileAreaService.findByTemplateId(splitTemplates.getId());
+    	List<AndroidRealplayArea> fileAreas = androidRealplayAreaService.findByTemplateId(androidRealplayTemplate.getId());
     	model.put("fileAreas", fileAreas);
     	model.put("subSystems", subSystems);
-    	model.put("splitTemplates", splitTemplates);
-        return "manage/split_templates/edit";
+    	model.put("androidRealplayTemplate", androidRealplayTemplate);
+        return "manage/android_templates/edit";
     }
 
-    @PostMapping("/split_templates/{id}/edit")
-    public String doEdit(@Valid SplitTemplates splitTemplates,
+    @PostMapping("/android_templates/{id}/edit")
+    public String doEdit(@Valid AndroidRealplayTemplate androidRealplayTemplate,
     							Errors result,
     							Map<String, Object> model,
                 	            @RequestParam(value = "areaJson",defaultValue = "") String areaJson,
@@ -145,33 +137,33 @@ public class SplitTemplatesController {
         	for(FieldError error:result.getFieldErrors()){
             	model.put(error.getField()+"Err", error.getDefaultMessage());
         	}
-        	model.put("splitTemplates", splitTemplates);
-            return "manage/split_templates/edit";
+        	model.put("androidRealplayTemplate", androidRealplayTemplate);
+            return "manage/android_templates/edit";
     	}
     	
-    	List<FileArea> areaList = new ArrayList<FileArea>();
+    	List<AndroidRealplayArea> areaList = new ArrayList<AndroidRealplayArea>();
     	if(areaJson != null && areaJson.length() > 10) {
     		JSONArray jsonArray = JSONArray.fromObject(areaJson);
             for(int i=0 ; i<jsonArray.size(); i++){
             	JSONObject jsonObject = jsonArray.getJSONObject(i);  
-            	FileArea area = (FileArea)JSONObject.toBean(jsonObject,FileArea.class);  
+            	AndroidRealplayArea area = (AndroidRealplayArea)JSONObject.toBean(jsonObject,AndroidRealplayArea.class);  
             	areaList.add(area);
             }
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "至少新增一条切割区域！");
-            redirectAttributes.addFlashAttribute("splitTemplates", splitTemplates);
-            return "redirect:/manage/split_templates/"+splitTemplates.getId()+"/edit";
+            redirectAttributes.addFlashAttribute("androidRealplayTemplate", androidRealplayTemplate);
+            return "redirect:/manage/android_templates/"+androidRealplayTemplate.getId()+"/edit";
     	}
     	
-		if(splitTemplates.getId() != null && splitTemplatesService.update(splitTemplates) > 0){
+		if(androidRealplayTemplate.getId() != null && androidRealplayTemplateService.update(androidRealplayTemplate) > 0){
 			if(areaList.size() > 0) {
-				fileAreaService.deteleByTemplateId(splitTemplates.getId());
+				androidRealplayAreaService.deteleByTemplateId(androidRealplayTemplate.getId());
 				for(int i=0; i<areaList.size(); i++) {
-					FileArea area = areaList.get(i);
-					area.setTemplateId(splitTemplates.getId());
+					AndroidRealplayArea area = areaList.get(i);
+					area.setTemplateId(androidRealplayTemplate.getId());
 				}
-				fileAreaService.batchInsert(areaList);
+				androidRealplayAreaService.batchInsert(areaList);
 			}
             redirectAttributes.addFlashAttribute("message", "保存成功！");
     	}else{
@@ -179,26 +171,15 @@ public class SplitTemplatesController {
             redirectAttributes.addFlashAttribute("message", "保存失败！");
     	}
     	
-        return "redirect:/manage/split_templates/list";
+        return "redirect:/manage/android_templates/list";
     }
 
-    @PostMapping("/split_templates/{id}/delete")
+    @PostMapping("/android_templates/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
-    							final RedirectAttributes redirectAttributes) throws IOException {
-    	if(splitTaskService.countByTemplateId(id) > 0) {
-            redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "有切割任务使用此模板，禁止删除！");
-            return "redirect:/manage/split_templates/list";
-    	}
-    	if(realplayTaskService.countByTemplateId(id) > 0) {
-            redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "有实时文件播放任务使用此模板，禁止删除！");
-            return "redirect:/manage/split_templates/list";
-    	}
-    	
+    							final RedirectAttributes redirectAttributes) throws IOException {    	
     	//先删除模板对应的切割区域
-    	if(fileAreaService.deteleByTemplateId(id) >= 0) {
-			if(splitTemplatesService.delete(id) > 0){
+    	if(androidRealplayAreaService.deteleByTemplateId(id) >= 0) {
+			if(androidRealplayTemplateService.delete(id) > 0){
 	            redirectAttributes.addFlashAttribute("message", "删除成功！");
 	    	}else{
 	            redirectAttributes.addFlashAttribute("hasError", true);
@@ -208,12 +189,12 @@ public class SplitTemplatesController {
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "删除对应切割区域失败！");
     	}
-        return "redirect:/manage/split_templates/list";
+        return "redirect:/manage/android_templates/list";
     }
 
-    @PostMapping("/split_templates/{templateId}/getAreas")
+    @PostMapping("/android_templates/{templateId}/getAreas")
     public @ResponseBody String getAreas(@PathVariable("templateId") int templateId) throws IOException {
-    	List<FileArea> areas = fileAreaService.findByTemplateId(templateId);
+    	List<AndroidRealplayArea> areas = androidRealplayAreaService.findByTemplateId(templateId);
     	JSONArray obj = JSONArray.fromObject(areas);
         return obj.toString();
     }

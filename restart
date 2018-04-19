@@ -1,0 +1,9 @@
+#! /bin/sh      
+ps -ef|grep java|grep bj-18a001|grep -v grep|awk '{print "kill -9 "$2}' |sh
+echo "stop successful!"
+echo "starting...."
+sleep 1
+exec java -Xms512m -Xmx1024m -jar bj-18a001-web-0.0.1-SNAPSHOT.war --spring.profiles.active=prod --server.port=8080 >/dev/null & 
+sleep 1  
+echo "startup successful!"
+

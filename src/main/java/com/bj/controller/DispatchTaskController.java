@@ -167,16 +167,14 @@ public class DispatchTaskController {
     }
 
     @PostMapping("/dispatch/{taskId}/subTask")
-    @ResponseBody
-    public String getAreas(@PathVariable("taskId") int taskId) throws IOException {
+    public @ResponseBody String getAreas(@PathVariable("taskId") int taskId) throws IOException {
     	List<DispatchSubTask> subTasks = splitSubTaskService.findByTaskId(taskId);
     	JSONArray obj = JSONArray.fromObject(subTasks);
         return obj.toString();
     }
 
     @PostMapping("/dispatch/{taskId}/again")
-    @ResponseBody
-    public String dispatchAgain(@PathVariable("taskId") int taskId) throws IOException {
+    public @ResponseBody String dispatchAgain(@PathVariable("taskId") int taskId) throws IOException {
     	//TODO send message
         return "1";
     }

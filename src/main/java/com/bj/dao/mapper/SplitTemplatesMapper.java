@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
@@ -22,10 +21,7 @@ import com.bj.pojo.SplitTemplates;
 public interface SplitTemplatesMapper {	
 	@Select("SELECT * FROM tbl_file_split_template where template_id = #{id}")
     @Results(value = {
-            @Result(property = "id", column = "template_id"),
-            @Result(property = "x", column = "pos_x"),
-            @Result(property = "y", column = "pos_y"),
-            @Result(property = "fileAreas", javaType = List.class, column = "template_id", many = @Many(select = "com.bj.dao.mapper.FileAreaMapper.findByTemplateId"))})
+            @Result(property = "id", column = "template_id")})
     SplitTemplates findById(@Param("id") int id);
     
     @Select("SELECT * FROM tbl_file_split_template " +
