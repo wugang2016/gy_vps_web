@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>新增Android模板 - 欧司朗视频切割系统</title>
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.css">
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrapValidator.min.css">
     <!--[if lt IE 9]>
     <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
     <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
@@ -141,7 +142,7 @@
 	                    <label class="btn btn-primary fileinput-button video_label" style="width:200px" data-placement="auto right" data-trigger="manual">
 	                 		<i class="glyphicon glyphicon-upload"></i>
 	                    	<span>视频文件选择</span>
-	               			<input type="file" name="file4" accept="video/mpeg,video/mp4,video/mkv,video/rm,video/rmvb,video/mov,video/wmv,video/avi,video/flv">
+	               			<input type="file" name="file4" accept="video/*">
 	                     </label>
                     </div>
                 </div>
@@ -210,7 +211,7 @@
                     <div class="col-sm-9">
 						<div class="checkbox">
 					        <label>
-								<input type="checkbox" id="copyFromSubSystem">复制分系统的宽度和高度
+								<input type="checkbox" id="copyFromSubSystem">复制ECUE主控的宽度和高度
 					        </label>
 				      </div>
                     </div>
@@ -238,6 +239,7 @@
 </div>
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
 <script>
 $(function() {
 	//选择文件后提交
@@ -252,6 +254,12 @@ $(function() {
 		$('.video_label').attr('data-original-title',fileName);
 		$('.video_label').tooltip("show");
     });
+    $("#form").bootstrapValidator();
+});
+
+//Modal验证销毁重构
+$('#myModal').on('hide.bs.modal', function() {
+	$(".modal-content").data('bootstrapValidator').destroy();
 });
 
 function showPreview(source,name) { 
@@ -285,33 +293,36 @@ $('select[name="subSystem_id"]').change(function(){
 
 var area_json = [];
 function setArea(){
-	var subSystem_id = $('select[name="subSystem_id"]').val();
-	var subSystem_name = $('select[name="subSystem_id"]').find("option:selected").text();
-	var x = $('input[name="x"]').val();
-	var y = $('input[name="y"]').val();
-	var width = $('input[name="width"]').val();
-	var height = $('input[name="height"]').val();
-	var index = parseInt(Math.random() * 10000); 
-	var newArea = "<tr id='tr_"+index+"'><td>" + subSystem_name + "</td><td>";
-	newArea += x + "</td><td>";
-	newArea += y + "</td><td>";
-	newArea += width + "</td><td>";
-	newArea += height + "</td><td>";
-	newArea += "<a href='#' onclick='deleteArea("+index+")'>删除</a></td></tr>";
-	$('#area_div').append(newArea);
-	
-	//隐藏并清空
-	$('#myModal').modal('hide');
-	$('select[name="subSystem_id"] option:first').prop("selected", 'selected');  
-	$('#copyFromSubSystem').prop("checked",'');
-	$('input[name="x"]').val('');
-	$('input[name="y"]').val('');
-	$('input[name="width"]').val('');
-	$('input[name="height"]').val('');
-	
-	//存入json
-	area_json.push({"index1":index,"x":x,"y":y,"w":width,"h":height,"subSystem":{"id":subSystem_id}});
-	$('#areaJson').val(JSON.stringify(area_json));
+	$(".modal-content").bootstrapValidator('validate');
+	if($(".modal-content").data('bootstrapValidator').isValid()){
+		var subSystem_id = $('select[name="subSystem_id"]').val();
+		var subSystem_name = $('select[name="subSystem_id"]').find("option:selected").text();
+		var x = $('input[name="x"]').val();
+		var y = $('input[name="y"]').val();
+		var width = $('input[name="width"]').val();
+		var height = $('input[name="height"]').val();
+		var index = parseInt(Math.random() * 10000); 
+		var newArea = "<tr id='tr_"+index+"'><td>" + subSystem_name + "</td><td>";
+		newArea += x + "</td><td>";
+		newArea += y + "</td><td>";
+		newArea += width + "</td><td>";
+		newArea += height + "</td><td>";
+		newArea += "<a href='#' onclick='deleteArea("+index+")'>删除</a></td></tr>";
+		$('#area_div').append(newArea);
+		
+		//隐藏并清空
+		$('#myModal').modal('hide');
+		$('select[name="subSystem_id"] option:first').prop("selected", 'selected');  
+		$('#copyFromSubSystem').prop("checked",'');
+		$('input[name="x"]').val('');
+		$('input[name="y"]').val('');
+		$('input[name="width"]').val('');
+		$('input[name="height"]').val('');
+		
+		//存入json
+		area_json.push({"index1":index,"x":x,"y":y,"w":width,"h":height,"subSystem":{"id":subSystem_id}});
+		$('#areaJson').val(JSON.stringify(area_json));
+	}
 }
 
 function deleteArea(index){

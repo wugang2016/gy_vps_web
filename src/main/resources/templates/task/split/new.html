@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>新增切割任务 - 欧司朗视频切割系统</title>
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.css">
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrapValidator.min.css">
     <!--[if lt IE 9]>
     <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
     <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
@@ -100,7 +101,7 @@
 	                    <label class="btn btn-primary fileinput-button" style="width:200px" data-placement="auto right" data-trigger="manual">
 	                 		<i class="glyphicon glyphicon-upload"></i>
 	                    	<span>视频文件选择</span>
-	               			<input type="file" name="file" accept="video/mpeg,video/mp4,video/mkv,video/rm,video/rmvb,video/mov,video/wmv,video/avi,video/flv">
+	               			<input type="file" name="file" accept="video/*">
 	                     </label>
                     </div>
                 </div>
@@ -139,6 +140,7 @@
 </div>
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
 <script>
 $(function() {
 	//选择文件后提交
@@ -150,6 +152,7 @@ $(function() {
     });
     $('#templateId').val({{#splitTask}}{{#splitTemplate.id}}{{.}}{{/splitTemplate.id}}{{/splitTask}});
     changeTemplate();
+    $("#form").bootstrapValidator();
 });
 
 var area_json = [];
@@ -183,7 +186,8 @@ function putArea(obj){
 }
 
 function onSubmit(){
-	if(confirm("一旦创建成功不可修改，确认提交？")){
+	if($("#form").data('bootstrapValidator').isValid() 
+			&& confirm("一旦创建成功不可修改，确认提交？")){
 		$("input[data-id]").each(function(){
 			var areaId = $(this).attr("data-id");
 			var customName = $(this).val();
