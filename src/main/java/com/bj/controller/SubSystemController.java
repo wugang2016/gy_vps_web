@@ -31,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bj.pojo.SubSystemInfo;
 import com.bj.service.FileAreaService;
+import com.bj.service.SendMessageService;
 import com.bj.service.SubSystemService;
 import com.bj.util.BaseUtil;
 import com.bj.util.Contants;
@@ -48,6 +49,9 @@ public class SubSystemController {
         
     @Resource
     private FileAreaService fileAreaService ;
+
+    @Resource
+    private SendMessageService sendMessageService;
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
@@ -99,6 +103,7 @@ public class SubSystemController {
     		}
     		if(subSystemService.insert(subSystem) > 0){
                 redirectAttributes.addFlashAttribute("message", "保存成功！");
+    			sendMessageService.onlySendMessage(subSystem.format("add"));
         	}else{
                 redirectAttributes.addFlashAttribute("hasError", true);
                 redirectAttributes.addFlashAttribute("message", "保存失败！");
@@ -143,6 +148,7 @@ public class SubSystemController {
     		}
     		if(subSystem.getId() != null && subSystemService.update(subSystem) > 0){
                 redirectAttributes.addFlashAttribute("message", "保存成功！");
+    			sendMessageService.onlySendMessage(subSystem.format("mod"));
         	}else{
                 redirectAttributes.addFlashAttribute("hasError", true);
                 redirectAttributes.addFlashAttribute("message", "保存失败！");
@@ -160,6 +166,7 @@ public class SubSystemController {
     	} else {
     		if(subSystemService.detele(id) > 0){
                 redirectAttributes.addFlashAttribute("message", "删除成功！");
+    			sendMessageService.onlySendMessage("{\"opt\":\"rmv\",\"tbl_name\":\"tbl_sub_sys_info\",\"value\":{\"sub_sys_id\":" + id + "}}");
         	}else{
                 redirectAttributes.addFlashAttribute("hasError", true);
                 redirectAttributes.addFlashAttribute("message", "删除失败！");

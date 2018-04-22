@@ -33,6 +33,7 @@ import com.bj.pojo.TaskStatus;
 import com.bj.service.DispatchSubTaskService;
 import com.bj.service.DispatchTaskService;
 import com.bj.service.FileAreaService;
+import com.bj.service.SendMessageService;
 import com.bj.service.SplitTaskService;
 import com.bj.service.SysParamService;
 import com.bj.util.BaseUtil;
@@ -61,6 +62,9 @@ public class DispatchTaskController {
     
     @Resource
     private FileAreaService fileAreaService ;
+
+    @Resource
+    private SendMessageService sendMessageService;
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
@@ -139,6 +143,8 @@ public class DispatchTaskController {
 				splitSubTaskService.insert(subTask);
 			}
             redirectAttributes.addFlashAttribute("message", "保存成功！");
+
+			sendMessageService.onlySendMessage(dispatchTask.format());
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "保存失败！");

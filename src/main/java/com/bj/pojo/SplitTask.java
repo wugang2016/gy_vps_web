@@ -128,5 +128,9 @@ public class SplitTask extends BaseTask{
 	public boolean getIsDispatch() {
 		return TaskStatus.values()[status].allowDispatch();
 	}
+	
+	public String format() {
+		return "{\"opt\":\"start_file_task\", \"task_id\":" + id + "}";
+	}
 
 }

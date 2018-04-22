@@ -34,6 +34,7 @@ import com.bj.pojo.SubTaskStatus;
 import com.bj.pojo.TaskStatus;
 import com.bj.service.DispatchTaskService;
 import com.bj.service.FileAreaService;
+import com.bj.service.SendMessageService;
 import com.bj.service.SplitSubTaskService;
 import com.bj.service.SplitTaskService;
 import com.bj.service.SplitTemplatesService;
@@ -68,6 +69,9 @@ public class SplitTaskController {
     
     @Resource
     private FileAreaService fileAreaService ;
+
+    @Resource
+    private SendMessageService sendMessageService;
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
@@ -156,6 +160,7 @@ public class SplitTaskController {
 				splitSubTaskService.insert(subTask);
 			}
             redirectAttributes.addFlashAttribute("message", "保存成功！");
+			sendMessageService.onlySendMessage(splitTask.format());
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "保存失败！");

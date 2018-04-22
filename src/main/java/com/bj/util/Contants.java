@@ -9,8 +9,9 @@ package com.bj.util;
  */
 public class Contants {
 	public static final int FILE_NAME_LENGTH = 12;
-	public static final String PIC_FILE_SUB_PATH = "PIC";
-	public static final String VIDEO_FILE_SUB_PATH = "VIDEO";
+	public static final String PIC_FILE_SUB_PATH = "pic";
+	public static final String VIDEO_FILE_SUB_PATH = "video";
+	public static final String SPLIT_FILE_SUB_PATH = "split";
 
 	//SYSTEM PARAM KEY
 	public static final String KEY_BITERATE_1080P = "biterate.1080p";

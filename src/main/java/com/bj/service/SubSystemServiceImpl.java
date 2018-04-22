@@ -22,9 +22,6 @@ import com.bj.pojo.SubSystemInfo;
 public class SubSystemServiceImpl implements SubSystemService {
     @SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(SubSystemServiceImpl.class);
-
-    @Resource
-    private SendMessageService sendMessageService;
     
     @Resource
     private SubSystemMapper subSystemInfoMapper;
@@ -41,11 +38,7 @@ public class SubSystemServiceImpl implements SubSystemService {
 
 	@Override
 	public int insert(SubSystemInfo subSystemInfo) {
-		int result = subSystemInfoMapper.insert(subSystemInfo);
-		if(result > 0){
-			sendMessageService.onlySendMessage(subSystemInfo.format("add"));
-		}
-		return result;
+		return subSystemInfoMapper.insert(subSystemInfo);
 	}
 
 	@Override
@@ -55,20 +48,12 @@ public class SubSystemServiceImpl implements SubSystemService {
 
 	@Override
 	public int update(SubSystemInfo subSystemInfo) {
-		int result = subSystemInfoMapper.update(subSystemInfo);
-		if(result > 0){
-			sendMessageService.onlySendMessage(subSystemInfo.format("mod"));
-		}
-		return result;
+		return subSystemInfoMapper.update(subSystemInfo);
 	}
 
 	@Override
 	public int detele(int id) {
-		int result = subSystemInfoMapper.delete(id);
-		if(result > 0){
-			sendMessageService.onlySendMessage("{\"opt\":\"rmv\",\"tbl_name\":\"tbl_sub_sys_info\",\"value\":{\"sub_sys_id\":" + id + "}}");
-		}
-		return result;
+		return subSystemInfoMapper.delete(id);
 	}
 
 	@Override

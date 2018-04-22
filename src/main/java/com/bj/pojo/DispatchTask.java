@@ -99,4 +99,8 @@ public class DispatchTask extends BaseTask{
 	public boolean getIsDispatch() {
 		return TaskStatus.values()[status].allowDispatchForDispatchTask();
 	}
+	
+	public String format() {
+		return "{\"opt\":\"start_dispatch_task\", \"task_id\":" + id + "}";
+	}
 }

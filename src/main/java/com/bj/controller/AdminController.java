@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bj.pojo.SysUser;
+import com.bj.service.SendMessageService;
 import com.bj.service.SysParamService;
 import com.bj.service.SysUserService;
 import com.bj.util.BaseUtil;
@@ -38,6 +39,9 @@ public class AdminController {
 
     @Resource
     private SysParamService sysParamService;
+
+    @Resource
+    private SendMessageService sendMessageService;
     
     @GetMapping(value= {"","/","/login","/setML","/setPwd","/setDoPwd"})
     public String goLogin(Map<String, Object> model) {
@@ -83,9 +87,9 @@ public class AdminController {
         	model.put("message", "参数不可为空"); 
         	return "admin/set";
     	}
-		sysParamService.updateValue(Contants.KEY_BITERATE_1080P, b1080);
-		sysParamService.updateValue(Contants.KEY_BITERATE_720P, b720);
-		sysParamService.updateValue(Contants.KEY_BITERATE_4CIF, b4cif);
+		updateAndSendMsg(Contants.KEY_BITERATE_1080P, b1080);
+		updateAndSendMsg(Contants.KEY_BITERATE_720P, b720);
+		updateAndSendMsg(Contants.KEY_BITERATE_4CIF, b4cif);
     	model.put("message", "修改参数成功"); 
     	loginedInit(model);
     	return "admin/set";
@@ -139,7 +143,7 @@ public class AdminController {
     	}
     	String value = sysParamService.findByKey(Contants.KEY_TASK_PASSWORD);
     	if(BaseUtil.md5(oldTaskPassword.trim()).equals(value)) {
-    		sysParamService.updateValue(Contants.KEY_TASK_PASSWORD, BaseUtil.md5(taskPassword.trim()));
+    		updateAndSendMsg(Contants.KEY_TASK_PASSWORD, BaseUtil.md5(taskPassword.trim()));
         	model.put("message", "修改任务密码成功"); 
     	}else {
         	model.put("hasError", true);
@@ -168,5 +172,16 @@ public class AdminController {
     private boolean isLogin(HttpServletRequest request) {
     	Object obj = request.getSession().getAttribute(LOGIN_PASS);
     	return (obj != null && Boolean.parseBoolean(obj.toString()));
+    }
+    
+    /**
+     * 
+     * @param key
+     * @param value
+     */
+    private void updateAndSendMsg(String key, String value) {
+		if(sysParamService.updateValue(key,value) > 0) {
+			sendMessageService.onlySendMessage("{ \"opt\":\"mod\",\"tbl_name\":\"tbl_sys_param\",\"value\":{\"key\":\"" + key + "\",\"value\":" + value + "\"}");
+		}
     }
 }

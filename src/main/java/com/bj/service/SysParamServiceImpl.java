@@ -20,7 +20,7 @@ import com.bj.util.Contants;
 public class SysParamServiceImpl implements SysParamService{
     @Resource
     private SysParamMapper sysParamMapper;
-
+    
 	@Override
 	public String findByKey(String key) {
 		SysParam sysParam = this.findSysParamByKey(key);

@@ -18,9 +18,6 @@ import com.bj.pojo.FileArea;
  */
 @Service
 public class FileAreaServiceImpl implements FileAreaService {
-
-    @Resource
-    private SendMessageService sendMessageService;
     
     @Resource
     private FileAreaMapper fileAreaMapper;
@@ -37,11 +34,7 @@ public class FileAreaServiceImpl implements FileAreaService {
 
 	@Override
 	public int insert(FileArea fileArea) {
-		int result = fileAreaMapper.insert(fileArea);
-		if(result > 0){
-			sendMessageService.onlySendMessage(fileArea.format("add"));
-		}
-		return result;
+		return fileAreaMapper.insert(fileArea);
 	}
 
 	@Override
@@ -51,20 +44,12 @@ public class FileAreaServiceImpl implements FileAreaService {
 
 	@Override
 	public int update(FileArea fileArea) {
-		int result = fileAreaMapper.update(fileArea);
-		if(result > 0){
-			sendMessageService.onlySendMessage(fileArea.format("mod"));
-		}
-		return result;
+		return fileAreaMapper.update(fileArea);
 	}
 
 	@Override
 	public int detele(int id) {
-		int result = fileAreaMapper.delete(id);
-		if(result > 0){
-			sendMessageService.onlySendMessage("{\"opt\":\"rmv\",\"tbl_name\":\"tbl_file_area\",\"value\":{\"area_id\":" + id + "}}");
-		}
-		return result;
+		return fileAreaMapper.delete(id);
 	}
 
 	@Override

@@ -30,6 +30,7 @@ import com.bj.pojo.SplitTemplates;
 import com.bj.pojo.TaskStatus;
 import com.bj.service.FileAreaService;
 import com.bj.service.RealplayTaskService;
+import com.bj.service.SendMessageService;
 import com.bj.service.SplitSubTaskService;
 import com.bj.service.SplitTemplatesService;
 import com.bj.service.SysParamService;
@@ -57,6 +58,9 @@ public class RealplayTaskController {
     
     @Resource
     private FileAreaService fileAreaService ;
+
+    @Resource
+    private SendMessageService sendMessageService;
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
@@ -121,6 +125,7 @@ public class RealplayTaskController {
     	realplayTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		if(realplayTaskService.insert(realplayTask) > 0){
             redirectAttributes.addFlashAttribute("message", "保存成功！");
+			sendMessageService.onlySendMessage(realplayTask.format());
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "保存失败！");
