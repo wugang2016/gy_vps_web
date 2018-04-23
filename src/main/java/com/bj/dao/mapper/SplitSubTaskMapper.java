@@ -29,7 +29,7 @@ public interface SplitSubTaskMapper {
             @Result(property = "fileArea", javaType = FileArea.class, column = "area_id", one = @One(select = "com.bj.dao.mapper.FileAreaMapper.findById"))})
 	SplitSubTask findById(@Param("id") int id);
 	
-    @Select("SELECT * FROM tbl_file_split_subtask " +
+    @Select("SELECT * FROM tbl_file_split_subtask order by subtask_id desc " +
             "LIMIT #{offset}, #{rowCount} ")
     @Results(value = {
             @Result(property = "id", column = "subtask_id"),

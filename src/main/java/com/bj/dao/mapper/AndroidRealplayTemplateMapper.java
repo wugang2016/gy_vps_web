@@ -30,8 +30,8 @@ public interface AndroidRealplayTemplateMapper {
             @Result(property = "realplayAreas", javaType = List.class, column = "template_id", many = @Many(select = "com.bj.dao.mapper.AndroidRealplayAreaMapper.findByTemplateId"))})
     AndroidRealplayTemplate findById(@Param("id") int id);
     
-    @Select("SELECT * FROM tbl_android_realplay_template " +
-            "LIMIT #{offset}, #{rowCount} ")
+    @Select("SELECT * FROM tbl_android_realplay_template order by template_id desc " +
+            "LIMIT #{offset}, #{rowCount}")
     @Results(value = {
             @Result(property = "id", column = "template_id"),
             @Result(property = "miniPicPath", column = "mini_pic_path"),

@@ -40,8 +40,8 @@ public interface AndroidRealplayAreaMapper {
             @Result(property = "subSystem", javaType = SubSystemInfo.class, column = "sub_sys_id", one = @One(select = "com.bj.dao.mapper.SubSystemMapper.findById"))})
 	List<AndroidRealplayArea> findByTemplateId(@Param("templateId") int templateId);
 	
-    @Select("SELECT * FROM tbl_android_realplay_area " +
-            "LIMIT #{offset}, #{rowCount} ")
+    @Select("SELECT * FROM tbl_android_realplay_area order by area_id desc " +
+            "LIMIT #{offset}, #{rowCount}")
     @Results(value = {
             @Result(property = "id", column = "area_id"),
             @Result(property = "templateId", column = "template_id"),

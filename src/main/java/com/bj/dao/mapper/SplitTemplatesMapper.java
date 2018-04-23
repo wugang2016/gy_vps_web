@@ -24,7 +24,7 @@ public interface SplitTemplatesMapper {
             @Result(property = "id", column = "template_id")})
     SplitTemplates findById(@Param("id") int id);
     
-    @Select("SELECT * FROM tbl_file_split_template " +
+    @Select("SELECT * FROM tbl_file_split_template order by template_id desc " +
             "LIMIT #{offset}, #{rowCount} ")
     @Results(value = {
             @Result(property = "id", column = "template_id")})

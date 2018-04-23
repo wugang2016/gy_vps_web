@@ -17,7 +17,6 @@ import java.util.Random;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.ApplicationHome;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -144,8 +143,5 @@ public class BaseUtil {
     }
     
 	public static void main(String[] args) {
-		ApplicationHome home = new ApplicationHome(BaseUtil.class);
-	    File jarFile = home.getSource();
-	    System.out.println("currentPath=" + jarFile.getParentFile());
 	}
 }

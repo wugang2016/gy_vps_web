@@ -95,7 +95,7 @@
                 <div class="form-group">
                     <label for="inputName" class="col-sm-2 control-label">描述</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="desc" placeholder="模板描述" value="{{#splitTemplates}}{{#desc}}{{.}}{{/desc}}{{/splitTemplates}}" required>
+                        <textarea class="form-control" name="desc" placeholder="模板描述" rows="5" maxlength="100" required>{{#splitTemplates}}{{#desc}}{{.}}{{/desc}}{{/splitTemplates}}</textarea>
                         {{#descErr}}<span class="error">{{.}}</span>{{/descErr}}
                     </div>
                 </div>
@@ -145,13 +145,13 @@
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">左上角横坐标</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control"  name="x" placeholder="左上角横坐标" required>
+                        <input type="number" class="form-control"  name="x" placeholder="左上角横坐标" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">左上角纵坐标</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" name="y" placeholder="左上角纵坐标" required>
+                        <input type="number" class="form-control" name="y" placeholder="左上角纵坐标" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -167,13 +167,13 @@
                 <div class="form-group">
                     <label for="inputEditingEnd" class="col-sm-3 control-label">区域宽度</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control " name="width" placeholder="区域宽度" required>
+                        <input type="number" class="form-control " name="width" placeholder="区域宽度" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputClosingDate" class="col-sm-3 control-label">区域高度</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control " name="height" placeholder="区域高度" required>
+                        <input type="number" class="form-control " name="height" placeholder="区域高度" required>
                     </div>
                 </div>
 				<!-- 内容 -->
@@ -191,14 +191,15 @@
 <script>
 $(function() {
     $("#form").bootstrapValidator();
+    $(".modal-content").bootstrapValidator();
 });
 
 //Modal验证销毁重构
 $('#myModal').on('hide.bs.modal', function() {
-	$(".modal-content").data('bootstrapValidator').destroy();
+	$(".modal-content").data('bootstrapValidator').resetForm();
 });
 
-function setWH(isChecked){
+function setWH(isChecked, isValid){
 	if(isChecked){
 		$('input[name="width"]').val($('#sub_id_'+$('select[name="subSystem_id"]').val()).attr('width-data'));
 		$('input[name="height"]').val($('#sub_id_'+$('select[name="subSystem_id"]').val()).attr('height-data'));
@@ -206,9 +207,13 @@ function setWH(isChecked){
 		$('input[name="width"]').val('');
 		$('input[name="height"]').val('');
 	}
+	if(isValid){
+		$(".modal-content").data('bootstrapValidator').revalidateField('width');
+		$(".modal-content").data('bootstrapValidator').revalidateField('height');
+	}
 }
 $('#copyFromSubSystem').change(function(){
-	setWH($(this).prop("checked"));
+	setWH($(this).prop("checked"), true);
 });
 $('select[name="subSystem_id"]').change(function(){
 	setWH($('#copyFromSubSystem').prop("checked"));
@@ -216,7 +221,8 @@ $('select[name="subSystem_id"]').change(function(){
 
 var area_json = [];
 function setArea(){
-	$(".modal-content").bootstrapValidator('validate');;
+	$(".modal-content").bootstrapValidator('validate');
+	$(".modal-content").data("bootstrapValidator").validate();
 	if($(".modal-content").data('bootstrapValidator').isValid()){
 		var subSystem_id = $('select[name="subSystem_id"]').val();
 		var subSystem_name = $('select[name="subSystem_id"]').find("option:selected").text();

@@ -27,7 +27,7 @@ public interface SubSystemMapper {
             @Result(property = "picPath", column = "pic_path")})
     SubSystemInfo findById(@Param("id") int id);
     
-    @Select("SELECT * FROM tbl_sub_sys_info " +
+    @Select("SELECT * FROM tbl_sub_sys_info order by sub_sys_id desc " +
             "LIMIT #{offset}, #{rowCount} ")
     @Results(value = {
             @Result(property = "id", column = "sub_sys_id"),

@@ -31,7 +31,7 @@ public interface SplitTaskMapper {
             @Result(property = "splitTemplate", javaType = SubSystemInfo.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
 	SplitTask findById(@Param("id") int id);
 	
-    @Select("SELECT * FROM tbl_file_split_task " +
+    @Select("SELECT * FROM tbl_file_split_task order by task_id desc " +
             "LIMIT #{offset}, #{rowCount} ")
     @Results(value = {
             @Result(property = "id", column = "task_id"),

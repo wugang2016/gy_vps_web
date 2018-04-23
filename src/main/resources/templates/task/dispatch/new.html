@@ -104,7 +104,7 @@
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-2 control-label">描述</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="taskDesc" placeholder="任务描述" value="{{#dispatchTask}}{{#taskDesc}}{{.}}{{/taskDesc}}{{/dispatchTask}}">
+                        <textarea class="form-control" name="taskDesc" placeholder="任务描述" rows="5" maxlength="100">{{#dispatchTask}}{{#taskDesc}}{{.}}{{/taskDesc}}{{/dispatchTask}}</textarea>
                         {{#taskDescErr}}<span class="error">{{.}}</span>{{/taskDescErr}}
                     </div>
                 </div>

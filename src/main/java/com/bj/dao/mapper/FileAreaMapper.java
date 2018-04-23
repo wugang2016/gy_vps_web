@@ -41,7 +41,7 @@ public interface FileAreaMapper {
 	List<FileArea> findByTemplateId(@Param("templateId") int templateId);
 	
 	
-    @Select("SELECT * FROM tbl_file_area " +
+    @Select("SELECT * FROM tbl_file_area order by area_id desc " +
             "LIMIT #{offset}, #{rowCount} ")
     @Results(value = {
             @Result(property = "id", column = "area_id"),

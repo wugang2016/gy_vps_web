@@ -28,18 +28,28 @@ public interface RealplayTaskMapper {
             @Result(property = "startTime", column = "start_time"),
             @Result(property = "endTime", column = "end_time"),
             @Result(property = "errCode", column = "error_code"),
-            @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.RealplayTaskMapper.findFileResourceById")),
+            @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.FileResourceMapper.findById")),
             @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
     RealplayTask findById(@Param("id") int id);
+
+	@Select("SELECT * FROM tbl_file_realplay_task where file_id=#{fileId}")
+    @Results(value = {
+            @Result(property = "id", column = "task_id"),
+            @Result(property = "startTime", column = "start_time"),
+            @Result(property = "endTime", column = "end_time"),
+            @Result(property = "errCode", column = "error_code"),
+            @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.FileResourceMapper.findById")),
+            @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
+	List<RealplayTask> findByFileId(int fileId);
     
-    @Select("SELECT * FROM tbl_file_realplay_task " +
+    @Select("SELECT * FROM tbl_file_realplay_task order by task_id desc " +
             "LIMIT #{offset}, #{rowCount} ")
     @Results(value = {
             @Result(property = "id", column = "task_id"),
             @Result(property = "startTime", column = "start_time"),
             @Result(property = "endTime", column = "end_time"),
             @Result(property = "errCode", column = "error_code"),
-            @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.RealplayTaskMapper.findFileResourceById")),
+            @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.FileResourceMapper.findById")),
             @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
     List<RealplayTask> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
 
@@ -67,21 +77,4 @@ public interface RealplayTaskMapper {
 
     @Delete("DELETE FROM tbl_file_realplay_task where task_id=#{id}")
     int delete(int id);
-
-    @Delete("DELETE FROM tbl_file_src where src_file_id in(select file_id from tbl_file_realplay_task where task_id=#{taskId})")
-    int deleteFileResourceByTaskId(int taskId);
-    
-    @Insert("INSERT INTO tbl_file_src " +
-            "   (file_path, file_desc, type) " +
-            "VALUES " +
-            "   (#{filePath}, #{fileDesc}, #{type})")
-    @Options(useGeneratedKeys=true,keyColumn="src_file_id")
-    int insertFileResource(FileResource fileResource);
-    
-	@Select("SELECT * FROM tbl_file_src where src_file_id=#{id}")
-    @Results(value = {
-            @Result(property = "id", column = "src_file_id"),
-            @Result(property = "filePath", column = "file_path"),
-            @Result(property = "fileDesc", column = "file_desc")})
-    FileResource findFileResourceById(@Param("id") int id);
 }

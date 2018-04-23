@@ -101,7 +101,7 @@
 	                    <label class="btn btn-primary fileinput-button" style="width:200px" data-placement="auto right" data-trigger="manual">
 	                 		<i class="glyphicon glyphicon-upload"></i>
 	                    	<span>视频文件选择</span>
-	               			<input type="file" name="file" accept="video/x-ms-wmv">
+	               			<input type="file" name="file" accept="video/x-ms-wmv,video/mp4">
 	                     </label>
                     </div>
                 </div>
@@ -122,7 +122,7 @@
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-2 control-label">描述</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="taskDesc" placeholder="任务描述" value="{{#splitTask}}{{#taskDesc}}{{.}}{{/taskDesc}}{{/splitTask}}">
+                        <textarea class="form-control" name="taskDesc" placeholder="任务描述" rows="5" maxlength="100">{{#splitTask}}{{#taskDesc}}{{.}}{{/taskDesc}}{{/splitTask}}</textarea>
                         {{#taskDescErr}}<span class="error">{{.}}</span>{{/taskDescErr}}
                     </div>
                 </div>

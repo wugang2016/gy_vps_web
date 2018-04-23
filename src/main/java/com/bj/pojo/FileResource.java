@@ -9,6 +9,8 @@ public class FileResource {
 	private Integer type;
 	private String fileDesc;
 	
+	private Boolean goPlay;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -32,6 +34,12 @@ public class FileResource {
 	}
 	public void setFileDesc(String fileDesc) {
 		this.fileDesc = fileDesc;
+	}
+	public Boolean getGoPlay() {
+		return goPlay;
+	}
+	public void setGoPlay(Boolean goPlay) {
+		this.goPlay = goPlay;
 	}
 	public String getFileName() {
 		if(this.filePath != null) {

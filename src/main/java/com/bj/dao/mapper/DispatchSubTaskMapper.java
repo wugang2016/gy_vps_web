@@ -29,8 +29,8 @@ public interface DispatchSubTaskMapper {
 			@Result(property = "splitSubTask", javaType = SplitSubTask.class, column = "sub_filesplit_task_id", one = @One(select = "com.bj.dao.mapper.SplitSubTaskMapper.findById"))})
 	DispatchSubTask findById(@Param("id") int id);
 	
-    @Select("SELECT * FROM tbl_file_dispatch_subtask " +
-            "LIMIT #{offset}, #{rowCount} ")
+    @Select("SELECT * FROM tbl_file_dispatch_subtask order by subtask_id desc " +
+            "LIMIT #{offset}, #{rowCount}")
     @Results(value = {
             @Result(property = "id", column = "subtask_id"),
             @Result(property = "errCode", column = "error_code"),

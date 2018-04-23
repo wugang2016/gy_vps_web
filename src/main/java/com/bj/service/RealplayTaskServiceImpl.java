@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.bj.dao.mapper.RealplayTaskMapper;
-import com.bj.pojo.FileResource;
 import com.bj.pojo.RealplayTask;
 
 /**
@@ -50,22 +49,17 @@ public class RealplayTaskServiceImpl implements RealplayTaskService {
 
 	@Override
 	public int delete(int id) {
-		return realplayTaskMapper.deleteFileResourceByTaskId(id) * realplayTaskMapper.delete(id);
-	}
-
-	@Override
-	public int insertFileResource(FileResource fileResource) {
-		return realplayTaskMapper.insertFileResource(fileResource);
-	}
-
-	@Override
-	public FileResource findFileResourceById(int id) {
-		return realplayTaskMapper.findFileResourceById(id);
+		return realplayTaskMapper.delete(id);
 	}
 
 	@Override
 	public int countByTemplateId(int templateId) {
 		return realplayTaskMapper.countByTemplateId(templateId);
+	}
+
+	@Override
+	public List<RealplayTask> findByFileId(int fileId) {
+		return realplayTaskMapper.findByFileId(fileId);
 	}
 	
 }

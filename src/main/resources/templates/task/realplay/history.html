@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>历史播放任务 - 欧司朗视频切割系统</title>
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.min.css">
+    <!--[if lt IE 9]>
+    <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
+    <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bijie.css">
+    <style></style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">欧司朗视频切割系统</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a target="blank" href="{{ctx.contextPath}}/admin/login">高级设置</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active submenu open">
+                    <a href="#">任务管理</a>
+                    <ul style="display: block;">
+                        <li><a href="{{ctx.contextPath}}/task/split/list">切割任务</a></li>
+                        <li><a href="{{ctx.contextPath}}/task/dispatch/list">分发任务</a></li>
+                        <li class="active"><a href="{{ctx.contextPath}}/task/realplay/list">实时文件播放任务</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ctx.contextPath}}/manage/sub_system/list">通用管理</a></li>
+            </ul>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            {{#message}}
+            <p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}" role="alert">
+            	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
+            {{/message}}
+            <div class="page-header">
+                <h2>历史播放任务
+                    <small>列表</small>
+                </h2>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <!--<th>#ID</th>  -->
+                        <th>文件名称</th>
+                        <th>切割模板</th>
+                        <th>播放状态</th>
+                        <th>循环播放</th>
+                        <th>开始时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#realplayTasks}}
+                    <tr>
+                        <!--<td>{{id}}</td>-->
+                        <td>{{fileResource.fileName}}</td>
+                        <td>{{splitTemplate.name}}</td>
+                        <td class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
+                        <td>{{#repeate}}是{{/repeate}}{{^repeate}}否{{/repeate}}</td>
+                        <td>{{#startTime}}{{.}}{{/startTime}}</td>
+                        <td>
+                        	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/realplay/{{id}}/delete" onsubmit="return delCheck()">
+	                            {{#allowStop}}<a href="#" onclick="stopPlay('/task/realplay/{{id}}/stop')">结束播放</a>{{/allowStop}}
+	                            {{#allowReplay}}<a href="#" onclick="stopPlay('/task/realplay/{{id}}/replay')">再次播放</a>{{/allowReplay}}
+	                            {{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}
+                            </form>
+                        </td>
+                    </tr>
+                    {{/realplayTasks}}
+                    </tbody>
+                </table>
+                {{#pagination}}
+                <nav aria-label="Page navigation" class="text-center">
+                    <ul class="pagination">
+                        {{#hasPreviousPage}}
+                        <li>
+                            <a href="{{previousPageUri}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {{/hasPreviousPage}}
+                        {{#pageList}}
+                        {{#isCurrent}}
+                        <li class="active"><a>{{pageNo}}</a></li>
+                        {{/isCurrent}}
+                        {{^isCurrent}}
+                        <li><a href="{{pageUri}}">{{pageNo}}</a></li>
+                        {{/isCurrent}}
+                        {{/pageList}}
+                        {{#hasNextPage}}
+                        <li>
+                            <a href="{{nextPageUri}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {{/hasNextPage}}
+                    </ul>
+                </nav>
+                {{/pagination}}
+            </div>
+            <a href="{{ctx.contextPath}}/task/realplay/list" class="btn btn-default">&lt返 回</a>
+        </div>
+    </div>
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:800px">
+		<div class="modal-content"></div>
+	</div>
+</div>
+<script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
+<script>
+function delCheck(){
+	return confirm("确认要删除此记录？");
+}
+function stopPlay(url){
+    $.ajax({
+        url: url,
+        type: "POST",
+        async: true,
+        success: function(data){
+            if(data == "1"){
+            	alert("发送成功！");
+            	location.reload();
+            }else{
+            	alert("发送失败！")
+            }
+        }
+    });
+}
+</script>
+</body>
+</html>
