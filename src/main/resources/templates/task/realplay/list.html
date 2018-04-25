@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {{#refresh}}<meta http-equiv="refresh" content="{{refresh}}">{{/refresh}}
     <title>文件播放任务列表 - 欧司朗视频切割系统</title>
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrapValidator.min.css">
@@ -54,6 +55,19 @@
             <div class="page-header">
                 <h2>最近播放任务
                     <small>列表</small>
+	                <div class="btn-group pull-right">
+						<button type="button" class="btn btn-primary" id="refresh_btn" onclick="refresh()">手工刷新</button>
+						<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+							<span class="caret"></span>
+							<span class="sr-only">切换下拉菜单</span>
+						</button>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#" onclick="refresh(5)">自动刷新(5s)</a></li>
+							<li><a href="#" onclick="refresh(10)">自动刷新(10s)</a></li>
+							<li class="divider"></li>
+							<li><a href="#" onclick="refresh()">手工刷新</a></li>
+						</ul>
+					</div>
                 </h2>
             </div>
             <div class="table-responsive">
@@ -80,7 +94,7 @@
                         <td>{{#startTime}}{{.}}{{/startTime}}</td>
                         <td>
                         	<form id="delForm1_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/realplay/{{id}}/delete" onsubmit="return delCheck()">
-	                            {{#allowStop}}<a href="#" onclick="stopPlay('{{id}}')">结束播放</a>{{/allowStop}}
+	                            {{#allowStop}}<a href="#" data-toggle="modal" data-target="#stopModal" data-id="{{id}}">结束播放</a>{{/allowStop}}
 	                            {{#allowReplay}}<a href="#" data-toggle="modal" data-target="#replayModal" data-id="{{id}}" data-repeate="{{#repeate}}true{{/repeate}}">再次播放</a>{{/allowReplay}}
 	                            {{#isDelete}}<a href="#" onclick="$('#delForm1_{{id}}').submit()">删除</a>{{/isDelete}}
                             </form>
@@ -163,7 +177,10 @@
 		<div class="modal-content">
 			<div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">播放条件</h4>
+                <h4 class="modal-title">播放条件</h4>
+            	<p class="alert alert-danger" role="alert" style="display:none">
+            		<em>系统提示：</em><span id="msg"></span>
+            	</p>
             </div>
             <div class="modal-body form-horizontal">
                 <div class="form-group">
@@ -194,7 +211,10 @@
 		<div class="modal-content">
 			<div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">播放条件</h4>
+                <h4 class="modal-title">播放条件</h4>
+            	<p class="alert alert-danger" role="alert" style="display:none">
+            		<em>系统提示：</em><span id="msg"></span>
+            	</p>
             </div>
             <div class="modal-body form-horizontal">
                 <div class="form-group">
@@ -228,11 +248,43 @@
 		</div>
 	</div>
 </div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="stopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">停止条件</h4>
+            	<p class="alert alert-danger" role="alert" style="display:none">
+            		<em>系统提示：</em><span id="msg"></span>
+            	</p>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">任务密码</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control"  name="taskPassword" placeholder="任务密码" required>
+                    </div>
+                </div>
+              	<input type="hidden" name="stopTaskId" id="stopTaskId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="stopPlay()">提交</button>
+            </div>
+		</div>
+	</div>
+</div>
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
 <script>
 $(function() {
+	$('#replayModal').find(".modal-content").bootstrapValidator();
+	$('#goplayModal').find(".modal-content").bootstrapValidator();
+	$('#stopModal').find(".modal-content").bootstrapValidator();
+	
 	$('#replayModal').on('show.bs.modal', function (event) {
 		$("#taskId").val($(event.relatedTarget).data("id"));
 		if($(event.relatedTarget).data("repeate")+"" === 'true'){
@@ -244,37 +296,48 @@ $(function() {
 	$('#goplayModal').on('show.bs.modal', function (event) {
 		$("#fileId").val($(event.relatedTarget).data("id"));
 	});
+	$('#stopModal').on('show.bs.modal', function (event) {
+		$("#stopTaskId").val($(event.relatedTarget).data("id"));
+	});
 	//Modal验证销毁重构
 	$('#replayModal').on('hide.bs.modal', function() {
-		var valid = $(this).find(".modal-content").data('bootstrapValidator');
-		if(typeof(valid) === 'object'){
-			valid.destroy();
-		}
+		$(this).find(".alert").hide();
+		$(this).find(".modal-content").data('bootstrapValidator').resetForm();
 	});
 	$('#goplayModal').on('hide.bs.modal', function() {
-		var valid = $(this).find(".modal-content").data('bootstrapValidator');
-		if(typeof(valid) === 'object'){
-			valid.destroy();
-		}
+		$(this).find(".alert").hide();
+		$(this).find(".modal-content").data('bootstrapValidator').resetForm();
 	});
+	$('#stopModal').on('hide.bs.modal', function() {
+		$(this).find(".alert").hide();
+		$(this).find(".modal-content").data('bootstrapValidator').resetForm();
+	});
+	
+	setRefreshText({{#refresh}}{{.}}{{/refresh}});
 });
 function delCheck(){
 	return confirm("确认要删除此记录？");
 }
-function stopPlay(id){
-	var url = "/task/realplay/" + id + "/stop";
-    $.ajax({
-        url: url,
-        type: "POST",
-        success: function(data){
-            if(data == "1"){
-            	alert("发起任务成功！");
-            	location.reload();
-            }else{
-            	alert(data);
-            }
-        }
-    });
+function stopPlay(){
+	$('#stopModal').find(".modal-content").bootstrapValidator('validate');
+	if($('#stopModal').find(".modal-content").data('bootstrapValidator').isValid()){
+		var url = "/task/realplay/" + $('#stopTaskId').val() + "/stop";
+		var taskPwd = $('#stopModal').find("input[name='taskPassword']").val();
+	    $.ajax({
+	        url: url,
+	        type: "POST",
+	        data:{taskPassword:taskPwd},
+	        success: function(data){
+	            if(data == "1"){
+	            	alert("请求已发送！");
+	            	location.reload();
+	            }else{
+	            	$('#stopModal').find(".alert").show();
+	            	$('#stopModal').find("#msg").html(data);
+	            }
+	        }
+	    });
+	}
 }
 function replay(){
 	$('#replayModal').find(".modal-content").bootstrapValidator('validate');
@@ -288,10 +351,11 @@ function replay(){
 	        data:{repeate:repeate,taskPassword:taskPwd},
 	        success: function(data){
 	            if(data == "1"){
-	            	alert("发送成功！");
+	            	alert("请求已发送！");
 	            	location.reload();
 	            }else{
-	            	alert(data);
+	            	$('#replayModal').find(".alert").show();
+	            	$('#replayModal').find("#msg").html(data);
 	            }
 	        }
 	    });
@@ -310,14 +374,29 @@ function goplay(){
 	        data:{templateId:templateId,repeate:repeate,taskPassword:taskPwd},
 	        success: function(data){
 	            if(data == "1"){
-	            	alert("发起任务成功！");
+	            	alert("请求已发送！");
 	            	location.reload();
 	            }else{
-	            	alert(data);
+	            	$('#goplayModal').find(".alert").show();
+	            	$('#goplayModal').find("#msg").html(data);
 	            }
 	        }
 	    });
 	}
+}
+
+function setRefreshText(s){
+	if(typeof(s) != 'undefined'){
+		$("#refresh_btn").html("自动刷新("+s+"s)");
+		$("#refresh_btn").attr("onclick","refresh("+s+")");
+	}
+}
+function refresh(s){
+	var url = "/task/realplay/list"
+	if(typeof(s) != 'undefined'){
+		url = "/task/realplay/list?a="+s
+	}
+	window.location.href = url;
 }
 </script>
 </body>

@@ -8,6 +8,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -122,11 +126,7 @@ public class BaseUtil {
      * @return
      */
     public static String format(Date date) {
-    	if(date != null) {
-    		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-    		return df.format(date);
-    	}
-    	return "";
+    	return format(date, "yyyyMMddHHmmss");
     }
 	
     /**
@@ -140,6 +140,31 @@ public class BaseUtil {
     		return df.format(date);
     	}
     	return "";
+    }
+    
+    /**
+     * 发送消息到设备
+     */
+    public static String udpSend(String ip, int port, String _message) throws SocketException,IOException{
+        LOGGER.info("向{}:{} 发送内容：{}", ip, port, _message);
+    	DatagramSocket ds = null;
+		try {
+			ds = new DatagramSocket();
+			//1.发送
+			byte[] buf = _message.getBytes();
+			DatagramPacket dp = new DatagramPacket(buf, buf.length, InetAddress.getByName(ip), port);
+			ds.send(dp);
+			//2.接收
+            byte[] getBuf = new byte[1024];
+            DatagramPacket getPacket = new DatagramPacket(getBuf, getBuf.length);  
+            ds.setSoTimeout(2000);
+            ds.receive(getPacket);
+            String backMes = new String(getBuf, 0, getPacket.getLength());  
+            LOGGER.info("接受方返回的消息：{}", backMes);
+            return backMes;
+		} finally{
+			ds.close();
+		}
     }
     
 	public static void main(String[] args) {

@@ -72,12 +72,16 @@ public class DispatchTaskController {
     @GetMapping("/dispatch/list")
     public String goList(Map<String, Object> model,
             HttpServletRequest request,
+            @RequestParam(value = "a", defaultValue = "0") int refresh,
             @RequestParam(value = "p", defaultValue = "1") int page) {
     	int count = dispatchTaskService.countAll();
     	List<DispatchTask> dispatchTasks = dispatchTaskService.findAll((page - 1) * Pagination.DEFAULT_PAGE_SIZE, Pagination.DEFAULT_PAGE_SIZE);
         Pagination pagination = new Pagination(request, page, count, Pagination.DEFAULT_PAGE_SIZE);
         model.put("dispatchTasks", dispatchTasks);
         model.put("pagination", pagination);
+        if(refresh > 0) {
+            model.put("refresh", refresh);
+        }
         return "task/dispatch/list";
     }
 
@@ -181,7 +185,8 @@ public class DispatchTaskController {
 
     @PostMapping("/dispatch/{taskId}/again")
     public @ResponseBody String dispatchAgain(@PathVariable("taskId") int taskId) throws IOException {
-    	//TODO send message
+    	DispatchTask dispatchTask = dispatchTaskService.findById(taskId);
+		sendMessageService.onlySendMessage(dispatchTask.format());
         return "1";
     }
 }

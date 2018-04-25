@@ -40,6 +40,6 @@ public enum PlayStatus {
 	}
 
 	public boolean allowReplay() {
-		return (this.compareTo(DONE) == 0 || this.compareTo(FAILED) == 0);
+		return (this.compareTo(PAUSE) == 0 || this.compareTo(DONE) == 0 || this.compareTo(FAILED) == 0);
 	}
 }

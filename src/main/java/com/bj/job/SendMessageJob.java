@@ -1,9 +1,6 @@
 package com.bj.job;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.Date;
 import java.util.UUID;
@@ -12,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bj.pojo.QueryResult;
+import com.bj.util.BaseUtil;
 
 import net.sf.json.JSONObject;
 
@@ -110,25 +108,7 @@ public class SendMessageJob implements AdminStatusTask, Runnable {
      * 发送消息到设备
      */
     private String udpSend(String _message) throws SocketException,IOException{
-        LOGGER.info("发送内容：{}", _message);
-    	DatagramSocket ds = null;
-		try {
-			ds = new DatagramSocket();
-			//1.发送
-			byte[] buf = _message.getBytes();
-			DatagramPacket dp = new DatagramPacket(buf, buf.length, InetAddress.getByName(ip), port);
-			ds.send(dp);
-			//2.接收
-            byte[] getBuf = new byte[1024];
-            DatagramPacket getPacket = new DatagramPacket(getBuf, getBuf.length);  
-            ds.setSoTimeout(2000);
-            ds.receive(getPacket);
-            String backMes = new String(getBuf, 0, getPacket.getLength());  
-            LOGGER.info("接受方返回的消息：{}", backMes);
-            return backMes;
-		} finally{
-			ds.close();
-		}
+        return BaseUtil.udpSend(ip, port, _message);
     }
     
     @Override

@@ -87,7 +87,7 @@ public class RealplayTask extends BaseTask{
 		return PlayStatus.values()[status].allowReplay();
 	}
 	
-	public String format() {
-		return "{\"opt\":\"start_file_realplay_task\", \"task_id\":" + id + "}";
+	public String format(String opt) {
+		return "{\"opt\":\"" + opt + "\", \"task_id\":" + id + "}";
 	}
 }

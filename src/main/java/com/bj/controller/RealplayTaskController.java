@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bj.pojo.FileResource;
+import com.bj.pojo.PlayStatus;
 import com.bj.pojo.RealplayTask;
 import com.bj.pojo.SplitTemplates;
 import com.bj.pojo.TaskStatus;
@@ -44,6 +45,9 @@ import com.bj.util.Pagination;
 public class RealplayTaskController {
     @SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(RealplayTaskController.class);
+    private static final String OPT_PLAY = "start_file_realplay_task";
+    private static final String OPT_STOP = "stop_file_realplay_task";
+    private static final String SUCCESS = "1";
 
     @Resource
     private RealplayTaskService realplayTaskService;
@@ -72,6 +76,7 @@ public class RealplayTaskController {
     @GetMapping("/realplay/list")
     public String goList(Map<String, Object> model,
             HttpServletRequest request,
+            @RequestParam(value = "a", defaultValue = "0") int refresh,
             @RequestParam(value = "p", defaultValue = "1") int page) {
     	//最近任务
     	int showNum = 5;
@@ -88,6 +93,9 @@ public class RealplayTaskController {
         model.put("pagination", pagination);
     	List<SplitTemplates> templates = splitTemplatesService.findAll(0, 200);
         model.put("templates", templates);
+        if(refresh > 0) {
+            model.put("refresh", refresh);
+        }
         return "task/realplay/list";
     }
 
@@ -150,7 +158,7 @@ public class RealplayTaskController {
 			fileResourceService.insert(realplayTask.getFileResource());
     	}
         redirectAttributes.addFlashAttribute("message", "保存成功！");
-		sendMessageService.onlySendMessage(realplayTask.format());
+		sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
         return "redirect:/task/realplay/list";
     }
 
@@ -193,9 +201,14 @@ public class RealplayTaskController {
 
     @PostMapping("/realplay/{id}/stop")
     public @ResponseBody String goStop(@PathVariable("id") int id,
+            final @RequestParam("taskPassword") String taskPassword,
 			final RedirectAttributes redirectAttributes) throws IOException {
-    	//TODO send message
-        return "1";
+    	if(!sysParamService.validTaskPassword(taskPassword)) {
+            return "任务密码错误";
+    	}
+    	RealplayTask realplayTask = realplayTaskService.findById(id);
+		sendMessageService.onlySendMessage(realplayTask.format(OPT_STOP));
+        return SUCCESS;
     }
     
     @PostMapping("/realplay/{id}/replay")
@@ -206,20 +219,34 @@ public class RealplayTaskController {
     	if(!sysParamService.validTaskPassword(taskPassword)) {
             return "任务密码错误";
     	}
-    	//TODO send message
-        return "1";
+    	RealplayTask realplayTask = realplayTaskService.findById(id);
+    	realplayTask.setRepeate(repeate);
+    	if(realplayTaskService.update(realplayTask) > 0) {
+    		sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
+    	}
+        return SUCCESS;
     }
     
     @PostMapping("/realplay/{fileId}/goplay")
     public @ResponseBody String goPlay(@PathVariable("fileId") int fileId,
-            final @RequestParam("templateId") String templateId,
+            final @RequestParam("templateId") int templateId,
             final @RequestParam("repeate") Boolean repeate,
             final @RequestParam("taskPassword") String taskPassword,
 			final RedirectAttributes redirectAttributes) throws IOException {
     	if(!sysParamService.validTaskPassword(taskPassword)) {
             return "任务密码错误";
     	}
-    	//TODO send message
-        return "1";
+    	FileResource fileResource = fileResourceService.findById(fileId);
+    	SplitTemplates splitTemplates = splitTemplatesService.findById(templateId);
+    	RealplayTask realplayTask = new RealplayTask();
+    	realplayTask.setFileResource(fileResource);
+    	realplayTask.setSplitTemplate(splitTemplates);
+    	realplayTask.setRepeate(repeate);
+    	realplayTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+    	realplayTask.setStatus(PlayStatus.PLAYING.index());
+    	if(realplayTaskService.insert(realplayTask) > 0) {
+    		sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
+    	}
+        return SUCCESS;
     }
 }

@@ -70,7 +70,7 @@
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-2 control-label">文件描述</label>
                     <div class="col-sm-10">
-                    	<textarea class="form-control" name="fileResource.fileDesc" placeholder="文件描述" rows="5" maxlength="100">{{#realplayTask}}{{#realplayTask.fileResource}}{{#realplayTask.fileResource.fileDesc}}{{.}}{{/realplayTask.fileResource.fileDesc}}{{/realplayTask.fileResource}}{{/realplayTask}}</textarea>
+                    	<textarea class="form-control" name="fileResource.fileDesc" placeholder="文件描述" rows="5" maxlength="100" required>{{#realplayTask}}{{#realplayTask.fileResource}}{{#realplayTask.fileResource.fileDesc}}{{.}}{{/realplayTask.fileResource.fileDesc}}{{/realplayTask.fileResource}}{{/realplayTask}}</textarea>
                         {{#fileResource.fileErr}}<span class="error">{{.}}</span>{{/fileResource.fileErr}}
                     </div>
                 </div>

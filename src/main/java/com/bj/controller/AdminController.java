@@ -3,6 +3,8 @@
  */
 package com.bj.controller;
 
+import java.io.IOException;
+import java.net.SocketException;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -10,11 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bj.pojo.SysUser;
 import com.bj.service.SendMessageService;
@@ -151,7 +155,28 @@ public class AdminController {
     	}
     	return "admin/set";
     }
-    
+
+    /**
+     * 同步获取License
+     * @param request
+     * @return
+     */
+    @Value("${bijie.send.udp.ip}")
+    private String ip;
+    @Value("${bijie.send.udp.port}")
+    private int port;
+    @PostMapping("/loadSQ")
+    public @ResponseBody String loadSQ(HttpServletRequest request) {
+    	if(!isLogin(request)) {return "-1";}
+    	try {
+    		return BaseUtil.udpSend(ip, port, "{\"opt\":\"query_license_info\"}");
+		} catch (SocketException e) {
+        	LOGGER.error(e.getMessage(),e);
+		} catch (IOException e) {
+        	LOGGER.error(e.getMessage(),e);
+		}
+    	return "{\"opt\":\"query_license_info_rsp\",\"active\":1,\"expire_time\":\"2018-10-30 23:25:00\",\"file_split\":1,\"file_realtime_play\":1,\"android_realtime_play\":0}";
+    }
     /**
      * 
      * @param model
@@ -181,7 +206,7 @@ public class AdminController {
      */
     private void updateAndSendMsg(String key, String value) {
 		if(sysParamService.updateValue(key,value) > 0) {
-			sendMessageService.onlySendMessage("{ \"opt\":\"mod\",\"tbl_name\":\"tbl_sys_param\",\"value\":{\"key\":\"" + key + "\",\"value\":" + value + "\"}");
+			sendMessageService.onlySendMessage("{\"opt\":\"mod\",\"tbl_name\":\"tbl_sys_param\",\"value\":{\"key\":\"" + key + "\",\"value\":" + value + "\"}}");
 		}
     }
 }

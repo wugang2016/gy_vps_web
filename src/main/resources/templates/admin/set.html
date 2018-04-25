@@ -47,19 +47,19 @@
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-3 control-label">1080P码率(kbps)</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control w_300"  name="b1080" placeholder="1080P码率(kbps)" value="{{#b1080}}{{.}}{{/b1080}}">
+                        <input type="number" class="form-control w_300"  name="b1080" placeholder="1080P码率(kbps)" value="{{#b1080}}{{.}}{{/b1080}}" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">720P码率(kbps)</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control w_300"  name="b720" placeholder="720P码率(kbps)" value="{{#b720}}{{.}}{{/b720}}">
+                        <input type="number" class="form-control w_300"  name="b720" placeholder="720P码率(kbps)" value="{{#b720}}{{.}}{{/b720}}" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">小于720P码率(kbps)</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control w_300"  name="b4cif" placeholder="小于720P码率(kbps)" value="{{#b4cif}}{{.}}{{/b4cif}}">
+                        <input type="number" class="form-control w_300"  name="b4cif" placeholder="小于720P码率(kbps)" value="{{#b4cif}}{{.}}{{/b4cif}}" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -135,36 +135,42 @@
          	
          	<!-- ###############################任务密码修改################################# -->
          	<div class="page-header">
-                <h1>License状态
-                    <small></small>
+                <h1>License
+                    <small>授权信息</small>
                 </h1>
             </div>
 			<form id="form4" class="form-horizontal" action="{{ctx.contextPath}}/admin/upload_license" method="post">
 	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">激活状态</label>
+	                <div class="col-sm-9 form-control-static">
+	                	<span id="active">-</span>&nbsp;
+	                	<a href="javascript:void(0)" onclick="loadSQ()">重新获取</a>
+	                	<span id="loading"></span>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="inputCode" class="col-sm-3 control-label">有效时间</label>
-	                <div class="col-sm-9">
-	                    xxxx
-	                </div>
+	                <div class="col-sm-9 form-control-static" id="expire_time">-</div>
 	            </div>
 	            <div class="form-group">
-	                <label for="inputCode" class="col-sm-3 control-label">实时呈现功能开关</label>
-	                <div class="col-sm-9">
-	                    xxxx
-	                </div>
+	                <label for="inputCode" class="col-sm-3 control-label">文件切割功能</label>
+	                <div class="col-sm-9 form-control-static" id="file_split">-</div>
 	            </div>
 	            <div class="form-group">
-	                <label for="inputCode" class="col-sm-3 control-label">文件切割功能开关</label>
-	                <div class="col-sm-9">
-	                    xxxx
-	                </div>
+	                <label for="inputCode" class="col-sm-3 control-label">文件实时播放功能</label>
+	                <div class="col-sm-9 form-control-static" id="file_realtime_play">-</div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">Android实时播放功能</label>
+	                <div class="col-sm-9 form-control-static" id="android_realtime_play">-</div>
 	            </div>
 	            <div class="form-group">
 	                <label for="inputCode" class="col-sm-3 control-label"></label>
-	                <div class="col-sm-9">
+	                <div class="col-sm-9 form-control-static">
 	                    <label title="License文件选择" class="btn btn-primary fileinput-button" style="width:200px">
 	                 		<i class="glyphicon glyphicon-upload"></i>
 	                    	<span>上传License文件</span>
-	               			<input type="file" name="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,image/bmp">
+	               			<input type="file" name="file">
 	                     </label>
 	                </div>
 	            </div>
@@ -177,10 +183,62 @@
 <script>
 $(function() {
     $("#form1").bootstrapValidator();
-    $("#form2").bootstrapValidator();
-    $("#form3").bootstrapValidator();
+    $("#form2").bootstrapValidator({
+	fields: {
+    	password2: {
+	        validators: {
+	            identical: {
+	                field: 'password',
+              		message: '请与新密码输入相同的值'
+	            },
+	            different: {
+	                field: 'oldPassword',
+	             	message: '新密码和旧密码不能相同'
+	            }
+	        }
+    	}
+    }});
+    $("#form3").bootstrapValidator({
+    fields:{
+    	taskPassword2: {
+	        validators: {
+	            identical: {
+	                field: 'taskPassword',
+              		message: '请与新密码输入相同的值'
+	            },
+	            different: {
+	                field: 'oldTaskPassword',
+	             	message: '新密码和旧密码不能相同'
+	            }
+	        }
+    	}
+    }});
     $("#form4").bootstrapValidator();
+    loadSQ();
 });
+
+function loadSQ(){
+	$("#loading").html("<img src='/css/img/small-loading.gif'>获取中...");
+	$.ajax({
+	    url: "/admin/loadSQ",
+	    type: "POST",
+	    async: true,
+	    success: function(data){
+	        console.log("data="+data);
+	        if(data.length > 10){
+	        	var obj = JSON.parse(data);
+	        	$('#expire_time').html(obj.expire_time);
+	        	$('#active').html(obj.active=='1'?'已激活':'未激活');
+	        	$('#file_split').html(obj.file_split=='1'?'支持':'不支持');
+	        	$('#file_realtime_play').html(obj.file_realtime_play=='1'?'支持':'不支持');
+	        	$('#android_realtime_play').html(obj.android_realtime_play=='1'?'支持':'不支持');
+	        }
+	    },
+	    complete:function(){
+	  		$("#loading").html("");
+	    }
+	  });
+}
 </script>
 </body>
 </html>

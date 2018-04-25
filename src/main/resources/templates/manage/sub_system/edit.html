@@ -57,21 +57,21 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">分系统名称</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="name" placeholder="分系统名称" value="{{#subSystem}}{{#name}}{{.}}{{/name}}{{/subSystem}}">
+                        <input type="text" class="form-control"  name="name" placeholder="分系统名称" value="{{#subSystem}}{{#name}}{{.}}{{/name}}{{/subSystem}}" required>
                         {{#nameErr}}<span class="error">{{.}}</span>{{/nameErr}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">子系统IP地址</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="ip" placeholder="子系统IP地址" value="{{#subSystem}}{{#ip}}{{.}}{{/ip}}{{/subSystem}}">
+                        <input type="text" class="form-control"  name="ip" placeholder="子系统IP地址" value="{{#subSystem}}{{#ip}}{{.}}{{/ip}}{{/subSystem}}" required ipv4="true">
                         {{#ipErr}}<span class="error">{{.}}</span>{{/ipErr}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">端口</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="port" placeholder="端口" value="{{#subSystem}}{{#port}}{{.}}{{/port}}{{/subSystem}}">
+                        <input type="number" class="form-control" name="port" placeholder="端口" value="{{#subSystem}}{{#port}}{{.}}{{/port}}{{/subSystem}}">
                         {{#portErr}}<span class="error">{{.}}</span>{{/portErr}}
                     </div>
                 </div>
@@ -87,21 +87,21 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">盒子地址</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="boxIp" placeholder="盒子IP地址" value="{{#subSystem}}{{#boxIp}}{{.}}{{/boxIp}}{{/subSystem}}">
+                        <input type="text" class="form-control"  name="boxIp" placeholder="盒子IP地址" value="{{#subSystem}}{{#boxIp}}{{.}}{{/boxIp}}{{/subSystem}}" required ipv4="true">
                         {{#boxIpErr}}<span class="error">{{.}}</span>{{/boxIpErr}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">区域宽度</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control " name="width" placeholder="区域宽度" value="{{#subSystem}}{{#width}}{{.}}{{/width}}{{/subSystem}}">
+                        <input type="number" class="form-control " name="width" placeholder="区域宽度" value="{{#subSystem}}{{#width}}{{.}}{{/width}}{{/subSystem}}" required>
                         {{#widthErr}}<span class="error">{{.}}</span>{{/widthErr}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">区域高度</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control " name="height" placeholder="区域高度" value="{{#subSystem}}{{#height}}{{.}}{{/height}}{{/subSystem}}">
+                        <input type="number" class="form-control " name="height" placeholder="区域高度" value="{{#subSystem}}{{#height}}{{.}}{{/height}}{{/subSystem}}" required>
                         {{#heightErr}}<span class="error">{{.}}</span>{{/heightErr}}
                     </div>
                 </div>
@@ -128,11 +128,11 @@
                 <div class="form-group">
                     <label for="inputClosingDate" class="col-sm-2 control-label">位置坐标</label>
                     <div class="col-sm-2">
-                        <input type="text" class="form-control " name="longitude" placeholder="经度" value="{{#subSystem}}{{#longitude}}{{.}}{{/longitude}}{{/subSystem}}">
+                        <input type="text" class="form-control " name="longitude" placeholder="经度" value="{{#subSystem}}{{#longitude}}{{.}}{{/longitude}}{{/subSystem}}" required>
                         {{#longitudeErr}}<span class="error">{{.}}</span>{{/longitudeErr}}
                     </div>
                     <div class="col-sm-2">
-                        <input type="text" class="form-control " name="latitude" placeholder="纬度" value="{{#subSystem}}{{#latitude}}{{.}}{{/latitude}}{{/subSystem}}">
+                        <input type="text" class="form-control " name="latitude" placeholder="纬度" value="{{#subSystem}}{{#latitude}}{{.}}{{/latitude}}{{/subSystem}}" required>
                         {{#latitudeErr}}<span class="error">{{.}}</span>{{/latitudeErr}}
                     </div>
                 </div>

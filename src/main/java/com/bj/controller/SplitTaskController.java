@@ -79,12 +79,16 @@ public class SplitTaskController {
     @GetMapping("/split/list")
     public String goList(Map<String, Object> model,
             HttpServletRequest request,
+            @RequestParam(value = "a", defaultValue = "0") int refresh,
             @RequestParam(value = "p", defaultValue = "1") int page) {
     	int count = splitTaskService.countAll();
     	List<SplitTask> splitTasks = splitTaskService.findAll((page - 1) * Pagination.DEFAULT_PAGE_SIZE, Pagination.DEFAULT_PAGE_SIZE);
         Pagination pagination = new Pagination(request, page, count, Pagination.DEFAULT_PAGE_SIZE);
         model.put("splitTasks", splitTasks);
         model.put("pagination", pagination);
+        if(refresh > 0) {
+            model.put("refresh", refresh);
+        }
         return "task/split/list";
     }
 
