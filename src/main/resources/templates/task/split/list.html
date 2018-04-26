@@ -23,6 +23,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
+            	<li><a href="#">
+            		<span class="badge" id="cpu">CPU: 00.00%</span>
+            		<span class="badge" id="mem">MEM: 00.00%</span>
+            		<span class="badge" id="disk">DISK: 00.00%</span>
+            	</a></li>
                 <li><a target="blank" href="{{ctx.contextPath}}/admin/login">高级设置</a></li>
             </ul>
         </div>
@@ -44,6 +49,8 @@
                 </li>
                 <li><a href="{{ctx.contextPath}}/manage/sub_system/list">通用管理</a></li>
             </ul>
+            <footer class="footer navbar-fixed-bottom">
+			</footer>
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
