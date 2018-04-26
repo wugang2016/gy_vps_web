@@ -2,7 +2,7 @@ package com.bj.pojo;
 
 import java.io.Serializable;
 
-public class BaseTask implements Serializable {
+public class BaseTask implements Serializable {	
 	private static final long serialVersionUID = 1L;
 	private String taskPassword;
 	

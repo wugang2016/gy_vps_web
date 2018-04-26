@@ -1,5 +1,7 @@
 package com.bj.pojo;
 
+import com.bj.util.ErrorMessage;
+
 public class RealplayTask extends BaseTask{
 	/**
 	 * 
@@ -66,7 +68,6 @@ public class RealplayTask extends BaseTask{
 	public void setErrCode(Integer errCode) {
 		this.errCode = errCode;
 	}
-
 	public String getStatusText() {
 		return PlayStatus.values()[status].text();
 	}
@@ -85,6 +86,14 @@ public class RealplayTask extends BaseTask{
 
 	public boolean getAllowReplay() {
 		return PlayStatus.values()[status].allowReplay();
+	}
+	
+	public String getErrMsg() {
+		String msg = ErrorMessage.getProperty(this.errCode+"");
+		if(msg == null && this.errCode != null) {
+			msg = this.errCode+"";
+		}
+		return msg;
 	}
 	
 	public String format(String opt) {

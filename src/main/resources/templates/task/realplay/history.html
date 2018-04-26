@@ -63,6 +63,7 @@
                         <th>文件名称</th>
                         <th>切割模板</th>
                         <th>播放状态</th>
+                        <th>返回结果</th>
                         <th>循环播放</th>
                         <th>开始时间</th>
                         <th>操作</th>
@@ -75,6 +76,7 @@
                         <td>{{fileResource.fileName}}</td>
                         <td>{{splitTemplate.name}}</td>
                         <td class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
+                        <td>{{#errMsg}}{{.}}{{/errMsg}}</td>
                         <td>{{#repeate}}是{{/repeate}}{{^repeate}}否{{/repeate}}</td>
                         <td>{{#startTime}}{{.}}{{/startTime}}</td>
                         <td>

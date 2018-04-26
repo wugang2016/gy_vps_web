@@ -32,7 +32,7 @@ public enum PlayStatus {
 	}
 
 	public boolean allowDelete() {
-		return this.compareTo(FAILED) == 0;
+		return (this.compareTo(DONE) == 0 || this.compareTo(FAILED) == 0);
 	}
 
 	public boolean allowStop() {

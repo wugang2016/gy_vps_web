@@ -290,8 +290,12 @@ $('#myModal').on('hide.bs.modal', function() {
 
 function showVideoName(filePath){
 	var fileName = filePath.substr(filePath.lastIndexOf("\\")+1);
-	$('.video_label').attr('data-original-title',fileName);
-	$('.video_label').tooltip("show");
+	if(fileName != ""){
+		$('.video_label').attr('data-original-title',fileName);
+		$('.video_label').tooltip("show");
+	}else{
+		$('.video_label').tooltip("hide");
+	}
 }
 
 function showPreview(source,name) { 

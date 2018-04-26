@@ -129,8 +129,12 @@ $(function() {
     $(".fileinput-button").on("change", "input[type='file']", function() {
     	var fileName = $("input[name='file']").val();
     	fileName = fileName.substr(fileName.lastIndexOf("\\")+1);
-    	$('.fileinput-button').attr('data-original-title',fileName);
-    	$('.fileinput-button').tooltip("show");
+    	if(fileName != ''){
+	    	$('.fileinput-button').attr('data-original-title',fileName);
+	    	$('.fileinput-button').tooltip("show");
+    	}else{
+	    	$('.fileinput-button').tooltip("hide");
+    	}
     });
     $("input[name='fileResource.goPlay']").on("change",function(){
     	changeGoPlay();

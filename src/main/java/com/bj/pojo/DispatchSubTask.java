@@ -1,5 +1,7 @@
 package com.bj.pojo;
 
+import com.bj.util.ErrorMessage;
+
 /**
  * The persistent class for the tbl_file_split_subtask database table.
  * 
@@ -11,7 +13,7 @@ public class DispatchSubTask extends BaseTask  {
 
 	private int taskId;
 
-	private int errCode;
+	private Integer errCode;
 
 	private int status;
 	
@@ -73,5 +75,13 @@ public class DispatchSubTask extends BaseTask  {
 
 	public boolean getIsFail() {
 		return status == 3;
+	}
+	
+	public String getErrMsg() {
+		String msg = ErrorMessage.getProperty(this.errCode+"");
+		if(msg == null && this.errCode != null) {
+			msg = this.errCode+"";
+		}
+		return msg;
 	}
 }

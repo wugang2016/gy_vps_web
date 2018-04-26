@@ -251,8 +251,12 @@ $(function() {
     $("input[name='file4']").on("change", function() {
 		var fileName = $(this).val();
 		fileName = fileName.substr(fileName.lastIndexOf("\\")+1);
-		$('.video_label').attr('data-original-title',fileName);
-		$('.video_label').tooltip("show");
+		if(fileName != ""){
+			$('.video_label').attr('data-original-title',fileName);
+			$('.video_label').tooltip("show");
+		}else{
+			$('.video_label').tooltip("hide");
+		}
     });
     
     $("#form").bootstrapValidator();
