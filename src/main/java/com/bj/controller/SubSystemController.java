@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +41,7 @@ import com.bj.util.FileTypeUtil.FileType;
 import com.bj.util.Pagination;
 
 @Controller
+@Transactional
 @RequestMapping("/manage")
 public class SubSystemController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SubSystemController.class);

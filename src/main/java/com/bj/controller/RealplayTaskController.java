@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ import com.bj.util.Contants;
 import com.bj.util.Pagination;
 
 @Controller
+@Transactional
 @RequestMapping("/task")
 public class RealplayTaskController {
     @SuppressWarnings("unused")
@@ -117,7 +119,7 @@ public class RealplayTaskController {
         model.put("templates", templates);
         return "task/realplay/new";
     }
-
+    
     @PostMapping("/realplay/new")
     public String doNew(@Valid RealplayTask realplayTask,
     							Errors result,
@@ -156,7 +158,7 @@ public class RealplayTaskController {
         	}
     	}else {
 			fileResourceService.insert(realplayTask.getFileResource());
-    	}
+    	}    	
         redirectAttributes.addFlashAttribute("message", "保存成功！");
 		sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
         return "redirect:/task/realplay/list";

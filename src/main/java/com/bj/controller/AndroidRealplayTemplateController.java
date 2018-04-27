@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +48,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
+@Transactional
 @RequestMapping("/manage")
 public class AndroidRealplayTemplateController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AndroidRealplayTemplateController.class);
@@ -183,7 +185,6 @@ public class AndroidRealplayTemplateController {
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "保存失败！");
     	}
-    	
         return "redirect:/manage/android_template/list";
     }
 
