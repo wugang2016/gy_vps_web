@@ -137,9 +137,7 @@ $(function() {
     changeSplitTask(true,tz_splitTaskId);
     $("#form").bootstrapValidator().on('success.form.bv', function (e) {
         e.preventDefault();
-        if(isSubmit()){
-			$("#form").data('bootstrapValidator').disableSubmitButtons(true).defaultSubmit();
-        }
+        goSubmit();
     });
 });
 
@@ -203,7 +201,7 @@ function initCheckbox(){
 	}
 }
 
-function isSubmit(){
+function goSubmit(){
 	if(confirm("一旦创建成功不可修改，确认提交？")){
 		var submit_json = [];
 		$("input[type='checkbox']").each(function(){
@@ -219,10 +217,11 @@ function isSubmit(){
 		});
 		$('#subTaskJson').val(JSON.stringify(submit_json));
 		$("#submiting").html("<img src='/css/img/small-loading.gif'>上传中,请稍后...");
-		return true;
+		$("input[name='taskPassword']").val($.md5($("input[name='taskPassword']").val()));
+		$("#form").data('bootstrapValidator').disableSubmitButtons(true).defaultSubmit();
+	}else{
+		$('#form').bootstrapValidator('disableSubmitButtons', false);
 	}
-	$('#form').bootstrapValidator('disableSubmitButtons', false);
-	return false;
 }
 </script>
 </body>

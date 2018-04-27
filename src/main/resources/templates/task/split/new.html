@@ -164,9 +164,7 @@ $(function() {
     changeTemplate();
     $("#form").bootstrapValidator().on('success.form.bv', function (e) {
         e.preventDefault();
-        if(isSubmit()){
-    		$("#form").data('bootstrapValidator').disableSubmitButtons(true).defaultSubmit();
-        }
+        goSubmit();
     });
 });
 
@@ -200,7 +198,7 @@ function putArea(obj){
 	$('#area_div').append(newArea);
 }
 
-function isSubmit(){
+function goSubmit(){
 	if(confirm("一旦创建成功不可修改，确认提交？")){
 		$("input[data-id]").each(function(){
 			var areaId = $(this).attr("data-id");
@@ -213,10 +211,10 @@ function isSubmit(){
 		});
 		$('#areaJson').val(JSON.stringify(area_json));
 		$("#submiting").html("<img src='/css/img/small-loading.gif'>上传中,请稍后...");
-		return true;
+		$("input[name='taskPassword']").val($.md5($("input[name='taskPassword']").val()));
+		$("#form").data('bootstrapValidator').disableSubmitButtons(true).defaultSubmit();
 	}else{
 		$('#form').bootstrapValidator('disableSubmitButtons', false);
-		return false;
 	}
 }
 </script>

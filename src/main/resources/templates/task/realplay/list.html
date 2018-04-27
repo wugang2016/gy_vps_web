@@ -329,7 +329,7 @@ function stopPlay(){
 	$('#stopModal').find(".modal-content").bootstrapValidator('validate');
 	if($('#stopModal').find(".modal-content").data('bootstrapValidator').isValid()){
 		var url = "/task/realplay/" + $('#stopTaskId').val() + "/stop";
-		var taskPwd = $('#stopModal').find("input[name='taskPassword']").val();
+		var taskPwd = $.md5($('#stopModal').find("input[name='taskPassword']").val());
 	    $.ajax({
 	        url: url,
 	        type: "POST",
@@ -351,7 +351,7 @@ function replay(){
 	if($('#replayModal').find(".modal-content").data('bootstrapValidator').isValid()){
 		var url = "/task/realplay/" + $('#taskId').val() + "/replay";
 		var repeate = $('#replayModal').find("input[name='repeate']").prop("checked");
-		var taskPwd = $('#replayModal').find("input[name='taskPassword']").val();
+		var taskPwd = $.md5($('#replayModal').find("input[name='taskPassword']").val());
 	    $.ajax({
 	        url: url,
 	        type: "POST",
@@ -374,7 +374,7 @@ function goplay(){
 		var url = "/task/realplay/" + $('#fileId').val() + "/goplay";
 		var templateId = $('#goplayModal').find("select[name='splitTemplateId']").val();
 		var repeate = $('#goplayModal').find("input[name='repeate']").prop("checked");
-		var taskPwd = $('#goplayModal').find("input[name='taskPassword']").val();
+		var taskPwd = $.md5($('#goplayModal').find("input[name='taskPassword']").val());
 	    $.ajax({
 	        url: url,
 	        type: "POST",

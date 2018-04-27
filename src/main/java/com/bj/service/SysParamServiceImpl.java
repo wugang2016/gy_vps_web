@@ -42,7 +42,7 @@ public class SysParamServiceImpl implements SysParamService{
 
 	@Override
 	public boolean validTaskPassword(String taskPassword){
-		return BaseUtil.md5(taskPassword).equals(findByKey(Contants.KEY_TASK_PASSWORD));
+		return taskPassword.equals(findByKey(Contants.KEY_TASK_PASSWORD));
 	}
 
 }
