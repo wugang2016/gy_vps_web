@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.bj.dao.mapper.SysParamMapper;
 import com.bj.pojo.SysParam;
-import com.bj.util.BaseUtil;
 import com.bj.util.Contants;
 
 /**

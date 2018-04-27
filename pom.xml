@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.bijie</groupId>
-    <artifactId>bj-18a001-web</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>gy-vps-web</artifactId>
+    <version>0.1.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <parent>
@@ -14,7 +14,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <name>bj-18a001-web</name>
+    <name>gy-vps-web</name>
     <url>http://maven.apache.org</url>
 
     <properties>
