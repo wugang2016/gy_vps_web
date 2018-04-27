@@ -2,6 +2,9 @@ package com.bj.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -18,24 +21,33 @@ import org.springframework.stereotype.Component;
 public class ErrorMessage {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ErrorMessage.class);
 	private static Properties props;
+	private static Map<String, String> map = new HashMap<>();
 
 	public ErrorMessage() {
 		String fileName = "error-message.properties";
 		try {
+			//先读取内部配置文件->map
+			Resource resource = new ClassPathResource(fileName);
+			props = PropertiesLoaderUtils.loadProperties(new EncodedResource(resource, "UTF-8"));
+			for (Entry<Object, Object> entry:props.entrySet()) {
+				map.put((String) entry.getKey(), (String) entry.getValue());
+			}
+			LOGGER.info("Loading inside error config：{}({})", resource.getURI(), map.size());
+
+			//读取外部配置文件->map
 			ApplicationHome home = new ApplicationHome(getClass());
 		    File jarFile = home.getSource();
 		    String filePath = jarFile.getParentFile().getPath() + File.separator + fileName;
 		    File file = new File(filePath);
 		    if(file.exists()) {
-				//读取外部配置文件
-				Resource resource = new PathResource(filePath);
+				resource = new PathResource(filePath);
 				props = PropertiesLoaderUtils.loadProperties(new EncodedResource(resource, "UTF-8"));
-				LOGGER.info("Loading outside error config：{}", file.getCanonicalPath());
-		    }else {
-				//读取内部配置文件
-				Resource resource = new ClassPathResource(fileName);
-				props = PropertiesLoaderUtils.loadProperties(new EncodedResource(resource, "UTF-8"));
-				LOGGER.info("Loading inside error config：{}", resource.getURI());
+				Map<String, String> outMap = new HashMap<>();
+				for (Entry<Object, Object> entry:props.entrySet()) {
+					outMap.put((String) entry.getKey(), (String) entry.getValue());
+				}
+				map.putAll(outMap);
+				LOGGER.info("Loading outside error config：{}({})", file.getCanonicalPath(), outMap.size());
 		    }
 		} catch (IOException e) { 
 			e.printStackTrace();
@@ -47,15 +59,6 @@ public class ErrorMessage {
 	 * @return 
 	 */ 
 	public static String getProperty(String key) {
-		return props == null ? null : props.getProperty(key);
-	}
-
-	/** 
-	 * 获取属性
-	 * @param key 属性key
-	 * @param defaultValue 属性value 
-	 * @return */
-	public static String getProperty(String key, String defaultValue) {
-		return props == null ? null : props.getProperty(key, defaultValue);
+		return map.get(key);
 	}
 }
