@@ -12,6 +12,7 @@ public class Contants {
 	public static final String PIC_FILE_SUB_PATH = "pic";
 	public static final String VIDEO_FILE_SUB_PATH = "video";
 	public static final String SPLIT_FILE_SUB_PATH = "split";
+	public static final String LICENSE_FILE_SUB_PATH = "license";
 
 	//SYSTEM PARAM KEY
 	public static final String KEY_BITERATE_1080P = "biterate.1080p";

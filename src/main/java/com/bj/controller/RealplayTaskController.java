@@ -33,7 +33,6 @@ import com.bj.pojo.TaskStatus;
 import com.bj.service.FileAreaService;
 import com.bj.service.FileResourceService;
 import com.bj.service.RealplayTaskService;
-import com.bj.service.SendMessageService;
 import com.bj.service.SplitSubTaskService;
 import com.bj.service.SplitTemplatesService;
 import com.bj.service.SysParamService;
@@ -42,13 +41,10 @@ import com.bj.util.Contants;
 import com.bj.util.Pagination;
 
 @Controller
-@Transactional
 @RequestMapping("/task")
 public class RealplayTaskController {
     @SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(RealplayTaskController.class);
-    private static final String OPT_PLAY = "start_file_realplay_task";
-    private static final String OPT_STOP = "stop_file_realplay_task";
     private static final String SUCCESS = "1";
 
     @Resource
@@ -68,9 +64,6 @@ public class RealplayTaskController {
     
     @Resource
     private FileAreaService fileAreaService ;
-
-    @Resource
-    private SendMessageService sendMessageService;
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
@@ -119,7 +112,8 @@ public class RealplayTaskController {
         model.put("templates", templates);
         return "task/realplay/new";
     }
-    
+
+    @Transactional
     @PostMapping("/realplay/new")
     public String doNew(@Valid RealplayTask realplayTask,
     							Errors result,
@@ -160,7 +154,6 @@ public class RealplayTaskController {
 			fileResourceService.insert(realplayTask.getFileResource());
     	}    	
         redirectAttributes.addFlashAttribute("message", "保存成功！");
-		sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
         return "redirect:/task/realplay/list";
     }
 
@@ -171,7 +164,8 @@ public class RealplayTaskController {
     	model.put("realplayTask", realplayTask);
         return "task/realplay/view";
     }
-    
+
+    @Transactional
     @PostMapping("/realplay/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {
@@ -183,7 +177,8 @@ public class RealplayTaskController {
     	}
         return "redirect:/task/realplay/list";
     }
-    
+
+    @Transactional
     @PostMapping("/realplay/file/{id}/delete")
     public String doDeleteFile(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {
@@ -209,10 +204,11 @@ public class RealplayTaskController {
             return "任务密码错误";
     	}
     	RealplayTask realplayTask = realplayTaskService.findById(id);
-		sendMessageService.onlySendMessage(realplayTask.format(OPT_STOP));
+    	realplayTaskService.stopPlay(realplayTask);
         return SUCCESS;
     }
-    
+
+    @Transactional
     @PostMapping("/realplay/{id}/replay")
     public @ResponseBody String goReplay(@PathVariable("id") int id,
             final @RequestParam("repeate") Boolean repeate,
@@ -223,12 +219,11 @@ public class RealplayTaskController {
     	}
     	RealplayTask realplayTask = realplayTaskService.findById(id);
     	realplayTask.setRepeate(repeate);
-    	if(realplayTaskService.update(realplayTask) > 0) {
-    		sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
-    	}
+    	realplayTaskService.update(realplayTask);
         return SUCCESS;
     }
-    
+
+    @Transactional
     @PostMapping("/realplay/{fileId}/goplay")
     public @ResponseBody String goPlay(@PathVariable("fileId") int fileId,
             final @RequestParam("templateId") int templateId,
@@ -246,9 +241,7 @@ public class RealplayTaskController {
     	realplayTask.setRepeate(repeate);
     	realplayTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	realplayTask.setStatus(PlayStatus.PLAYING.index());
-    	if(realplayTaskService.insert(realplayTask) > 0) {
-    		sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
-    	}
+    	realplayTaskService.insert(realplayTask);
         return SUCCESS;
     }
 }

@@ -45,11 +45,11 @@ public class DispatchSubTask extends BaseTask  {
 		this.status = status;
 	}
 	
-	public int getErrCode() {
+	public Integer getErrCode() {
 		return errCode;
 	}
 
-	public void setErrCode(int errCode) {
+	public void setErrCode(Integer errCode) {
 		this.errCode = errCode;
 	}
 

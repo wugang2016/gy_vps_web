@@ -25,6 +25,9 @@ public class DispatchTaskServiceImpl implements DispatchTaskService {
     
     @Resource
     private DispatchSubTaskMapper dispatchSubTaskMapper;
+    
+    @Resource
+    private SendMessageService sendMessageService;
 
 	@Override
 	public DispatchTask findById(int id) {
@@ -38,7 +41,11 @@ public class DispatchTaskServiceImpl implements DispatchTaskService {
 
 	@Override
 	public int insert(DispatchTask dispatchTask) {
-		return dispatchTaskMapper.insert(dispatchTask);
+		int result = dispatchTaskMapper.insert(dispatchTask);
+		if(result > 0){
+			sendMessageService.onlySendMessage(dispatchTask.format());
+		}
+		return result;
 	}
 
 	@Override

@@ -34,7 +34,6 @@ import com.bj.pojo.TaskStatus;
 import com.bj.service.DispatchSubTaskService;
 import com.bj.service.DispatchTaskService;
 import com.bj.service.FileAreaService;
-import com.bj.service.SendMessageService;
 import com.bj.service.SplitTaskService;
 import com.bj.service.SysParamService;
 import com.bj.util.BaseUtil;
@@ -44,7 +43,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
-@Transactional
 @RequestMapping("/task")
 public class DispatchTaskController {
     @SuppressWarnings("unused")
@@ -54,7 +52,7 @@ public class DispatchTaskController {
     private DispatchTaskService dispatchTaskService;
     
     @Resource
-    private DispatchSubTaskService splitSubTaskService;
+    private DispatchSubTaskService dispatchSubTaskService;
 
     @Resource
     private SplitTaskService splitTaskService;
@@ -64,9 +62,6 @@ public class DispatchTaskController {
     
     @Resource
     private FileAreaService fileAreaService ;
-
-    @Resource
-    private SendMessageService sendMessageService;
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
@@ -94,6 +89,7 @@ public class DispatchTaskController {
         return "task/dispatch/new";
     }
 
+    @Transactional
     @PostMapping("/dispatch/new")
     public String doNew(@Valid DispatchTask dispatchTask,
     							Errors result,
@@ -119,13 +115,13 @@ public class DispatchTaskController {
             return "task/dispatch/new";
     	}
     	
-		List<SplitSubTask> splitSubTaskList = new ArrayList<SplitSubTask>();
+		List<SplitSubTask> dispatchSubTaskList = new ArrayList<SplitSubTask>();
     	if(splitSubTaskJson != null && splitSubTaskJson.length() > 10) {
     		JSONArray jsonArray = JSONArray.fromObject(splitSubTaskJson);
             for(int i=0 ; i<jsonArray.size(); i++){
             	JSONObject jsonObject = jsonArray.getJSONObject(i);  
             	SplitSubTask splitSubTask = (SplitSubTask)JSONObject.toBean(jsonObject,SplitSubTask.class);  
-            	splitSubTaskList.add(splitSubTask);
+            	dispatchSubTaskList.add(splitSubTask);
             }
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
@@ -139,18 +135,16 @@ public class DispatchTaskController {
     	dispatchTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		if(dispatchTaskService.insert(dispatchTask) > 0){
 			//存入子任务表
-			for(int i=0; i<splitSubTaskList.size(); i++) {
-				SplitSubTask splitSubTask = splitSubTaskList.get(i);
+			for(int i=0; i<dispatchSubTaskList.size(); i++) {
+				SplitSubTask splitSubTask = dispatchSubTaskList.get(i);
 				DispatchSubTask subTask = new DispatchSubTask();
 				subTask.setTaskId(dispatchTask.getId());
 				subTask.setSubSystem(splitSubTask.getFileArea().getSubSystem());
 				subTask.setSplitSubTask(splitSubTask);
 				subTask.setStatus(SubTaskStatus.PENDING.index());
-				splitSubTaskService.insert(subTask);
+				dispatchSubTaskService.insert(subTask);
 			}
             redirectAttributes.addFlashAttribute("message", "保存成功！");
-
-			sendMessageService.onlySendMessage(dispatchTask.format());
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "保存失败！");
@@ -165,7 +159,8 @@ public class DispatchTaskController {
     	model.put("dispatchTask", dispatchTask);
         return "task/dispatch/view";
     }
-    
+
+    @Transactional
     @PostMapping("/dispatch/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {    	
@@ -180,15 +175,32 @@ public class DispatchTaskController {
 
     @PostMapping("/dispatch/{taskId}/subTask")
     public @ResponseBody String getAreas(@PathVariable("taskId") int taskId) throws IOException {
-    	List<DispatchSubTask> subTasks = splitSubTaskService.findByTaskId(taskId);
+    	List<DispatchSubTask> subTasks = dispatchSubTaskService.findByTaskId(taskId);
     	JSONArray obj = JSONArray.fromObject(subTasks);
         return obj.toString();
     }
 
+    @Transactional
     @PostMapping("/dispatch/{taskId}/again")
-    public @ResponseBody String dispatchAgain(@PathVariable("taskId") int taskId) throws IOException {
+    public @ResponseBody String dispatchAgain(@PathVariable("taskId") int taskId,
+            final @RequestParam("taskPassword") String taskPassword) throws IOException {
+    	if(!sysParamService.validTaskPassword(taskPassword)) {
+            return "任务密码错误";
+    	}
     	DispatchTask dispatchTask = dispatchTaskService.findById(taskId);
-		sendMessageService.onlySendMessage(dispatchTask.format());
+    	List<DispatchSubTask> dispatchSubTaskList = dispatchSubTaskService.findByTaskId(taskId);
+    	dispatchTask.setStatus(TaskStatus.PENDING.index());
+    	dispatchTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+    	dispatchTask.setEndTime(null);
+		if(dispatchTaskService.insert(dispatchTask) > 0){
+			//存入子任务表
+			for(int i=0; i<dispatchSubTaskList.size(); i++) {
+				DispatchSubTask subTask = dispatchSubTaskList.get(i);
+				subTask.setTaskId(dispatchTask.getId());
+				subTask.setStatus(SubTaskStatus.PENDING.index());
+				dispatchSubTaskService.insert(subTask);
+			}
+    	}
         return "1";
     }
 }

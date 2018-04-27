@@ -6,6 +6,7 @@
     {{#refresh}}<meta http-equiv="refresh" content="{{refresh}}">{{/refresh}}
     <title>分发任务列表 - 欧司朗视频切割系统</title>
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrapValidator.min.css">
     <!--[if lt IE 9]>
     <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
     <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
@@ -98,7 +99,7 @@
                         <td>
                         	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/dispatch/{{id}}/delete" onsubmit="return delCheck()">
 	                            <a href="{{ctx.contextPath}}/task/dispatch/{{id}}/view" data-toggle="modal" data-target="#myModal">详细</a>
-	                            {{#isDispatch}}<a href="#" onclick="dispatchAgain({{id}})">再次分发</a>{{/isDispatch}}
+	                            {{#isDispatch}}<a href="#" data-toggle="modal" data-target="#againModal" data-id="{{id}}">再次分发</a>{{/isDispatch}}
 	                            {{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}
                             </form>
                         </td>
@@ -145,29 +146,75 @@
 		<div class="modal-content"></div>
 	</div>
 </div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="againModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+	<div class="modal-dialog" style="width:400px">
+		<div class="modal-content">
+			<div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">分发条件</h4>
+            	<p class="alert alert-danger" role="alert" style="display:none">
+            		<em>系统提示：</em><span id="msg"></span>
+            	</p>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">任务密码</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control"  name="taskPassword" placeholder="任务密码" required>
+                    </div>
+              		<input type="hidden" name="taskId" id="taskId">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="again()">提交</button>
+            </div>
+		</div>
+	</div>
+</div>
+
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
 <script>
 $(function(){
 	setRefreshText({{#refresh}}{{.}}{{/refresh}});
+	$('#againModal').find(".modal-content").bootstrapValidator();
+	$('#againModal').on('show.bs.modal', function (event) {
+		$("#taskId").val($(event.relatedTarget).data("id"));
+	});
+	//Modal验证销毁重构
+	$('#againModal').on('hide.bs.modal', function() {
+		$(this).find(".alert").hide();
+		$(this).find(".modal-content").data('bootstrapValidator').resetForm();
+	});
 });
 function delCheck(){
 	return confirm("确认要删除此记录？");
 }
-function dispatchAgain(id){
-    $.ajax({
-        url: "/task/dispatch/"+id+"/again",
-        type: "POST",
-        async: true,
-        success: function(data){
-            if(data == "1"){
-            	alert("发送成功！");
-            	location.reload();
-            }else{
-            	alert("发送失败！")
-            }
-        }
-    });
+function again(){
+	$('#againModal').find(".modal-content").bootstrapValidator('validate');
+	if($('#againModal').find(".modal-content").data('bootstrapValidator').isValid()){
+		var id = $('#taskId').val();
+		var taskPwd = $.md5($('#againModal').find("input[name='taskPassword']").val());
+	    $.ajax({
+	        url: "/task/dispatch/"+id+"/again",
+	        type: "POST",
+	        async: true,
+	        data:{taskPassword:taskPwd},
+	        success: function(data){
+	            if(data == "1"){
+	            	alert("发送成功！");
+	            	location.reload();
+	            }else{
+	            	$('#againModal').find(".alert").show();
+	            	$('#againModal').find("#msg").html(data);
+	            }
+	        }
+	    });
+	}
 }
 
 function setRefreshText(s){

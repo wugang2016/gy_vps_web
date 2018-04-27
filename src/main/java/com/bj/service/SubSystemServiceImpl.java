@@ -25,6 +25,9 @@ public class SubSystemServiceImpl implements SubSystemService {
     
     @Resource
     private SubSystemMapper subSystemInfoMapper;
+    
+    @Resource
+    private SendMessageService sendMessageService;
 	
 	@Override
 	public List<SubSystemInfo> findAll(int offset,  int rowCount) {
@@ -38,7 +41,11 @@ public class SubSystemServiceImpl implements SubSystemService {
 
 	@Override
 	public int insert(SubSystemInfo subSystemInfo) {
-		return subSystemInfoMapper.insert(subSystemInfo);
+		int result = subSystemInfoMapper.insert(subSystemInfo);
+		if(result > 0) {
+			sendMessageService.onlySendMessage(subSystemInfo.format("add"));
+		}
+		return result;
 	}
 
 	@Override
@@ -48,12 +55,20 @@ public class SubSystemServiceImpl implements SubSystemService {
 
 	@Override
 	public int update(SubSystemInfo subSystemInfo) {
-		return subSystemInfoMapper.update(subSystemInfo);
+		int result = subSystemInfoMapper.update(subSystemInfo);
+		if(result > 0){
+			sendMessageService.onlySendMessage(subSystemInfo.format("mod"));
+		}
+		return result;
 	}
 
 	@Override
 	public int detele(int id) {
-		return subSystemInfoMapper.delete(id);
+		int result = subSystemInfoMapper.delete(id);
+		if(result > 0){
+			sendMessageService.onlySendMessage("{\"opt\":\"rmv\",\"tbl_name\":\"tbl_sub_sys_info\",\"value\":{\"sub_sys_id\":" + id + "}}");
+		}
+		return result;
 	}
 
 	@Override

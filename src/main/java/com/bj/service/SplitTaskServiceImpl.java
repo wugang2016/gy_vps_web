@@ -29,6 +29,9 @@ public class SplitTaskServiceImpl implements SplitTaskService {
     @Resource
     private SplitSubTaskMapper splitSubTaskMapper;
     
+    @Resource
+    private SendMessageService sendMessageService;
+    
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
     
@@ -50,6 +53,7 @@ public class SplitTaskServiceImpl implements SplitTaskService {
 			if(!dir.exists()) {
 				dir.mkdirs();
 			}
+			sendMessageService.onlySendMessage(splitTask.format());
 		}
 		return result;
 	}

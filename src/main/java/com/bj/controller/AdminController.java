@@ -3,6 +3,7 @@
  */
 package com.bj.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.Map;
@@ -19,9 +20,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bj.pojo.SysUser;
-import com.bj.service.SendMessageService;
 import com.bj.service.SysParamService;
 import com.bj.service.SysUserService;
 import com.bj.util.BaseUtil;
@@ -43,9 +45,9 @@ public class AdminController {
 
     @Resource
     private SysParamService sysParamService;
-
-    @Resource
-    private SendMessageService sendMessageService;
+    
+    @Value("${bijie.upload.file.path}")
+    private String uploadFileDir;
     
     @GetMapping(value= {"","/","/login","/setML","/setPwd","/setDoPwd"})
     public String goLogin(Map<String, Object> model) {
@@ -155,6 +157,23 @@ public class AdminController {
     	}
     	return "admin/set";
     }
+    
+    @PostMapping("/upload_license")
+    public String upload(Map<String, Object> model,
+            HttpServletRequest request,
+            final @RequestParam("file") MultipartFile file,
+			final RedirectAttributes redirectAttributes) throws IOException {
+    	if(!isLogin(request)) {return "admin/login";}
+    	if(file.getSize() <= 0) {
+            redirectAttributes.addFlashAttribute("hasError", true);
+            redirectAttributes.addFlashAttribute("message", "缺少切割视频文件！");
+            return "redirect:/task/split/new";
+    	}else {
+			BaseUtil.doSaveFile(uploadFileDir + File.separator + Contants.LICENSE_FILE_SUB_PATH, file, null);
+    	}
+    	model.put("message", "上传成功"); 
+    	return "admin/set";
+    }
 
     /**
      * 同步获取License
@@ -185,8 +204,6 @@ public class AdminController {
         model.put("b1080", sysParamService.findByKey(Contants.KEY_BITERATE_1080P));
         model.put("b720", sysParamService.findByKey(Contants.KEY_BITERATE_720P));
         model.put("b4cif", sysParamService.findByKey(Contants.KEY_BITERATE_4CIF));
-        
-        //TODO 许可信息
     }
     
     /**
@@ -205,8 +222,6 @@ public class AdminController {
      * @param value
      */
     private void updateAndSendMsg(String key, String value) {
-		if(sysParamService.updateValue(key,value) > 0) {
-			sendMessageService.onlySendMessage("{\"opt\":\"mod\",\"tbl_name\":\"tbl_sys_param\",\"value\":{\"key\":\"" + key + "\",\"value\":" + value + "\"}}");
-		}
+		sysParamService.updateValue(key,value);
     }
 }

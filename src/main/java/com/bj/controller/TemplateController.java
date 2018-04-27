@@ -9,11 +9,9 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bj.pojo.AndroidRealplayArea;
 import com.bj.pojo.AndroidRealplayTemplate;
 import com.bj.pojo.Template;
 import com.bj.pojo.TemplateList;
-import com.bj.service.AndroidRealplayAreaService;
 import com.bj.service.AndroidRealplayTemplateService;
 
 
@@ -30,9 +28,8 @@ public class TemplateController {
 		List<Template> templates = new ArrayList<Template>();
 	    for(int i=0; i<page; ++i) {
 	    	List<AndroidRealplayTemplate> androidRealplayTemplates =  androidRealplayTemplateService.findAll(i*20,20);
-	    	for (Iterator iterator = androidRealplayTemplates.iterator(); iterator.hasNext();) {
-				AndroidRealplayTemplate androidRealplayTemplate = (AndroidRealplayTemplate) iterator.next();
-				
+	    	for (Iterator<AndroidRealplayTemplate> iterator = androidRealplayTemplates.iterator(); iterator.hasNext();) {
+				AndroidRealplayTemplate androidRealplayTemplate = iterator.next();
 				
 				Template tem1 = new Template(androidRealplayTemplate.getId(),
 						androidRealplayTemplate.getName(),
@@ -43,7 +40,6 @@ public class TemplateController {
 						androidRealplayTemplate.getLongitude(),
 						androidRealplayTemplate.getLatitude()
 						);
-				
 				
 				templates.add(tem1);
 			}

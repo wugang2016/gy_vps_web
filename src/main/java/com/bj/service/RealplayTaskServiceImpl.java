@@ -18,9 +18,14 @@ import com.bj.pojo.RealplayTask;
  */
 @Service
 public class RealplayTaskServiceImpl implements RealplayTaskService {
+    private static final String OPT_PLAY = "start_file_realplay_task";
+    private static final String OPT_STOP = "stop_file_realplay_task";
 
     @Resource
     private RealplayTaskMapper realplayTaskMapper;
+
+    @Resource
+    private SendMessageService sendMessageService;
 
 	@Override
 	public RealplayTask findById(int id) {
@@ -34,12 +39,20 @@ public class RealplayTaskServiceImpl implements RealplayTaskService {
 
 	@Override
 	public int insert(RealplayTask realplayTask) {
-		return realplayTaskMapper.insert(realplayTask);
+		int result = realplayTaskMapper.insert(realplayTask);
+		if(result > 0) {
+			sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
+		}
+		return result;
 	}
 
 	@Override
 	public int update(RealplayTask realplayTask) {
-		return realplayTaskMapper.update(realplayTask);
+		int result = realplayTaskMapper.update(realplayTask);
+		if(result > 0) {
+			sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
+		}
+		return result;
 	}
 
 	@Override
@@ -60,6 +73,11 @@ public class RealplayTaskServiceImpl implements RealplayTaskService {
 	@Override
 	public List<RealplayTask> findByFileId(int fileId) {
 		return realplayTaskMapper.findByFileId(fileId);
+	}
+
+	@Override
+	public void stopPlay(RealplayTask realplayTask) {
+		sendMessageService.onlySendMessage(realplayTask.format(OPT_STOP));
 	}
 	
 }

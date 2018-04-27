@@ -35,7 +35,6 @@ import com.bj.pojo.SubTaskStatus;
 import com.bj.pojo.TaskStatus;
 import com.bj.service.DispatchTaskService;
 import com.bj.service.FileAreaService;
-import com.bj.service.SendMessageService;
 import com.bj.service.SplitSubTaskService;
 import com.bj.service.SplitTaskService;
 import com.bj.service.SplitTemplatesService;
@@ -48,7 +47,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
-@Transactional
 @RequestMapping("/task")
 public class SplitTaskController {
     @SuppressWarnings("unused")
@@ -71,9 +69,6 @@ public class SplitTaskController {
     
     @Resource
     private FileAreaService fileAreaService ;
-
-    @Resource
-    private SendMessageService sendMessageService;
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
@@ -101,6 +96,7 @@ public class SplitTaskController {
         return "task/split/new";
     }
 
+    @Transactional
     @PostMapping("/split/new")
     public String doNew(@Valid SplitTask splitTask,
     							Errors result,
@@ -166,7 +162,6 @@ public class SplitTaskController {
 				splitSubTaskService.insert(subTask);
 			}
             redirectAttributes.addFlashAttribute("message", "保存成功！");
-			sendMessageService.onlySendMessage(splitTask.format());
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "保存失败！");
@@ -181,7 +176,8 @@ public class SplitTaskController {
     	model.put("splitTask", splitTask);
         return "task/split/view";
     }
-    
+
+    @Transactional
     @PostMapping("/split/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {
@@ -208,9 +204,15 @@ public class SplitTaskController {
     }
 
     @PostMapping("/split/{taskId}/subTask")
-    public @ResponseBody String getAreas(@PathVariable("taskId") int taskId) throws IOException {
+    public @ResponseBody String getSubTask(@PathVariable("taskId") int taskId) throws IOException {
     	List<SplitSubTask> subTasks = splitSubTaskService.findByTaskId(taskId);
     	JSONArray obj = JSONArray.fromObject(subTasks);
         return obj.toString();
+    }
+    
+    @PostMapping("/valid/pwd")
+    public @ResponseBody String validTaskPwd(@RequestParam("taskPassword") String taskPassword) throws IOException {
+        Boolean result = sysParamService.validTaskPassword(BaseUtil.md5(taskPassword));
+        return "{\"valid\": " + result.toString() + "}";
     }
 }

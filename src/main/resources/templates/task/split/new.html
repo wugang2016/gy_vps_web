@@ -162,7 +162,15 @@ $(function() {
     });
     $('#templateId').val({{#splitTask}}{{#splitTemplate.id}}{{.}}{{/splitTemplate.id}}{{/splitTask}});
     changeTemplate();
-    $("#form").bootstrapValidator().on('success.form.bv', function (e) {
+    $("#form").bootstrapValidator({
+   		fields:{taskPassword:{validators:{ 
+			remote:{
+					url : '/task/valid/pwd',
+					message : "任务密码不正确",
+					type : 'POST',
+                    delay: 1000
+				}}}}
+    }).on('success.form.bv', function (e) {
         e.preventDefault();
         goSubmit();
     });
@@ -217,6 +225,8 @@ function goSubmit(){
 		$('#form').bootstrapValidator('disableSubmitButtons', false);
 	}
 }
+
+
 </script>
 </body>
 </html>
