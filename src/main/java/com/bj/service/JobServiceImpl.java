@@ -6,7 +6,6 @@ package com.bj.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
 import javax.annotation.Resource;

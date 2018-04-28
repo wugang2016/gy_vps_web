@@ -70,14 +70,13 @@ public class IndexController {
         return result;
     }
 
-    @GetMapping(value = "/data-export/download/{uuid}",
+    @GetMapping(value = "/download/{uuid}",
             produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     @ResponseBody
     public FileSystemResource downloadExportFile(@PathVariable String uuid,
-    													 @PathVariable("name") String name,
-                                                         HttpServletResponse response) throws UnsupportedEncodingException {
+                                                  	HttpServletResponse response) throws UnsupportedEncodingException {
     	AdminStatusTask task = jobService.getAdminStatusTask(uuid);
-    	String filename = "package_" + BaseUtil.format(new Date(), "yyyyMMdd") + ".zip";
+    	String filename = "Package_" + BaseUtil.format(new Date(), "yyyyMMdd") + ".zip";
         response.setHeader("Content-Disposition", "attachment; " +
                 "filename=\"" + URLEncoder.encode(filename, "UTF-8") + "\";" +
                 "filename*=utf-8''" + URLEncoder.encode(filename, "UTF-8"));
