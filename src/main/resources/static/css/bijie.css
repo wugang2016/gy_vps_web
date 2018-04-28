@@ -157,6 +157,10 @@ body.signin {
   background-color: #e35c00;
   border-color: #ae3800;
 }
+.btn-primary.disabled.focus,.btn-primary.disabled:focus,.btn-primary.disabled:hover,.btn-primary[disabled].focus,.btn-primary[disabled]:focus,.btn-primary[disabled]:hover,fieldset[disabled] .btn-primary.focus,fieldset[disabled] .btn-primary:focus,fieldset[disabled] .btn-primary:hover{
+	background-color:#e35c00;
+	border-color:#ae3800
+}
 
 .navbar-default {
   background-color: #d8d8d8;

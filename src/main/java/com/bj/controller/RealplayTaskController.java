@@ -86,7 +86,8 @@ public class RealplayTaskController {
         Pagination pagination = new Pagination(request, page, count, Pagination.DEFAULT_PAGE_SIZE);
         model.put("fileResources", fileResources);
         model.put("pagination", pagination);
-    	List<SplitTemplates> templates = splitTemplatesService.findAll(0, 200);
+    	List<SplitTemplates> templates = splitTemplatesService.findDefaultTemplates();
+    	templates.addAll(splitTemplatesService.findAll(0, 200));
         model.put("templates", templates);
         if(refresh > 0) {
             model.put("refresh", refresh);
@@ -108,7 +109,8 @@ public class RealplayTaskController {
 
     @GetMapping("/realplay/new")
     public String goNew(Map<String, Object> model) {
-    	List<SplitTemplates> templates = splitTemplatesService.findAll(0, 200);
+    	List<SplitTemplates> templates = splitTemplatesService.findDefaultTemplates();
+    	templates.addAll(splitTemplatesService.findAll(0, 200));
         model.put("templates", templates);
         return "task/realplay/new";
     }

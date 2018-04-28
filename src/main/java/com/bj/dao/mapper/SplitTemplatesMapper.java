@@ -24,16 +24,24 @@ public interface SplitTemplatesMapper {
             @Result(property = "id", column = "template_id")})
     SplitTemplates findById(@Param("id") int id);
     
-    @Select("SELECT * FROM tbl_file_split_template order by template_id desc " +
+    @Select("SELECT * FROM tbl_file_split_template where type = 1 ")
+    @Results(value = {
+            @Result(property = "id", column = "template_id")})
+    List<SplitTemplates> findDefaultTemplates();
+    
+    @Select("SELECT * FROM tbl_file_split_template where type !=1 order by template_id desc " +
             "LIMIT #{offset}, #{rowCount} ")
     @Results(value = {
             @Result(property = "id", column = "template_id")})
     List<SplitTemplates> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
 
+    @Select("SELECT count(1) FROM tbl_file_split_template where type !=1")
+    int countAll();
+
     @Insert("INSERT INTO tbl_file_split_template " +
-            "   (name, `desc`) " +
+            "   (name, `desc`, type) " +
             "VALUES " +
-            "   (#{name}, #{desc})")
+            "   (#{name}, #{desc}, 0)")
     @Options(useGeneratedKeys=true,keyColumn="template_id",keyProperty="id")
     int insert(SplitTemplates splitTemplates);
 
@@ -42,9 +50,6 @@ public interface SplitTemplatesMapper {
     		"   t.desc = #{desc}  " +
     		"   where t.template_id = #{id}")
     int update(SplitTemplates splitTemplates);
-
-    @Select("SELECT count(1) FROM tbl_file_split_template")
-    int countAll();
     
     @Delete("DELETE FROM tbl_file_split_template where template_id=#{id}")
     int delete(int id);

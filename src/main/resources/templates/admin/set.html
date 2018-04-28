@@ -144,7 +144,7 @@
 	                <label for="inputCode" class="col-sm-3 control-label">激活状态</label>
 	                <div class="col-sm-9 form-control-static">
 	                	<span id="active">-</span>&nbsp;
-	                	<a href="javascript:void(0)" onclick="loadSQ()">重新获取</a>
+	                	<a href="#" onclick="loadSQ()">重新获取</a>
 	                	<span id="loading"></span>
 	                </div>
 	            </div>
@@ -163,6 +163,10 @@
 	            <div class="form-group">
 	                <label for="inputCode" class="col-sm-3 control-label">Android实时播放功能</label>
 	                <div class="col-sm-9 form-control-static" id="android_realtime_play">-</div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">机器码</label>
+	                <div class="col-sm-9 form-control-static" id="uuid">-</div>
 	            </div>
 	            <div class="form-group">
 	                <label for="inputCode" class="col-sm-3 control-label"></label>
@@ -188,7 +192,7 @@ $(function() {
     	if(fileName != ''){
     		$("#form4").submit();
     	}
-    }
+    });
     $("#form1").bootstrapValidator();
     $("#form2").bootstrapValidator({
 	fields: {
@@ -230,14 +234,14 @@ function loadSQ(){
 	    type: "POST",
 	    async: true,
 	    success: function(data){
-	        console.log("data="+data);
-	        if(data.length > 10){
-	        	var obj = JSON.parse(data);
+	        if(data){
+	        	var obj = $.parseJSON(data);
 	        	$('#expire_time').html(obj.expire_time);
 	        	$('#active').html(obj.active=='1'?'已激活':'未激活');
 	        	$('#file_split').html(obj.file_split=='1'?'支持':'不支持');
 	        	$('#file_realtime_play').html(obj.file_realtime_play=='1'?'支持':'不支持');
 	        	$('#android_realtime_play').html(obj.android_realtime_play=='1'?'支持':'不支持');
+	        	$('#uuid').html(obj.uuid);
 	        }
 	    },
 	    complete:function(){

@@ -107,6 +107,7 @@
                         	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/split/{{id}}/delete" onsubmit="return delCheck()">
 	                            <a href="{{ctx.contextPath}}/task/split/{{id}}/view" data-toggle="modal" data-target="#myModal">详细</a>
 	                            {{#isDispatch}}<a href="{{ctx.contextPath}}/task/split/{{id}}/dispatch" target="self">分发</a>{{/isDispatch}}
+	                            {{#isDispatch}}<a href="#" data-toggle="modal" data-target="#downloadModal" data-id="{{id}}">打包下载</a>{{/isDispatch}}
 	                            {{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}
                             </form>
                         </td>
@@ -154,6 +155,40 @@
 		<div class="modal-content"></div>
 	</div>
 </div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+	<div class="modal-dialog" style="width:400px">
+		<div class="modal-content">
+			<div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">打包下载分割文件</h4>
+            	<p class="alert alert-danger" role="alert" style="display:none">
+            		<em>系统提示：</em><span id="msg"></span>
+            	</p>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static" id="status"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <button type="button" id="download_btn" class="btn btn-default" disabled>下 载</button>
+                    </div>
+                    <input type="hidden" name="taskId" id="taskId">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+		</div>
+	</div>
+</div>
+
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script>

@@ -194,7 +194,7 @@ public class AdminController {
 		} catch (IOException e) {
         	LOGGER.error(e.getMessage(),e);
 		}
-    	return "{\"opt\":\"query_license_info_rsp\",\"active\":1,\"expire_time\":\"2018-10-30 23:25:00\",\"file_split\":1,\"file_realtime_play\":1,\"android_realtime_play\":0}";
+    	return "{\"opt\":\"query_license_info_rsp\",\"active\":0,\"expire_time\":\"2018-10-30 23:25:00\",\"file_split\":0,\"file_realtime_play\":0,\"android_realtime_play\":0,\"uuid\":\"xxxx-xxxx\"}";
     }
     /**
      * 
