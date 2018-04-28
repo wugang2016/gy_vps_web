@@ -3,7 +3,9 @@
  */
 package com.bj.service;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bj.job.AdminStatusTask;
+import com.bj.job.ExportZipFileJob;
 import com.bj.job.SendMessageJob;
 import com.bj.util.BaseUtil;
 
@@ -25,11 +28,11 @@ import com.bj.util.BaseUtil;
  *
  */
 @Service
-public class SendMessageServiceImpl implements SendMessageService {
+public class JobServiceImpl implements JobService {
     @SuppressWarnings("unused")
-	private static final Logger LOGGER = LoggerFactory.getLogger(SendMessageServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceImpl.class);
     // 保留最近任务
-    private LRUMap<UUID, AdminStatusTask> lastStatusJobs = new LRUMap<>(20);
+    private LRUMap<String, AdminStatusTask> lastStatusJobs = new LRUMap<>(20);
 
     @Resource(name = "statusExecutor")
     private ExecutorService statusExecutor;
@@ -77,12 +80,20 @@ public class SendMessageServiceImpl implements SendMessageService {
     }
 
     @Override
-    public AdminStatusTask getAdminStatusTask(UUID taskId) {
+    public AdminStatusTask getAdminStatusTask(String taskId) {
         return lastStatusJobs.get(taskId);
     }
 
 	@Override
-	public LRUMap<UUID, AdminStatusTask> getTaskMap() {
+	public LRUMap<String, AdminStatusTask> getTaskMap() {
 		return lastStatusJobs;
+	}
+
+	@Override
+	public ExportZipFileJob exportZipFile(List<File> srcFiles, String zipPath) {
+		ExportZipFileJob job = new ExportZipFileJob("zip_package", srcFiles, zipPath);
+        lastStatusJobs.put(job.getTaskId(), job);
+        statusExecutor.submit(job);
+        return job;
 	}
 }

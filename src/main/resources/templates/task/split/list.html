@@ -107,7 +107,7 @@
                         	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/split/{{id}}/delete" onsubmit="return delCheck()">
 	                            <a href="{{ctx.contextPath}}/task/split/{{id}}/view" data-toggle="modal" data-target="#myModal">详细</a>
 	                            {{#isDispatch}}<a href="{{ctx.contextPath}}/task/split/{{id}}/dispatch" target="self">分发</a>{{/isDispatch}}
-	                            {{#isDispatch}}<a href="#" data-toggle="modal" data-target="#downloadModal" data-id="{{id}}">打包下载</a>{{/isDispatch}}
+	                            {{#isDispatch}}<a href="#" data-toggle="modal" data-target="#downloadModal" data-id="{{id}}">下载</a>{{/isDispatch}}
 	                            {{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}
                             </form>
                         </td>
@@ -171,13 +171,13 @@
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-3 control-label">状态</label>
                     <div class="col-sm-9">
-                        <p class="form-control-static" id="status"></p>
+                        <p class="form-control-static" id="status">正在获取文件...</p>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-3 control-label"></label>
                     <div class="col-sm-9">
-                        <button type="button" id="download_btn" class="btn btn-default" disabled>下 载</button>
+                        <a href="#" id="download_btn" class="btn btn-primary" disabled>下 载</a>
                     </div>
                     <input type="hidden" name="taskId" id="taskId">
                 </div>
@@ -194,6 +194,16 @@
 <script>
 $(function(){
 	setRefreshText({{#refresh}}{{refresh}}{{/refresh}});
+
+	$('#downloadModal').on('show.bs.modal', function (event) {
+		$("#taskId").val($(event.relatedTarget).data("id"));
+		goPackage();
+	});
+	$('#downloadModal').on('hide.bs.modal', function() {
+		$(this).find(".alert").hide();
+    	$('#status').html("");
+		$('#download_btn').attr("disabled","disabled");
+	});
 })
 function delCheck(){
 	return confirm("确认要删除此记录？");
@@ -212,6 +222,46 @@ function refresh(s){
 		url = "/task/split/list?a="+s
 	}
 	window.location.href = url;
+}
+
+function goPackage(){
+	$.ajax({
+        url: "/task/split/"+$('#taskId').val()+"/package",
+        type: "POST",
+        success: function(data){
+            if(data != "-1"){
+            	loadPackageStauts(data);
+            }else{
+            	$('#downloadModal').find(".alert").show();
+            	$('#downloadModal').find("#msg").html("文件已经不存在");
+            }
+        }
+    });
+}
+
+function loadPackageStauts(uuid){
+	$.ajax({
+        url: "/job/"+uuid,
+        success: function(data){
+        	console.log("data="+data);
+            if(data != "-1"){
+	        	var obj = $.parseJSON(data);
+	        	if(obj.state == 1){
+		        	$('#status').html(obj.status);
+	        		$('#download_btn').attr("href", "/data-export/download/"+obj.taskId);
+	        		$('#download_btn').attr("disabled","false");
+	        	}else if(obj.state == 0){
+		        	$('#status').html(obj.status + " <img src='/css/img/small-loading.gif'>");
+	        		setTimeout("loadPackageStauts('"+uuid+"')", 1000);
+	        	}else{
+		        	$('#status').html(obj.status);
+	        	}
+            }else{
+            	$('#downloadModal').find(".alert").show();
+            	$('#downloadModal').find("#msg").html("任务已经不存在");
+            }
+        }
+    });
 }
 </script>
 </body>

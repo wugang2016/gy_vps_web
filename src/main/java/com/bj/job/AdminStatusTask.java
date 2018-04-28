@@ -1,7 +1,6 @@
 package com.bj.job;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * Created by liqingkun on 2018-01-16.
@@ -9,7 +8,7 @@ import java.util.UUID;
 public interface AdminStatusTask {
     String getName();
 
-    UUID getTaskId();
+    String getTaskId();
 
     Date getStartTime();
 
@@ -18,4 +17,8 @@ public interface AdminStatusTask {
     String getStatus();
 
     String getBackURL();
+
+    String getZipPath();
+
+    Integer getState();
 }

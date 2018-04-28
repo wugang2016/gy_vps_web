@@ -35,6 +35,7 @@ import com.bj.pojo.SubTaskStatus;
 import com.bj.pojo.TaskStatus;
 import com.bj.service.DispatchTaskService;
 import com.bj.service.FileAreaService;
+import com.bj.service.JobService;
 import com.bj.service.SplitSubTaskService;
 import com.bj.service.SplitTaskService;
 import com.bj.service.SplitTemplatesService;
@@ -69,6 +70,9 @@ public class SplitTaskController {
     
     @Resource
     private FileAreaService fileAreaService ;
+    
+    @Resource
+    private JobService jobService ;
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
@@ -215,4 +219,27 @@ public class SplitTaskController {
         Boolean result = sysParamService.validTaskPassword(BaseUtil.md5(taskPassword));
         return "{\"valid\": " + result.toString() + "}";
     }
+    
+    @PostMapping("/split/{taskId}/package")
+    public @ResponseBody String goPackage(@PathVariable("taskId") int taskId) throws IOException {
+    	SplitTask splitTask = splitTaskService.findById(taskId);
+    	List<File> fileList = new ArrayList<>();
+    	File srcFile = new File(uploadFileDir + File.separator + splitTask.getSrcFilePath());
+    	File splitFileDir = new File(uploadFileDir + File.separator + Contants.SPLIT_FILE_SUB_PATH + File.separator + taskId);
+    	if(srcFile.exists() && splitFileDir.exists()) {
+    		String zipPath = Contants.DOWNLOAD_TEMP_DIR + BaseUtil.getStrRandom(Contants.FILE_NAME_LENGTH) + ".zip";
+    		fileList.add(srcFile);
+    		fileList.add(splitFileDir);
+    		File zipFileDir = new File(Contants.DOWNLOAD_TEMP_DIR);
+    		if(!zipFileDir.exists()) {
+    			zipFileDir.mkdirs();
+    		}/*
+    		File zipFile = new File(zipPath);
+    		zipFile.createNewFile();*/
+        	return jobService.exportZipFile(fileList, zipPath).getTaskId().toString();
+    	}else {
+    		return "-1"; //文件已经不存在
+    	}
+    }
+    
 }

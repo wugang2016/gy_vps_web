@@ -30,7 +30,7 @@ public class SplitTaskServiceImpl implements SplitTaskService {
     private SplitSubTaskMapper splitSubTaskMapper;
     
     @Resource
-    private SendMessageService sendMessageService;
+    private JobService sendMessageService;
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;

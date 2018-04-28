@@ -25,7 +25,7 @@ public class RealplayTaskServiceImpl implements RealplayTaskService {
     private RealplayTaskMapper realplayTaskMapper;
 
     @Resource
-    private SendMessageService sendMessageService;
+    private JobService sendMessageService;
 
 	@Override
 	public RealplayTask findById(int id) {

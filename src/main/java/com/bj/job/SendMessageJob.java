@@ -122,8 +122,8 @@ public class SendMessageJob implements AdminStatusTask, Runnable {
     }
 
     @Override
-    public UUID getTaskId() {
-        return taskId;
+    public String getTaskId() {
+        return taskId.toString();
     }
 
     @Override
@@ -145,4 +145,14 @@ public class SendMessageJob implements AdminStatusTask, Runnable {
     public String getBackURL() {
         return backURL;
     }
+
+	@Override
+	public String getZipPath() {
+		return null;
+	}
+
+	@Override
+	public Integer getState() {
+		return null;
+	}
 }

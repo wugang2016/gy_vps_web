@@ -27,7 +27,7 @@ public class SubSystemServiceImpl implements SubSystemService {
     private SubSystemMapper subSystemInfoMapper;
     
     @Resource
-    private SendMessageService sendMessageService;
+    private JobService sendMessageService;
 	
 	@Override
 	public List<SubSystemInfo> findAll(int offset,  int rowCount) {

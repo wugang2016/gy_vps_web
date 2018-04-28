@@ -27,7 +27,7 @@ public class DispatchTaskServiceImpl implements DispatchTaskService {
     private DispatchSubTaskMapper dispatchSubTaskMapper;
     
     @Resource
-    private SendMessageService sendMessageService;
+    private JobService sendMessageService;
 
 	@Override
 	public DispatchTask findById(int id) {

@@ -21,7 +21,7 @@ public class SysParamServiceImpl implements SysParamService{
     private SysParamMapper sysParamMapper;
     
     @Resource
-    private SendMessageService sendMessageService;
+    private JobService sendMessageService;
     
 	@Override
 	public String findByKey(String key) {

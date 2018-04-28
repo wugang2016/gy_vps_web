@@ -138,6 +138,6 @@ public class SubSystemInfo {
 		json = json.replace("\"name\"", "\"sub_sys_name\"");
 		json = json.replace("\"mntPath\"", "\"mnt_path\"");
 		json = json.replace("\"boxIp\"", "\"box_ip\"");
-		return str + json;
+		return str + json + "}";
 	}
 }
