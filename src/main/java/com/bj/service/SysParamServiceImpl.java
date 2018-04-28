@@ -41,7 +41,7 @@ public class SysParamServiceImpl implements SysParamService{
 	public int updateValue(String key, String value) {
 		int result = sysParamMapper.updateValue(key, value);
 		if(result > 0) {
-			sendMessageService.onlySendMessage("{\"opt\":\"mod\",\"tbl_name\":\"tbl_sys_param\",\"value\":{\"key\":\"" + key + "\",\"value\":" + value + "\"}}");
+			sendMessageService.onlySendMessage("{\"opt\":\"mod\",\"tbl_name\":\"tbl_sys_param\",\"value\":{\"key\":\"" + key + "\",\"value\":\"" + value + "\"}}");
 		}
 		return result;
 	}
