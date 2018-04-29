@@ -233,9 +233,7 @@ public class SplitTaskController {
     		File zipFileDir = new File(Contants.DOWNLOAD_TEMP_DIR);
     		if(!zipFileDir.exists()) {
     			zipFileDir.mkdirs();
-    		}/*
-    		File zipFile = new File(zipPath);
-    		zipFile.createNewFile();*/
+    		}
         	return jobService.exportZipFile(fileList, zipPath).getTaskId().toString();
     	}else {
     		return "-1"; //文件已经不存在

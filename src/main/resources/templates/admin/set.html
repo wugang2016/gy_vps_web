@@ -225,6 +225,7 @@ $(function() {
     	}
     }});
     loadSQ();
+    setTimeout("pageTimeout()",60000);
 });
 
 function loadSQ(){
@@ -248,6 +249,9 @@ function loadSQ(){
 	  		$("#loading").html("");
 	    }
 	  });
+}
+function pageTimeout(){
+	window.location.href = "/admin";
 }
 </script>
 </body>

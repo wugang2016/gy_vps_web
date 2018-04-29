@@ -63,7 +63,7 @@
                     <small>列表</small>
                     <a href="{{ctx.contextPath}}/task/split/new" type="button" class="btn btn-primary"> 新增 </a>
 	                <div class="btn-group pull-right">
-						<button type="button" class="btn btn-primary" id="refresh_btn" onclick="refresh()">手工刷新</button>
+						<button type="button" class="btn btn-primary" id="refresh_btn" onclick="refresh()">手动刷新</button>
 						<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 							<span class="caret"></span>
 							<span class="sr-only">切换下拉菜单</span>
@@ -72,7 +72,7 @@
 							<li><a href="#" onclick="refresh(5)">自动刷新(5s)</a></li>
 							<li><a href="#" onclick="refresh(10)">自动刷新(10s)</a></li>
 							<li class="divider"></li>
-							<li><a href="#" onclick="refresh()">手工刷新</a></li>
+							<li><a href="#" onclick="refresh()">手动刷新</a></li>
 						</ul>
 					</div>
                 </h1>
@@ -83,7 +83,7 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <!--<th>#ID</th>  -->
+                        <th>#ID</th>
                         <th>切割任务名称</th>
                         <th>模板名称</th>
                         <th>状态</th>
@@ -96,7 +96,7 @@
                     <tbody>
                     {{#splitTasks}}
                     <tr>
-                        <!--<td>{{id}}</td>-->
+                        <td>{{id}}</td>
                         <td>{{taskName}}</td>
                         <td>{{splitTemplate.name}}</td>
                         <td class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
@@ -171,7 +171,7 @@
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-3 control-label">状态:</label>
                     <div class="col-sm-9">
-                        <p class="form-control-static" id="status">正在获取文件...<img src='/css/img/small-loading.gif'></p>
+                        <p class="form-control-static" id="status">正在获取文件...<img src='{{ctx.contextPath}}/css/img/small-loading.gif'></p>
                         <a href="#" id="download_btn" class="btn btn-primary" style="display:none">下 载</a>
                         <input type="hidden" name="taskId" id="taskId">
                     </div>
@@ -242,7 +242,7 @@ function loadPackageStauts(uuid){
 	        	var obj = $.parseJSON(data);
 	        	if(obj.state == 1){
 		        	$('#status').html(obj.status);
-	        		$('#download_btn').attr("href", "/download/"+obj.taskId);
+	        		$('#download_btn').attr("href", "/download/"+obj.taskId+"/0");
 	        		$('#download_btn').show();
 	        	}else if(obj.state == 0){
 		        	$('#status').html(obj.status + " <img src='/css/img/small-loading.gif'>");

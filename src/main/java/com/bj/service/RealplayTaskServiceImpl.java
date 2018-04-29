@@ -48,11 +48,7 @@ public class RealplayTaskServiceImpl implements RealplayTaskService {
 
 	@Override
 	public int update(RealplayTask realplayTask) {
-		int result = realplayTaskMapper.update(realplayTask);
-		if(result > 0) {
-			sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
-		}
-		return result;
+		return realplayTaskMapper.update(realplayTask);
 	}
 
 	@Override

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ECUE列表 - 欧司朗视频切割系统</title>
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.min.css">
+    <!--[if lt IE 9]>
+    <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
+    <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bijie.css">
+    <style></style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">欧司朗视频切割系统</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+            	<li><a href="#">
+            		<span class="badge" id="cpu">CPU: 00.00%</span>
+            		<span class="badge" id="mem">MEM: 00.00%</span>
+            		<span class="badge" id="disk">DISK: 00.00%</span>
+            	</a></li>
+                <li><a target="blank" href="{{ctx.contextPath}}/admin/login">高级设置</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="{{ctx.contextPath}}/task/split/list">任务管理</a></li>
+                <li class="active submenu open">
+                    <a href="#">通用管理</a>
+                    <ul style="display: block;">
+                        <li><a href="{{ctx.contextPath}}/manage/sub_system/list">ECUE设备</a></li>
+                        <li><a href="{{ctx.contextPath}}/manage/split_templates/list">文件切割模板</a></li>
+                        <li><a href="{{ctx.contextPath}}/manage/android_template/list">Android实时流模板</a></li>
+                        <li class="active"><a href="{{ctx.contextPath}}/manage/logs_download">日志下载</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            {{#message}}
+            <p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}" role="alert">
+            	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
+            {{/message}}
+            <div class="page-header">
+                <h1>日志下载
+                    <small>打包Web、VPS日志并下载</small>
+                </h1>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3">
+                		<a href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#downloadModal">打包下载</a>
+                    </label>
+                    <div class="col-sm-9">
+                    </div>
+                </div>
+        	</div>
+        </div>
+    </div>
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+	<div class="modal-dialog" style="width:400px">
+		<div class="modal-content">
+			<div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">打包下载分割文件</h4>
+            	<p class="alert alert-danger" role="alert" style="display:none">
+            		<em>系统提示：</em><span id="msg"></span>
+            	</p>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">状态:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static" id="status">正在获取文件...<img src='{{ctx.contextPath}}/css/img/small-loading.gif'></p>
+                        <a href="#" id="download_btn" class="btn btn-primary" style="display:none">下 载</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+		</div>
+	</div>
+</div>
+
+<script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
+<script>
+$(function(){
+	$('#downloadModal').on('show.bs.modal', function (event) {
+		goPackage();
+	});
+	$('#downloadModal').on('hide.bs.modal', function() {
+		$(this).find(".alert").hide();
+    	$('#status').html("");
+		$('#download_btn').hide();
+		$('#download_btn').attr("href", "#");
+	});
+})
+
+function goPackage(){
+	$.ajax({
+        url: "/logs/package",
+        type: "POST",
+        success: function(data){
+            if(data != "-1"){
+            	loadPackageStauts(data);
+            }else{
+	        	$('#status').html("文件已经不存在");
+            }
+        }
+    });
+}
+
+function loadPackageStauts(uuid){
+	$.ajax({
+        url: "/job/"+uuid,
+        success: function(data){
+            if(data != "-1"){
+	        	var obj = $.parseJSON(data);
+	        	if(obj.state == 1){
+		        	$('#status').html(obj.status);
+	        		$('#download_btn').attr("href", "/download/"+obj.taskId+"/1");
+	        		$('#download_btn').show();
+	        	}else if(obj.state == 0){
+		        	$('#status').html(obj.status + " <img src='/css/img/small-loading.gif'>");
+	        		setTimeout("loadPackageStauts('"+uuid+"')", 2000);
+	        	}else{
+		        	$('#status').html(obj.status);
+	        	}
+            }else{
+	        	$('#status').html("任务已经不存在");
+            }
+        }
+    });
+}
+</script>
+</body>
+</html>

@@ -62,7 +62,7 @@
                     <small>列表</small>
                 	<a href="{{ctx.contextPath}}/task/dispatch/new" type="button" class="btn btn-primary"> 新增 </a>
 	                <div class="btn-group pull-right">
-						<button type="button" class="btn btn-primary" id="refresh_btn" onclick="refresh()">手工刷新</button>
+						<button type="button" class="btn btn-primary" id="refresh_btn" onclick="refresh()">手动刷新</button>
 						<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 							<span class="caret"></span>
 							<span class="sr-only">切换下拉菜单</span>
@@ -71,7 +71,7 @@
 							<li><a href="#" onclick="refresh(5)">自动刷新(5s)</a></li>
 							<li><a href="#" onclick="refresh(10)">自动刷新(10s)</a></li>
 							<li class="divider"></li>
-							<li><a href="#" onclick="refresh()">手工刷新</a></li>
+							<li><a href="#" onclick="refresh()">手动刷新</a></li>
 						</ul>
 					</div>
                 </h1>
@@ -80,7 +80,7 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <!--<th>#ID</th>  -->
+                        <th>#ID</th>
                         <th>分发任务名称</th>
                         <th>切割任务名称</th>
                         <th>状态</th>
@@ -91,7 +91,7 @@
                     <tbody>
                     {{#dispatchTasks}}
                     <tr>
-                        <!--<td>{{id}}</td>-->
+                        <td>{{id}}</td>
                         <td>{{taskName}}</td>
                         <td>{{#splitTask}}{{splitTask.taskName}}{{/splitTask}}</td>
                         <td class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>

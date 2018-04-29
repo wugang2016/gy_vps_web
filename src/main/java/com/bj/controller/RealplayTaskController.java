@@ -29,12 +29,14 @@ import com.bj.pojo.FileResource;
 import com.bj.pojo.PlayStatus;
 import com.bj.pojo.RealplayTask;
 import com.bj.pojo.SplitTemplates;
+import com.bj.pojo.SubSystemInfo;
 import com.bj.pojo.TaskStatus;
 import com.bj.service.FileAreaService;
 import com.bj.service.FileResourceService;
 import com.bj.service.RealplayTaskService;
 import com.bj.service.SplitSubTaskService;
 import com.bj.service.SplitTemplatesService;
+import com.bj.service.SubSystemService;
 import com.bj.service.SysParamService;
 import com.bj.util.BaseUtil;
 import com.bj.util.Contants;
@@ -65,6 +67,9 @@ public class RealplayTaskController {
     @Resource
     private FileAreaService fileAreaService ;
     
+    @Resource
+    private SubSystemService subSystemService ;
+    
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
 
@@ -88,6 +93,8 @@ public class RealplayTaskController {
         model.put("pagination", pagination);
     	List<SplitTemplates> templates = splitTemplatesService.findDefaultTemplates();
     	templates.addAll(splitTemplatesService.findAll(0, 200));
+    	List<SubSystemInfo> lists = subSystemService.findAll(0, 200);
+    	model.put("subSystems", lists);
         model.put("templates", templates);
         if(refresh > 0) {
             model.put("refresh", refresh);
@@ -111,6 +118,8 @@ public class RealplayTaskController {
     public String goNew(Map<String, Object> model) {
     	List<SplitTemplates> templates = splitTemplatesService.findDefaultTemplates();
     	templates.addAll(splitTemplatesService.findAll(0, 200));
+    	List<SubSystemInfo> lists = subSystemService.findAll(0, 200);
+    	model.put("subSystems", lists);
         model.put("templates", templates);
         return "task/realplay/new";
     }
@@ -221,7 +230,10 @@ public class RealplayTaskController {
     	}
     	RealplayTask realplayTask = realplayTaskService.findById(id);
     	realplayTask.setRepeate(repeate);
-    	realplayTaskService.update(realplayTask);
+    	realplayTask.setStatus(TaskStatus.PENDING.index());
+    	realplayTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+    	realplayTask.setEndTime(null);
+    	realplayTaskService.insert(realplayTask);
         return SUCCESS;
     }
 
@@ -231,6 +243,7 @@ public class RealplayTaskController {
             final @RequestParam("templateId") int templateId,
             final @RequestParam("repeate") Boolean repeate,
             final @RequestParam("taskPassword") String taskPassword,
+            final @RequestParam(value = "subSystemIds", defaultValue = "") Integer[] subSystemIds,
 			final RedirectAttributes redirectAttributes) throws IOException {
     	if(!sysParamService.validTaskPassword(taskPassword)) {
             return "任务密码错误";
@@ -241,6 +254,7 @@ public class RealplayTaskController {
     	realplayTask.setFileResource(fileResource);
     	realplayTask.setSplitTemplate(splitTemplates);
     	realplayTask.setRepeate(repeate);
+    	realplayTask.setSubSystemIds(subSystemIds);
     	realplayTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	realplayTask.setStatus(PlayStatus.PLAYING.index());
     	realplayTaskService.insert(realplayTask);
