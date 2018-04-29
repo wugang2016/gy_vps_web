@@ -14,8 +14,8 @@ public class Contants {
 	public static final String SPLIT_FILE_SUB_PATH = "split";
 	public static final String LICENSE_FILE_SUB_PATH = "license";
 	//download temp dir
-	//public static final String DOWNLOAD_TEMP_DIR = "/tmp/split_zip_tmp/"; //Linux
-	public static final String DOWNLOAD_TEMP_DIR = "D:/test/tmp/"; //windows
+	public static final String DOWNLOAD_TEMP_DIR = "/tmp/split_zip_tmp/"; //Linux
+	//public static final String DOWNLOAD_TEMP_DIR = "D:/test/tmp/"; //windows test
 	
 
 	//SYSTEM PARAM KEY

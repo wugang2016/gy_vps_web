@@ -179,24 +179,28 @@
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
 <script>
+var againModalData;
 $(function(){
 	setRefreshText({{#refresh}}{{.}}{{/refresh}});
+	
 	$('#againModal').find(".modal-content").bootstrapValidator();
+	againModalData = $('#againModal').find(".modal-content").data('bootstrapValidator');
+	
 	$('#againModal').on('show.bs.modal', function (event) {
 		$("#taskId").val($(event.relatedTarget).data("id"));
 	});
 	//Modal验证销毁重构
 	$('#againModal').on('hide.bs.modal', function() {
-		$(this).find(".alert").hide();
-		$(this).find(".modal-content").data('bootstrapValidator').resetForm();
+		$('#againModal').find(".alert").hide();
+		againModalData.resetForm();
 	});
 });
 function delCheck(){
 	return confirm("确认要删除此记录？");
 }
 function again(){
-	$('#againModal').find(".modal-content").bootstrapValidator('validate');
-	if($('#againModal').find(".modal-content").data('bootstrapValidator').isValid()){
+	againModalData.validate();
+	if(againModalData.isValid()){
 		var id = $('#taskId').val();
 		var taskPwd = $.md5($('#againModal').find("input[name='taskPassword']").val());
 	    $.ajax({

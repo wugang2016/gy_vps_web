@@ -287,10 +287,18 @@
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
 <script>
+var replayModalData;
+var goplayModalData;
+var stopModalData;
 $(function() {
+	setRefreshText({{#refresh}}{{.}}{{/refresh}});
+	
 	$('#replayModal').find(".modal-content").bootstrapValidator();
 	$('#goplayModal').find(".modal-content").bootstrapValidator();
 	$('#stopModal').find(".modal-content").bootstrapValidator();
+	replayModalData = $('#replayModal').find(".modal-content").data('bootstrapValidator');
+	goplayModalData = $('#goplayModal').find(".modal-content").data('bootstrapValidator');
+	stopModalData = $('#stopModal').find(".modal-content").data('bootstrapValidator');
 	
 	$('#replayModal').on('show.bs.modal', function (event) {
 		$("#taskId").val($(event.relatedTarget).data("id"));
@@ -309,25 +317,23 @@ $(function() {
 	//Modal验证销毁重构
 	$('#replayModal').on('hide.bs.modal', function() {
 		$(this).find(".alert").hide();
-		$(this).find(".modal-content").data('bootstrapValidator').resetForm();
+		replayModalData.resetForm();
 	});
 	$('#goplayModal').on('hide.bs.modal', function() {
 		$(this).find(".alert").hide();
-		$(this).find(".modal-content").data('bootstrapValidator').resetForm();
+		goplayModalData.resetForm();
 	});
 	$('#stopModal').on('hide.bs.modal', function() {
 		$(this).find(".alert").hide();
-		$(this).find(".modal-content").data('bootstrapValidator').resetForm();
+		stopModalData.resetForm();
 	});
-	
-	setRefreshText({{#refresh}}{{.}}{{/refresh}});
 });
 function delCheck(){
 	return confirm("确认要删除此记录？");
 }
 function stopPlay(){
-	$('#stopModal').find(".modal-content").bootstrapValidator('validate');
-	if($('#stopModal').find(".modal-content").data('bootstrapValidator').isValid()){
+	stopModalData.validate();
+	if(stopModalData.isValid()){
 		var url = "/task/realplay/" + $('#stopTaskId').val() + "/stop";
 		var taskPwd = $.md5($('#stopModal').find("input[name='taskPassword']").val());
 	    $.ajax({
@@ -347,8 +353,8 @@ function stopPlay(){
 	}
 }
 function replay(){
-	$('#replayModal').find(".modal-content").bootstrapValidator('validate');
-	if($('#replayModal').find(".modal-content").data('bootstrapValidator').isValid()){
+	replayModalData.validate();
+	if(replayModalData.isValid()){
 		var url = "/task/realplay/" + $('#taskId').val() + "/replay";
 		var repeate = $('#replayModal').find("input[name='repeate']").prop("checked");
 		var taskPwd = $.md5($('#replayModal').find("input[name='taskPassword']").val());
@@ -369,8 +375,8 @@ function replay(){
 	}
 }
 function goplay(){
-	$('#goplayModal').find(".modal-content").bootstrapValidator('validate');
-	if($('#goplayModal').find(".modal-content").data('bootstrapValidator').isValid()){
+	goplayModalData.validate();
+	if(goplayModalData.isValid()){
 		var url = "/task/realplay/" + $('#fileId').val() + "/goplay";
 		var templateId = $('#goplayModal').find("select[name='splitTemplateId']").val();
 		var repeate = $('#goplayModal').find("input[name='repeate']").prop("checked");
