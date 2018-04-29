@@ -38,7 +38,7 @@ public class ExportZipFileJob implements AdminStatusTask, Runnable {
         try {
             this.status = "正在打包中，请稍等...";
     		FileOutputStream out = new FileOutputStream(new File(zipPath));
-    		ZipUtil.toZip(srcFiles, out);
+    		ZipUtil.toZip(srcFiles, out, true);
             this.status = "打包完成!";
         } catch (Exception e) {
             LOGGER.error("Task:{} 打包失败{}", this.taskId, e);

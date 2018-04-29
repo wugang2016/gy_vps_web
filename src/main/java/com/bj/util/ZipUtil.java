@@ -31,15 +31,16 @@ public class ZipUtil {
 	 * 							false:所有文件跑到压缩包根目录下(注意：不保留目录结构可能会出现同名文件,会压缩失败)
 	 * @throws RuntimeException 压缩失败会抛出运行时异常
 	 */
-	public static void toZip(String srcDir, OutputStream out, boolean KeepDirStructure)
+	public static void toZip(List<File> srcFiles, OutputStream out, boolean KeepDirStructure)
 			throws IOException, RuntimeException{
 		
 		long start = System.currentTimeMillis();
 		ZipOutputStream zos = null ;
 		try {
 			zos = new ZipOutputStream(out);
-			File sourceFile = new File(srcDir);
-			compress(sourceFile,zos,sourceFile.getName(),KeepDirStructure);
+			for(File sourceFile : srcFiles) {
+				compress(sourceFile,zos,sourceFile.getName(),KeepDirStructure);
+			}
 			long end = System.currentTimeMillis();
 			LOGGER.info("压缩完成，耗时：" + (end - start) +" ms");
 		} catch (Exception e) {
@@ -53,7 +54,6 @@ public class ZipUtil {
 				}
 			}
 		}
-		
 	}
 	
 	/**
@@ -165,13 +165,13 @@ public class ZipUtil {
 	public static void main(String[] args) throws Exception {
 		/** 测试压缩方法1  */
 		//FileOutputStream fos1 = new FileOutputStream(new File("c:/mytest01.zip"));
-		//ZipUtil.toZip("D:/log", fos1,true);
+		//ZipUtil.toZip("D:/test/1800", fos1,true);
 		
 		/** 测试压缩方法2  */
 		List<File> fileList = new ArrayList<>();
-		fileList.add(new File("D:\\liqingkun\\HeidiSQL"));
-		fileList.add(new File("D:\\liqingkun\\eclipse\\readme\\readme_eclipse.html"));
-		FileOutputStream fos2 = new FileOutputStream(new File("d:/test/tmp/mytest02.zip"));
-		ZipUtil.toZip(fileList, fos2);
+		fileList.add(new File("D:/test/1800"));
+		fileList.add(new File("C:/logs"));
+		FileOutputStream fos2 = new FileOutputStream(new File("d:/mytest02.zip"));
+		ZipUtil.toZip(fileList, fos2, true);
 	}
 }
