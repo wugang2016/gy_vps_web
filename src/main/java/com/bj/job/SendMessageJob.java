@@ -51,6 +51,11 @@ public class SendMessageJob implements AdminStatusTask, Runnable {
 
     @Override
     public void run() {
+    	try {
+			Thread.sleep(500);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
         this.status = "初始化";
         this.startTime = new Date();
         LOGGER.info("Task:{} 任务开始执行 -{}", this.taskId, this.name);
@@ -117,8 +122,8 @@ public class SendMessageJob implements AdminStatusTask, Runnable {
     }
 
     @Override
-    public UUID getTaskId() {
-        return taskId;
+    public String getTaskId() {
+        return taskId.toString();
     }
 
     @Override
@@ -140,4 +145,14 @@ public class SendMessageJob implements AdminStatusTask, Runnable {
     public String getBackURL() {
         return backURL;
     }
+
+	@Override
+	public String getZipPath() {
+		return null;
+	}
+
+	@Override
+	public Integer getState() {
+		return null;
+	}
 }

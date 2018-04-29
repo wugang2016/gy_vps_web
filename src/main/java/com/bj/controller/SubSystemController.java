@@ -32,7 +32,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bj.pojo.SubSystemInfo;
 import com.bj.service.FileAreaService;
-import com.bj.service.SendMessageService;
 import com.bj.service.SubSystemService;
 import com.bj.util.BaseUtil;
 import com.bj.util.Contants;
@@ -41,7 +40,6 @@ import com.bj.util.FileTypeUtil.FileType;
 import com.bj.util.Pagination;
 
 @Controller
-@Transactional
 @RequestMapping("/manage")
 public class SubSystemController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SubSystemController.class);
@@ -51,9 +49,6 @@ public class SubSystemController {
         
     @Resource
     private FileAreaService fileAreaService ;
-
-    @Resource
-    private SendMessageService sendMessageService;
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
@@ -77,6 +72,7 @@ public class SubSystemController {
         return "manage/sub_system/new";
     }
 
+    @Transactional
     @PostMapping("/sub_system/new")
     public String doNew(@Valid SubSystemInfo subSystem,
     							Errors result,
@@ -105,7 +101,6 @@ public class SubSystemController {
     		}
     		if(subSystemService.insert(subSystem) > 0){
                 redirectAttributes.addFlashAttribute("message", "保存成功！");
-    			sendMessageService.onlySendMessage(subSystem.format("add"));
         	}else{
                 redirectAttributes.addFlashAttribute("hasError", true);
                 redirectAttributes.addFlashAttribute("message", "保存失败！");
@@ -123,6 +118,7 @@ public class SubSystemController {
         return "manage/sub_system/edit";
     }
 
+    @Transactional
     @PostMapping("/sub_system/{id}/edit")
     public String doEdit(@Valid SubSystemInfo subSystem,
     							Errors result,
@@ -150,7 +146,6 @@ public class SubSystemController {
     		}
     		if(subSystem.getId() != null && subSystemService.update(subSystem) > 0){
                 redirectAttributes.addFlashAttribute("message", "保存成功！");
-    			sendMessageService.onlySendMessage(subSystem.format("mod"));
         	}else{
                 redirectAttributes.addFlashAttribute("hasError", true);
                 redirectAttributes.addFlashAttribute("message", "保存失败！");
@@ -159,6 +154,7 @@ public class SubSystemController {
         return "redirect:/manage/sub_system/list";
     }
 
+    @Transactional
     @PostMapping("/sub_system/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {
@@ -168,7 +164,6 @@ public class SubSystemController {
     	} else {
     		if(subSystemService.detele(id) > 0){
                 redirectAttributes.addFlashAttribute("message", "删除成功！");
-    			sendMessageService.onlySendMessage("{\"opt\":\"rmv\",\"tbl_name\":\"tbl_sub_sys_info\",\"value\":{\"sub_sys_id\":" + id + "}}");
         	}else{
                 redirectAttributes.addFlashAttribute("hasError", true);
                 redirectAttributes.addFlashAttribute("message", "删除失败！");

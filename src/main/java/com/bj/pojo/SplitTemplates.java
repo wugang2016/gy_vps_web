@@ -21,6 +21,7 @@ public class SplitTemplates {
 	@NotBlank(message = "描述不能为空")	
 	@Size(min = 1, max = 255, message = "描述长度最大为255字节")
 	private String desc;
+	private Integer type;
 	
 	private List<FileArea> fileAreas;
 	/**
@@ -70,6 +71,15 @@ public class SplitTemplates {
 	 */
 	public void setFileAreas(List<FileArea> fileAreas) {
 		this.fileAreas = fileAreas;
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	public boolean getIsDefault() {
+		return (this.type != null && this.type == 1);
 	}
 	
 }

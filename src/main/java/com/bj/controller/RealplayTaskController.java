@@ -29,26 +29,24 @@ import com.bj.pojo.FileResource;
 import com.bj.pojo.PlayStatus;
 import com.bj.pojo.RealplayTask;
 import com.bj.pojo.SplitTemplates;
+import com.bj.pojo.SubSystemInfo;
 import com.bj.pojo.TaskStatus;
 import com.bj.service.FileAreaService;
 import com.bj.service.FileResourceService;
 import com.bj.service.RealplayTaskService;
-import com.bj.service.SendMessageService;
 import com.bj.service.SplitSubTaskService;
 import com.bj.service.SplitTemplatesService;
+import com.bj.service.SubSystemService;
 import com.bj.service.SysParamService;
 import com.bj.util.BaseUtil;
 import com.bj.util.Contants;
 import com.bj.util.Pagination;
 
 @Controller
-@Transactional
 @RequestMapping("/task")
 public class RealplayTaskController {
     @SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(RealplayTaskController.class);
-    private static final String OPT_PLAY = "start_file_realplay_task";
-    private static final String OPT_STOP = "stop_file_realplay_task";
     private static final String SUCCESS = "1";
 
     @Resource
@@ -68,9 +66,9 @@ public class RealplayTaskController {
     
     @Resource
     private FileAreaService fileAreaService ;
-
+    
     @Resource
-    private SendMessageService sendMessageService;
+    private SubSystemService subSystemService ;
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
@@ -93,7 +91,10 @@ public class RealplayTaskController {
         Pagination pagination = new Pagination(request, page, count, Pagination.DEFAULT_PAGE_SIZE);
         model.put("fileResources", fileResources);
         model.put("pagination", pagination);
-    	List<SplitTemplates> templates = splitTemplatesService.findAll(0, 200);
+    	List<SplitTemplates> templates = splitTemplatesService.findDefaultTemplates();
+    	templates.addAll(splitTemplatesService.findAll(0, 200));
+    	List<SubSystemInfo> lists = subSystemService.findAll(0, 200);
+    	model.put("subSystems", lists);
         model.put("templates", templates);
         if(refresh > 0) {
             model.put("refresh", refresh);
@@ -115,11 +116,15 @@ public class RealplayTaskController {
 
     @GetMapping("/realplay/new")
     public String goNew(Map<String, Object> model) {
-    	List<SplitTemplates> templates = splitTemplatesService.findAll(0, 200);
+    	List<SplitTemplates> templates = splitTemplatesService.findDefaultTemplates();
+    	templates.addAll(splitTemplatesService.findAll(0, 200));
+    	List<SubSystemInfo> lists = subSystemService.findAll(0, 200);
+    	model.put("subSystems", lists);
         model.put("templates", templates);
         return "task/realplay/new";
     }
-    
+
+    @Transactional
     @PostMapping("/realplay/new")
     public String doNew(@Valid RealplayTask realplayTask,
     							Errors result,
@@ -160,7 +165,6 @@ public class RealplayTaskController {
 			fileResourceService.insert(realplayTask.getFileResource());
     	}    	
         redirectAttributes.addFlashAttribute("message", "保存成功！");
-		sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
         return "redirect:/task/realplay/list";
     }
 
@@ -171,7 +175,8 @@ public class RealplayTaskController {
     	model.put("realplayTask", realplayTask);
         return "task/realplay/view";
     }
-    
+
+    @Transactional
     @PostMapping("/realplay/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {
@@ -183,7 +188,8 @@ public class RealplayTaskController {
     	}
         return "redirect:/task/realplay/list";
     }
-    
+
+    @Transactional
     @PostMapping("/realplay/file/{id}/delete")
     public String doDeleteFile(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {
@@ -209,10 +215,11 @@ public class RealplayTaskController {
             return "任务密码错误";
     	}
     	RealplayTask realplayTask = realplayTaskService.findById(id);
-		sendMessageService.onlySendMessage(realplayTask.format(OPT_STOP));
+    	realplayTaskService.stopPlay(realplayTask);
         return SUCCESS;
     }
-    
+
+    @Transactional
     @PostMapping("/realplay/{id}/replay")
     public @ResponseBody String goReplay(@PathVariable("id") int id,
             final @RequestParam("repeate") Boolean repeate,
@@ -223,17 +230,20 @@ public class RealplayTaskController {
     	}
     	RealplayTask realplayTask = realplayTaskService.findById(id);
     	realplayTask.setRepeate(repeate);
-    	if(realplayTaskService.update(realplayTask) > 0) {
-    		sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
-    	}
+    	realplayTask.setStatus(TaskStatus.PENDING.index());
+    	realplayTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+    	realplayTask.setEndTime(null);
+    	realplayTaskService.insert(realplayTask);
         return SUCCESS;
     }
-    
+
+    @Transactional
     @PostMapping("/realplay/{fileId}/goplay")
     public @ResponseBody String goPlay(@PathVariable("fileId") int fileId,
             final @RequestParam("templateId") int templateId,
             final @RequestParam("repeate") Boolean repeate,
             final @RequestParam("taskPassword") String taskPassword,
+            final @RequestParam(value = "subSystemIds", defaultValue = "") Integer[] subSystemIds,
 			final RedirectAttributes redirectAttributes) throws IOException {
     	if(!sysParamService.validTaskPassword(taskPassword)) {
             return "任务密码错误";
@@ -244,11 +254,10 @@ public class RealplayTaskController {
     	realplayTask.setFileResource(fileResource);
     	realplayTask.setSplitTemplate(splitTemplates);
     	realplayTask.setRepeate(repeate);
+    	realplayTask.setSubSystemIds(subSystemIds);
     	realplayTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	realplayTask.setStatus(PlayStatus.PLAYING.index());
-    	if(realplayTaskService.insert(realplayTask) > 0) {
-    		sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
-    	}
+    	realplayTaskService.insert(realplayTask);
         return SUCCESS;
     }
 }

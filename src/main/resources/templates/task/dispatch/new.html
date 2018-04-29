@@ -135,7 +135,15 @@ $(function() {
     var tz_splitTaskId = '{{#tz_splitTask}}{{tz_splitTask.id}}{{/tz_splitTask}}';
     if(tz_splitTaskId)$('#splitTaskId').val(tz_splitTaskId);
     changeSplitTask(true,tz_splitTaskId);
-    $("#form").bootstrapValidator().on('success.form.bv', function (e) {
+    $("#form").bootstrapValidator({
+   		fields:{taskPassword:{validators:{ 
+			remote:{
+					url : '/task/valid/pwd',
+					message : "任务密码不正确",
+					type : 'POST',
+                    delay: 1000
+				}}}}
+    }).on('success.form.bv', function (e) {
         e.preventDefault();
         goSubmit();
     });

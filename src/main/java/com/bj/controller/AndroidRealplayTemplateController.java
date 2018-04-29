@@ -48,7 +48,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
-@Transactional
 @RequestMapping("/manage")
 public class AndroidRealplayTemplateController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AndroidRealplayTemplateController.class);
@@ -86,6 +85,7 @@ public class AndroidRealplayTemplateController {
         return "manage/android_template/new";
     }
 
+    @Transactional
     @PostMapping("/android_template/new")
     public String doNew(@Valid AndroidRealplayTemplate androidRealplayTemplate,
     							Errors result,
@@ -200,6 +200,7 @@ public class AndroidRealplayTemplateController {
         return "manage/android_template/edit";
     }
 
+    @Transactional
     @PostMapping("/android_template/{id}/edit")
     public String doEdit(@Valid AndroidRealplayTemplate androidRealplayTemplate,
     							Errors result,
@@ -280,6 +281,7 @@ public class AndroidRealplayTemplateController {
         return "redirect:/manage/android_template/list";
     }
 
+    @Transactional
     @PostMapping("/android_template/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {    	

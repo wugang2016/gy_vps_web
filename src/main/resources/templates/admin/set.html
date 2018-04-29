@@ -139,12 +139,12 @@
                     <small>授权信息</small>
                 </h1>
             </div>
-			<form id="form4" class="form-horizontal" action="{{ctx.contextPath}}/admin/upload_license" method="post">
+			<form id="form4" class="form-horizontal" action="{{ctx.contextPath}}/admin/upload_license" method="post" enctype="multipart/form-data">
 	            <div class="form-group">
 	                <label for="inputCode" class="col-sm-3 control-label">激活状态</label>
 	                <div class="col-sm-9 form-control-static">
 	                	<span id="active">-</span>&nbsp;
-	                	<a href="javascript:void(0)" onclick="loadSQ()">重新获取</a>
+	                	<a href="#" onclick="loadSQ()">重新获取</a>
 	                	<span id="loading"></span>
 	                </div>
 	            </div>
@@ -165,6 +165,10 @@
 	                <div class="col-sm-9 form-control-static" id="android_realtime_play">-</div>
 	            </div>
 	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">机器码</label>
+	                <div class="col-sm-9 form-control-static" id="uuid">-</div>
+	            </div>
+	            <div class="form-group">
 	                <label for="inputCode" class="col-sm-3 control-label"></label>
 	                <div class="col-sm-9 form-control-static">
 	                    <label title="License文件选择" class="btn btn-primary fileinput-button" style="width:200px">
@@ -178,10 +182,17 @@
          </div>
 </div> <!-- /container -->
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
-<script src="{{ctx.contextPath}}/js/bootstrap.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
 <script>
 $(function() {
+	//选择文件后提交
+    $("#form4").on("change", "input[type='file']", function() {
+    	var fileName = $("input[name='file']").val();
+    	if(fileName != ''){
+    		$("#form4").submit();
+    	}
+    });
     $("#form1").bootstrapValidator();
     $("#form2").bootstrapValidator({
 	fields: {
@@ -213,8 +224,8 @@ $(function() {
 	        }
     	}
     }});
-    $("#form4").bootstrapValidator();
     loadSQ();
+    setTimeout("pageTimeout()",60000);
 });
 
 function loadSQ(){
@@ -224,20 +235,23 @@ function loadSQ(){
 	    type: "POST",
 	    async: true,
 	    success: function(data){
-	        console.log("data="+data);
-	        if(data.length > 10){
-	        	var obj = JSON.parse(data);
+	        if(data){
+	        	var obj = $.parseJSON(data);
 	        	$('#expire_time').html(obj.expire_time);
 	        	$('#active').html(obj.active=='1'?'已激活':'未激活');
 	        	$('#file_split').html(obj.file_split=='1'?'支持':'不支持');
 	        	$('#file_realtime_play').html(obj.file_realtime_play=='1'?'支持':'不支持');
 	        	$('#android_realtime_play').html(obj.android_realtime_play=='1'?'支持':'不支持');
+	        	$('#uuid').html(obj.uuid);
 	        }
 	    },
 	    complete:function(){
 	  		$("#loading").html("");
 	    }
 	  });
+}
+function pageTimeout(){
+	window.location.href = "/admin";
 }
 </script>
 </body>

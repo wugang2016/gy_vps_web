@@ -37,7 +37,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
-@Transactional
 @RequestMapping("/manage")
 public class SplitTemplatesController {
     @SuppressWarnings("unused")
@@ -79,6 +78,7 @@ public class SplitTemplatesController {
         return "manage/split_templates/new";
     }
 
+    @Transactional
     @PostMapping("/split_templates/new")
     public String doNew(@Valid SplitTemplates splitTemplates,
     							Errors result,
@@ -137,6 +137,7 @@ public class SplitTemplatesController {
         return "manage/split_templates/edit";
     }
 
+    @Transactional
     @PostMapping("/split_templates/{id}/edit")
     public String doEdit(@Valid SplitTemplates splitTemplates,
     							Errors result,
@@ -184,6 +185,7 @@ public class SplitTemplatesController {
         return "redirect:/manage/split_templates/list";
     }
 
+    @Transactional
     @PostMapping("/split_templates/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {

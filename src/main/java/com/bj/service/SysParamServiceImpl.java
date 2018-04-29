@@ -20,6 +20,9 @@ public class SysParamServiceImpl implements SysParamService{
     @Resource
     private SysParamMapper sysParamMapper;
     
+    @Resource
+    private JobService sendMessageService;
+    
 	@Override
 	public String findByKey(String key) {
 		SysParam sysParam = this.findSysParamByKey(key);
@@ -36,7 +39,11 @@ public class SysParamServiceImpl implements SysParamService{
 
 	@Override
 	public int updateValue(String key, String value) {
-		return sysParamMapper.updateValue(key, value);
+		int result = sysParamMapper.updateValue(key, value);
+		if(result > 0) {
+			sendMessageService.onlySendMessage("{\"opt\":\"mod\",\"tbl_name\":\"tbl_sys_param\",\"value\":{\"key\":\"" + key + "\",\"value\":\"" + value + "\"}}");
+		}
+		return result;
 	}
 
 	@Override

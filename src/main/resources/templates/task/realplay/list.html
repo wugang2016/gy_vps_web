@@ -7,6 +7,7 @@
     <title>文件播放任务列表 - 欧司朗视频切割系统</title>
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrapValidator.min.css">
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap-multiselect.min.css">
     <!--[if lt IE 9]>
     <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
     <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
@@ -61,7 +62,7 @@
                 <h2>最近播放任务
                     <small>列表</small>
 	                <div class="btn-group pull-right">
-						<button type="button" class="btn btn-primary" id="refresh_btn" onclick="refresh()">手工刷新</button>
+						<button type="button" class="btn btn-primary" id="refresh_btn" onclick="refresh()">手动刷新</button>
 						<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 							<span class="caret"></span>
 							<span class="sr-only">切换下拉菜单</span>
@@ -70,7 +71,7 @@
 							<li><a href="#" onclick="refresh(5)">自动刷新(5s)</a></li>
 							<li><a href="#" onclick="refresh(10)">自动刷新(10s)</a></li>
 							<li class="divider"></li>
-							<li><a href="#" onclick="refresh()">手工刷新</a></li>
+							<li><a href="#" onclick="refresh()">手动刷新</a></li>
 						</ul>
 					</div>
                 </h2>
@@ -79,7 +80,7 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <!--<th>#ID</th>  -->
+                        <th>#ID</th>
                         <th>文件名称</th>
                         <th>切割模板</th>
                         <th>播放状态</th>
@@ -92,7 +93,7 @@
                     <tbody>
                     {{#realplayTasks}}
                     <tr>
-                        <!--<td>{{id}}</td>-->
+                        <td>{{id}}</td>
                         <td>{{fileResource.fileName}}</td>
                         <td>{{splitTemplate.name}}</td>
                         <td class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
@@ -123,7 +124,7 @@
                 <table class="table table-bordered">
                     <thead>
                     <tr class="active">
-                        <!--<th>#ID</th>  -->
+                        <!--<th>#</th>  -->
                         <th>文件名称</th>
                         <th>描述</th>
                         <th>操作</th>
@@ -227,10 +228,20 @@
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">选择切割模板</label>
                     <div class="col-sm-9">
-                        <select class="form-control" name="splitTemplateId" required>
+                        <select class="form-control" name="splitTemplateId" id="splitTemplateId" required>
                         	{{#templates}}
-                        	<option value="{{id}}">{{name}}</option>
+                        	<option value="{{id}}" {{#isDefault}}style="font-weight:bold;"{{/isDefault}} data-type="{{type}}">{{name}}</option>
                         	{{/templates}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="ecueBox">
+                    <label for="inputName" class="col-sm-3 control-label">选择ECUE设备</label>
+                    <div class="col-sm-9">
+                    	<select id="subSystemIds" name="subSystemIds" multiple="multiple" required>
+                        	{{#subSystems}}
+                        	<option value="{{id}}">{{name}} [{{ip}}]</option>
+                        	{{/subSystems}}
                         </select>
                     </div>
                 </div>
@@ -286,11 +297,20 @@
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrap-multiselect.min.js"></script>
 <script>
+var replayModalData;
+var goplayModalData;
+var stopModalData;
 $(function() {
+	setRefreshText({{#refresh}}{{.}}{{/refresh}});
+	
 	$('#replayModal').find(".modal-content").bootstrapValidator();
 	$('#goplayModal').find(".modal-content").bootstrapValidator();
 	$('#stopModal').find(".modal-content").bootstrapValidator();
+	replayModalData = $('#replayModal').find(".modal-content").data('bootstrapValidator');
+	goplayModalData = $('#goplayModal').find(".modal-content").data('bootstrapValidator');
+	stopModalData = $('#stopModal').find(".modal-content").data('bootstrapValidator');
 	
 	$('#replayModal').on('show.bs.modal', function (event) {
 		$("#taskId").val($(event.relatedTarget).data("id"));
@@ -309,25 +329,33 @@ $(function() {
 	//Modal验证销毁重构
 	$('#replayModal').on('hide.bs.modal', function() {
 		$(this).find(".alert").hide();
-		$(this).find(".modal-content").data('bootstrapValidator').resetForm();
+		replayModalData.resetForm();
 	});
 	$('#goplayModal').on('hide.bs.modal', function() {
 		$(this).find(".alert").hide();
-		$(this).find(".modal-content").data('bootstrapValidator').resetForm();
+		goplayModalData.resetForm();
 	});
 	$('#stopModal').on('hide.bs.modal', function() {
 		$(this).find(".alert").hide();
-		$(this).find(".modal-content").data('bootstrapValidator').resetForm();
+		stopModalData.resetForm();
 	});
 	
-	setRefreshText({{#refresh}}{{.}}{{/refresh}});
+    $('#subSystemIds').multiselect({nonSelectedText: '未选择'});
+	$('#splitTemplateId').on("change",function(){
+		var type = $(this).find("option:selected").attr("data-type");
+		if(type === "1"){
+			$('#ecueBox').show();
+		}else{
+			$('#ecueBox').hide();
+		}
+	});
 });
 function delCheck(){
 	return confirm("确认要删除此记录？");
 }
 function stopPlay(){
-	$('#stopModal').find(".modal-content").bootstrapValidator('validate');
-	if($('#stopModal').find(".modal-content").data('bootstrapValidator').isValid()){
+	stopModalData.validate();
+	if(stopModalData.isValid()){
 		var url = "/task/realplay/" + $('#stopTaskId').val() + "/stop";
 		var taskPwd = $.md5($('#stopModal').find("input[name='taskPassword']").val());
 	    $.ajax({
@@ -347,8 +375,8 @@ function stopPlay(){
 	}
 }
 function replay(){
-	$('#replayModal').find(".modal-content").bootstrapValidator('validate');
-	if($('#replayModal').find(".modal-content").data('bootstrapValidator').isValid()){
+	replayModalData.validate();
+	if(replayModalData.isValid()){
 		var url = "/task/realplay/" + $('#taskId').val() + "/replay";
 		var repeate = $('#replayModal').find("input[name='repeate']").prop("checked");
 		var taskPwd = $.md5($('#replayModal').find("input[name='taskPassword']").val());
@@ -369,16 +397,18 @@ function replay(){
 	}
 }
 function goplay(){
-	$('#goplayModal').find(".modal-content").bootstrapValidator('validate');
-	if($('#goplayModal').find(".modal-content").data('bootstrapValidator').isValid()){
+	goplayModalData.validate();
+	if(goplayModalData.isValid()){
 		var url = "/task/realplay/" + $('#fileId').val() + "/goplay";
 		var templateId = $('#goplayModal').find("select[name='splitTemplateId']").val();
 		var repeate = $('#goplayModal').find("input[name='repeate']").prop("checked");
 		var taskPwd = $.md5($('#goplayModal').find("input[name='taskPassword']").val());
+		var subSystemIds = $("#subSystemIds").val();
 	    $.ajax({
 	        url: url,
 	        type: "POST",
-	        data:{templateId:templateId,repeate:repeate,taskPassword:taskPwd},
+	        traditional:true,
+	        data:{templateId:templateId,repeate:repeate,taskPassword:taskPwd,subSystemIds:subSystemIds},
 	        success: function(data){
 	            if(data == "1"){
 	            	alert("请求已发送！");

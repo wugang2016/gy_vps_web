@@ -49,13 +49,16 @@ public class SplitTemplatesServiceImpl implements SplitTemplatesService {
 
 	@Override
 	public int update(SplitTemplates splitTemplates) {
-		int result = splitTemplatesMapper.update(splitTemplates);
-		return result;
+		return splitTemplatesMapper.update(splitTemplates);
 	}
 
 	@Override
 	public int delete(int id) {
-		int result = splitTemplatesMapper.delete(id);
-		return result;
+		return splitTemplatesMapper.delete(id);
+	}
+
+	@Override
+	public List<SplitTemplates> findDefaultTemplates() {
+		return splitTemplatesMapper.findDefaultTemplates();
 	}
 }

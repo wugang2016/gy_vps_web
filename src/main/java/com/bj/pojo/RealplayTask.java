@@ -1,5 +1,7 @@
 package com.bj.pojo;
 
+import java.util.Arrays;
+
 import com.bj.util.ErrorMessage;
 
 public class RealplayTask extends BaseTask{
@@ -15,6 +17,8 @@ public class RealplayTask extends BaseTask{
 	private String endTime;
 	private Integer status;
 	private Integer errCode;
+	
+	private Integer[] subSystemIds;
 	
 	public Integer getId() {
 		return id;
@@ -88,6 +92,13 @@ public class RealplayTask extends BaseTask{
 		return PlayStatus.values()[status].allowReplay();
 	}
 	
+	public Integer[] getSubSystemIds() {
+		return subSystemIds;
+	}
+	public void setSubSystemIds(Integer[] subSystemIds) {
+		this.subSystemIds = subSystemIds;
+	}
+	
 	public String getErrMsg() {
 		String msg = ErrorMessage.getProperty(this.errCode+"");
 		if(msg == null && this.errCode != null) {
@@ -95,8 +106,11 @@ public class RealplayTask extends BaseTask{
 		}
 		return msg;
 	}
-	
 	public String format(String opt) {
-		return "{\"opt\":\"" + opt + "\", \"task_id\":" + id + "}";
+		String ecue_list = "";
+		if(subSystemIds !=null && subSystemIds.length > 0) {
+			ecue_list = ",\"ecue_list\":" + Arrays.toString(subSystemIds);
+		}
+		return "{\"opt\":\"" + opt + "\", \"task_id\":" + id + ecue_list + "}";
 	}
 }

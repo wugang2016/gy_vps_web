@@ -13,4 +13,5 @@ public interface RealplayTaskService {
     int countAll();
     int delete(int id);
     int countByTemplateId(int templateId);
+    void stopPlay(RealplayTask realplayTask);
 }
