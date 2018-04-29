@@ -36,10 +36,10 @@ public class TemplateController {
 				
 				Template tem1 = new Template(androidRealplayTemplate.getId(),
 						androidRealplayTemplate.getName(),
-						"http:/"+ip+"/dl/"+androidRealplayTemplate.getMiniPicPath(),
-						"http:/"+ip+"/dl/"+androidRealplayTemplate.getPicPath(),
-						"http:/"+ip+"/dl/"+androidRealplayTemplate.getBackgroudVideo(),
-						"http:/"+ip+"/dl/"+androidRealplayTemplate.getSigPicBoderPath(),
+						"http://"+ip+"/dl/"+androidRealplayTemplate.getMiniPicPath(),
+						"http://"+ip+"/dl/"+androidRealplayTemplate.getPicPath(),
+						"http://"+ip+"/dl/"+androidRealplayTemplate.getBackgroudVideo(),
+						"http://"+ip+"/dl/"+androidRealplayTemplate.getSigPicBoderPath(),
 						androidRealplayTemplate.getLongitude(),
 						androidRealplayTemplate.getLatitude()
 						);
