@@ -96,15 +96,15 @@
                         <td>{{id}}</td>
                         <td>{{fileResource.fileName}}</td>
                         <td>{{splitTemplate.name}}</td>
-                        <td class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
-                        <td>{{#errMsg}}{{.}}{{/errMsg}}</td>
+                        <td id="status_{{id}}" data-status="{{status}}" data-repeate="{{#repeate}}true{{/repeate}}" class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
+                        <td id="errMsg_{{id}}">{{#errMsg}}{{.}}{{/errMsg}}</td>
                         <td>{{#repeate}}是{{/repeate}}{{^repeate}}否{{/repeate}}</td>
                         <td>{{#startTime}}{{.}}{{/startTime}}</td>
                         <td>
                         	<form id="delForm1_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/realplay/{{id}}/delete" onsubmit="return delCheck()">
-	                            {{#allowStop}}<a href="#" data-toggle="modal" data-target="#stopModal" data-id="{{id}}">结束播放</a>{{/allowStop}}
-	                            {{#allowReplay}}<a href="#" data-toggle="modal" data-target="#replayModal" data-id="{{id}}" data-repeate="{{#repeate}}true{{/repeate}}">再次播放</a>{{/allowReplay}}
-	                            {{#isDelete}}<a href="#" onclick="$('#delForm1_{{id}}').submit()">删除</a>{{/isDelete}}
+	                            <span id="js_{{id}}">{{#allowStop}}<a href="#" data-toggle="modal" data-target="#stopModal" data-id="{{id}}">结束播放</a>{{/allowStop}}</span>
+	                            <span id="bf_{{id}}">{{#allowReplay}}<a href="#" data-toggle="modal" data-target="#replayModal" data-id="{{id}}" data-repeate="{{#repeate}}true{{/repeate}}">再次播放</a>{{/allowReplay}}</span>
+	                            <span id="sc_{{id}}">{{#isDelete}}<a href="#" onclick="$('#delForm1_{{id}}').submit()">删除</a>{{/isDelete}}</span>
                             </form>
                         </td>
                     </tr>
@@ -181,7 +181,7 @@
 
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="replayModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
-	<div class="modal-dialog" style="width:400px">
+	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -219,7 +219,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">播放条件</h4>
+                <h4 class="modal-title">发起播放条件</h4>
             	<p class="alert alert-danger" role="alert" style="display:none">
             		<em>系统提示：</em><span id="msg"></span>
             	</p>
@@ -273,7 +273,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">停止条件</h4>
+                <h4 class="modal-title">结束条件</h4>
             	<p class="alert alert-danger" role="alert" style="display:none">
             		<em>系统提示：</em><span id="msg"></span>
             	</p>
@@ -303,6 +303,7 @@ var replayModalData;
 var goplayModalData;
 var stopModalData;
 $(function() {
+	loopStatus();
 	setRefreshText({{#refresh}}{{.}}{{/refresh}});
 	
 	$('#replayModal').find(".modal-content").bootstrapValidator();
@@ -434,6 +435,46 @@ function refresh(s){
 		url = "/task/realplay/list?a="+s
 	}
 	window.location.href = url;
+}
+
+function loopStatus(){
+	$("td[id^='status_']").each(function(i,object){
+		var id = $(this).attr("id").split("_")[1];
+		var status = $(this).attr("data-status")+"";
+		$.ajax({
+	        url: "/task/realplay/"+id+"/entity",
+	        success: function(data){
+	        	var obj = $.parseJSON(data);
+	        	if(status != (obj.status+"")){ //变化了、去更新 
+	        		$('#status_'+id).attr("data-status", obj.status);
+	        		$('#status_'+id).html(obj.statusText);
+	        		$('#errMsg_'+id).html(obj.errMsg);
+	        		if(obj.statusText.indexOf("失败") != -1){
+	        			$('#status_'+id).addClass("error");
+	        		}else{
+	        			$('#status_'+id).removeClass("error");
+	        		}
+	        		//操作区	                            
+	        		if(obj.allowStop){
+	        			$('#js_'+id).html('<a href="#" data-toggle="modal" data-target="#stopModal" data-id="'+id+'">结束播放</a>');
+	        		}else{
+	        			$('#js_'+id).html("");
+	        		}
+	        		if(obj.allowReplay){
+	        			$('#bf_'+id).html('<a href="#" data-toggle="modal" data-target="#replayModal" data-id="'+id+'" data-repeate="'+obj.repeate+'">再次播放</a>');
+	        		}else{
+	        			$('#bf_'+id).html("");
+	        		}
+	        		if(obj.isDelete){
+	        			$('#sc_'+id).html("<a href='#' onclick=\"$('#delForm1_"+id+"').submit()\">删除</a>");
+	        		}else{
+	        			$('#sc_'+id).html("");
+	        		}
+	        	}
+	        }
+		});
+	});
+	setTimeout("loopStatus()", 3000);
 }
 </script>
 </body>

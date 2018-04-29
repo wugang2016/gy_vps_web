@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -41,6 +42,8 @@ import com.bj.service.SysParamService;
 import com.bj.util.BaseUtil;
 import com.bj.util.Contants;
 import com.bj.util.Pagination;
+
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/task")
@@ -174,6 +177,17 @@ public class RealplayTaskController {
     	RealplayTask realplayTask = realplayTaskService.findById(id);
     	model.put("realplayTask", realplayTask);
         return "task/realplay/view";
+    }
+
+    @GetMapping("/realplay/{taskId}/entity")
+    public @ResponseBody String getEntity(@PathVariable("taskId") int taskId,
+            								HttpServletResponse response) throws IOException {
+        response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+        response.setHeader("Expires", "0");
+        response.setHeader("Pragma", "no-cache");
+        RealplayTask realplayTask = realplayTaskService.findById(taskId);
+    	JSONObject obj = JSONObject.fromObject(realplayTask);
+        return obj.toString();
     }
 
     @Transactional

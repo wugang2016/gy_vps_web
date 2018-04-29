@@ -94,13 +94,13 @@
                         <td>{{id}}</td>
                         <td>{{taskName}}</td>
                         <td>{{#splitTask}}{{splitTask.taskName}}{{/splitTask}}</td>
-                        <td class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
+                        <td id="status_{{id}}" data-status="{{status}}" class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
                         <td>{{#startTime}}{{.}}{{/startTime}}</td>
                         <td>
                         	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/dispatch/{{id}}/delete" onsubmit="return delCheck()">
 	                            <a href="{{ctx.contextPath}}/task/dispatch/{{id}}/view" data-toggle="modal" data-target="#myModal">详细</a>
-	                            {{#isDispatch}}<a href="#" data-toggle="modal" data-target="#againModal" data-id="{{id}}">再次分发</a>{{/isDispatch}}
-	                            {{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}
+	                            <span id="ff_{{id}}">{{#isDispatch}}<a href="#" data-toggle="modal" data-target="#againModal" data-id="{{id}}">再次分发</a>{{/isDispatch}}</span>
+	                            <span id="sc_{{id}}">{{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}</span>
                             </form>
                         </td>
                     </tr>
@@ -181,6 +181,7 @@
 <script>
 var againModalData;
 $(function(){
+	loopStatus();
 	setRefreshText({{#refresh}}{{.}}{{/refresh}});
 	
 	$('#againModal').find(".modal-content").bootstrapValidator();
@@ -233,6 +234,40 @@ function refresh(s){
 		url = "/task/dispatch/list?a="+s
 	}
 	window.location.href = url;
+}
+
+function loopStatus(){
+	$("td[id^='status_']").each(function(i,object){
+		var id = $(this).attr("id").split("_")[1];
+		var status = $(this).attr("data-status")+"";
+		$.ajax({
+	        url: "/task/dispatch/"+id+"/entity",
+	        success: function(data){
+	        	var obj = $.parseJSON(data);
+	        	if(status != (obj.status+"")){ //变化了、去更新 
+	        		$('#status_'+id).attr("data-status", obj.status);
+	        		$('#status_'+id).html(obj.statusText);
+	        		if(obj.statusText.indexOf("失败") != -1){
+	        			$('#status_'+id).addClass("error");
+	        		}else{
+	        			$('#status_'+id).removeClass("error");
+	        		}
+	        		//操作区
+	        		if(obj.isDispatch){
+	        			$('#ff_'+id).html('<a href="#" data-toggle="modal" data-target="#againModal" data-id="'+id+'">再次分发</a>');
+	        		}else{
+	        			$('#ff_'+id).html("");
+	        		}
+	        		if(obj.isDelete){
+	        			$('#sc_'+id).html("<a href='#' onclick=\"$('#delForm_"+id+"').submit()\">删除</a>");
+	        		}else{
+	        			$('#sc_'+id).html("");
+	        		}
+	        	}
+	        }
+		});
+	});
+	setTimeout("loopStatus()", 3000);
 }
 </script>
 </body>

@@ -234,6 +234,7 @@
                         <input type="number" class="form-control" name="height" placeholder="区域高度" required>
                     </div>
                 </div>
+                <input type="hidden" id="index">
 				<!-- 内容 -->
 			</div>
 			<div class="modal-footer">
@@ -269,8 +270,28 @@ $(function() {
     $(".modal-content").bootstrapValidator();
 });
 
+$('#myModal').on('show.bs.modal', function(event) { 
+	var index = $(event.relatedTarget).data("index");
+	if(typeof(index) != 'undefined'){ //编辑
+		$('#myModalLabel').html("编辑切割区域");
+		$('#index').val(index);
+		$.each(area_json,function(i,obj){
+			if(index == obj.index1){
+				$("select[name='subSystem_id']").val(obj.subSystem.id);
+				$("input[name='x']").val(obj.x);
+				$("input[name='y']").val(obj.y);
+				$("input[name='width']").val(obj.w);
+				$("input[name='height']").val(obj.h);
+			}
+		});
+	}else{
+		$('#myModalLabel').html("新增切割区域");
+	}
+});
+
 //Modal验证销毁重构
 $('#myModal').on('hide.bs.modal', function() {
+	$('#index').val("");
 	$(".modal-content").data('bootstrapValidator').resetForm();
 });
 
@@ -317,15 +338,37 @@ function setArea(){
 		var y = $('input[name="y"]').val();
 		var width = $('input[name="width"]').val();
 		var height = $('input[name="height"]').val();
-		var index = parseInt(Math.random() * 10000); 
-		var newArea = "<tr id='tr_"+index+"'><td>" + subSystem_name + "</td><td>";
-		newArea += x + "</td><td>";
-		newArea += y + "</td><td>";
-		newArea += width + "</td><td>";
-		newArea += height + "</td><td>";
-		newArea += "<a href='#' onclick='deleteArea("+index+")'>删除</a></td></tr>";
-		$('#area_div').append(newArea);
 		
+		var index = $('#index').val();
+		var newAreaTD = "<td>" + subSystem_name + "</td><td>";
+		newAreaTD += x + "</td><td>";
+		newAreaTD += y + "</td><td>";
+		newAreaTD += width + "</td><td>";
+		newAreaTD += height + "</td><td>";
+		newAreaTD += "<a href='#' data-toggle='modal' data-target='#myModal' data-index='"+index+"'>编辑</a> ";
+		newAreaTD += "<a href='#' onclick='deleteArea("+index+")'>删除</a></td>";
+
+		if(index != ""){ //编辑
+			$('#tr_'+index).html(newAreaTD);
+			$.each(area_json,function(i,obj){
+				if(index == obj.index1){
+					obj.subSystem.id = subSystem_id;
+					obj.x = x;
+					obj.y = y;
+					obj.w = width;
+					obj.h = height;
+				}
+			});
+		}else{ //新增
+			index = parseInt(Math.random() * 10000); 
+			newAreaTD = newAreaTD.replace("data-index=''","data-index='"+index+"'");
+			newAreaTD = newAreaTD.replace("deleteArea()","deleteArea("+index+")");
+			var newTR = "<tr id='tr_"+index+"'>" + newAreaTD + "</tr>";
+			$('#area_div').append(newTR);
+			//存入json
+			area_json.push({"index1":index,"x":x,"y":y,"w":width,"h":height,"subSystem":{"id":subSystem_id}});
+		}
+				
 		//隐藏并清空
 		$('#myModal').modal('hide');
 		$('select[name="subSystem_id"] option:first').prop("selected", 'selected');  
@@ -334,9 +377,8 @@ function setArea(){
 		$('input[name="y"]').val('');
 		$('input[name="width"]').val('');
 		$('input[name="height"]').val('');
+		$('#index').val("");
 		
-		//存入json
-		area_json.push({"index1":index,"x":x,"y":y,"w":width,"h":height,"subSystem":{"id":subSystem_id}});
 		$('#areaJson').val(JSON.stringify(area_json));
 	}
 }

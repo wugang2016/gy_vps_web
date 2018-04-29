@@ -99,16 +99,16 @@
                         <td>{{id}}</td>
                         <td>{{taskName}}</td>
                         <td>{{splitTemplate.name}}</td>
-                        <td class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
+                        <td id="status_{{id}}" data-status="{{status}}" class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
                         <td>{{#startTime}}{{.}}{{/startTime}}</td>
                         <!-- <td>{{#endTime}}{{.}}{{/endTime}}</td> -->
                         <td>{{#taskDesc}}{{.}}{{/taskDesc}}</td>
                         <td>
                         	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/split/{{id}}/delete" onsubmit="return delCheck()">
 	                            <a href="{{ctx.contextPath}}/task/split/{{id}}/view" data-toggle="modal" data-target="#myModal">详细</a>
-	                            {{#isDispatch}}<a href="{{ctx.contextPath}}/task/split/{{id}}/dispatch" target="self">分发</a>{{/isDispatch}}
-	                            {{#isDispatch}}<a href="#" data-toggle="modal" data-target="#downloadModal" data-id="{{id}}">下载</a>{{/isDispatch}}
-	                            {{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}
+	                            <span id="ff_{{id}}">{{#isDispatch}}<a href="{{ctx.contextPath}}/task/split/{{id}}/dispatch" target="self">分发</a>{{/isDispatch}}</span>
+	                            <span id="xz_{{id}}">{{#isDispatch}}<a href="#" data-toggle="modal" data-target="#downloadModal" data-id="{{id}}">下载</a>{{/isDispatch}}</span>
+	                            <span id="sc_{{id}}">{{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}</span>
                             </form>
                         </td>
                     </tr>
@@ -188,6 +188,7 @@
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script>
 $(function(){
+	loopStatus();
 	setRefreshText({{#refresh}}{{refresh}}{{/refresh}});
 
 	$('#downloadModal').on('show.bs.modal', function (event) {
@@ -255,6 +256,42 @@ function loadPackageStauts(uuid){
             }
         }
     });
+}
+
+function loopStatus(){
+	$("td[id^='status_']").each(function(i,object){
+		var id = $(this).attr("id").split("_")[1];
+		var status = $(this).attr("data-status")+"";
+		$.ajax({
+	        url: "/task/split/"+id+"/entity",
+	        success: function(data){
+	        	var obj = $.parseJSON(data);
+	        	if(status != (obj.status+"")){ //变化了、去更新 
+	        		$('#status_'+id).attr("data-status", obj.status);
+	        		$('#status_'+id).html(obj.statusText);
+	        		if(obj.statusText.indexOf("失败") != -1){
+	        			$('#status_'+id).addClass("error");
+	        		}else{
+	        			$('#status_'+id).removeClass("error");
+	        		}
+	        		//操作区
+	        		if(obj.isDispatch){
+	        			$('#ff_'+id).html("<a href='{{ctx.contextPath}}/task/split/"+id+"/dispatch'>分发</a>");
+	        			$('#xz_'+id).html("<a href='#' data-toggle='modal' data-target='#downloadModal' data-id='"+id+"'>下载</a>");
+	        		}else{
+	        			$('#ff_'+id).html("");
+	        			$('#xz_'+id).html("");
+	        		}
+	        		if(obj.isDelete){
+	        			$('#sc_'+id).html("<a href='#' onclick=\"$('#delForm_"+id+"').submit()\">删除</a>");
+	        		}else{
+	        			$('#sc_'+id).html("");
+	        		}
+	        	}
+	        }
+		});
+	});
+	setTimeout("loopStatus()", 3000);
 }
 </script>
 </body>

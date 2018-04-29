@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -158,6 +159,17 @@ public class DispatchTaskController {
     	DispatchTask dispatchTask = dispatchTaskService.findById(id);
     	model.put("dispatchTask", dispatchTask);
         return "task/dispatch/view";
+    }
+
+    @GetMapping("/dispatch/{taskId}/entity")
+    public @ResponseBody String getEntity(@PathVariable("taskId") int taskId,
+            								HttpServletResponse response) throws IOException {
+        response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+        response.setHeader("Expires", "0");
+        response.setHeader("Pragma", "no-cache");
+        DispatchTask dispatchTask = dispatchTaskService.findById(taskId);
+    	JSONObject obj = JSONObject.fromObject(dispatchTask);
+        return obj.toString();
     }
 
     @Transactional

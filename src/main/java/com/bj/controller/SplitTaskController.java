@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -197,6 +198,17 @@ public class SplitTaskController {
             redirectAttributes.addFlashAttribute("message", "有分发任务使用此切割任务，禁止删除！");
     	}
         return "redirect:/task/split/list";
+    }
+
+    @GetMapping("/split/{taskId}/entity")
+    public @ResponseBody String getEntity(@PathVariable("taskId") int taskId,
+            								HttpServletResponse response) throws IOException {
+        response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+        response.setHeader("Expires", "0");
+        response.setHeader("Pragma", "no-cache");
+    	SplitTask splitTask = splitTaskService.findById(taskId);
+    	JSONObject obj = JSONObject.fromObject(splitTask);
+        return obj.toString();
     }
 
     @GetMapping("/split/{id}/dispatch")
