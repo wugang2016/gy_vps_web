@@ -108,12 +108,16 @@ public class RealplayTaskController {
     @GetMapping("/realplay/history")
     public String goHistory(Map<String, Object> model,
             HttpServletRequest request,
+            @RequestParam(value = "a", defaultValue = "0") int refresh,
             @RequestParam(value = "p", defaultValue = "1") int page) {
     	int count = realplayTaskService.countAll();
     	List<RealplayTask> realplayTasks = realplayTaskService.findAll((page - 1) * Pagination.DEFAULT_PAGE_SIZE, Pagination.DEFAULT_PAGE_SIZE);
         Pagination pagination = new Pagination(request, page, count, Pagination.DEFAULT_PAGE_SIZE);
         model.put("realplayTasks", realplayTasks);
         model.put("pagination", pagination);
+        if(refresh > 0) {
+            model.put("refresh", refresh);
+        }
         return "task/realplay/history";
     }
 
@@ -134,6 +138,12 @@ public class RealplayTaskController {
     							Map<String, Object> model,
     				            final @RequestParam("file") MultipartFile file,
     							final RedirectAttributes redirectAttributes) throws IOException {
+    	if(!sysParamService.validTaskPassword(realplayTask.getTaskPassword())) {
+            redirectAttributes.addFlashAttribute("hasError", true);
+            redirectAttributes.addFlashAttribute("message", "任务密码错误！");
+            redirectAttributes.addFlashAttribute("realplayTask", realplayTask);
+            return "redirect:/task/realplay/new";
+    	}
     	if(file.getSize() <= 0) {
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "缺少视频文件！");
@@ -150,12 +160,6 @@ public class RealplayTaskController {
     	Boolean goPlay = realplayTask.getFileResource().getGoPlay();
     	if(goPlay != null && goPlay.booleanValue()) {
     		//新建任务
-        	if(!sysParamService.validTaskPassword(realplayTask.getTaskPassword())) {
-                redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "任务密码错误！");
-                redirectAttributes.addFlashAttribute("realplayTask", realplayTask);
-                return "redirect:/task/realplay/new";
-        	}
         	realplayTask.setStatus(TaskStatus.PENDING.index());
         	realplayTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
 			fileResourceService.insert(realplayTask.getFileResource());

@@ -89,7 +89,7 @@
                         <th>状态</th>
                         <th>开始时间</th>
                         <!-- <th>结束时间</th> -->
-                        <th>任务描述</th>
+                        <!-- <th>任务描述</th> -->
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -102,7 +102,7 @@
                         <td id="status_{{id}}" data-status="{{status}}" class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
                         <td>{{#startTime}}{{.}}{{/startTime}}</td>
                         <!-- <td>{{#endTime}}{{.}}{{/endTime}}</td> -->
-                        <td>{{#taskDesc}}{{.}}{{/taskDesc}}</td>
+                        <!-- <td>{{#taskDesc}}{{.}}{{/taskDesc}}</td> -->
                         <td>
                         	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/split/{{id}}/delete" onsubmit="return delCheck()">
 	                            <a href="{{ctx.contextPath}}/task/split/{{id}}/view" data-toggle="modal" data-target="#myModal">详细</a>
@@ -151,7 +151,7 @@
 
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog" style="width:850px">
+	<div class="modal-dialog" style="width:950px">
 		<div class="modal-content"></div>
 	</div>
 </div>

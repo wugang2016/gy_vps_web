@@ -73,6 +73,7 @@
                     <label for="inputName" class="col-sm-2 control-label">视频切割区域</label>
                     <div class="col-sm-10">
 						<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal">新增切割区域</button>
+                		<input type="hidden" name="areaJson" id="areaJson" data-bv-excluded="false"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -107,7 +108,7 @@
 				                    <label title="效果图选择" class="btn btn-primary fileinput-button" style="width:200px">
 				                 		<i class="glyphicon glyphicon-upload"></i>
 				                    	<span>签名界面效果图</span>
-				               			<input type="file" name="file1" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,image/bmp">
+				               			<input type="file" name="file1" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,image/bmp" required>
 				                     </label>
 				                </p>
 				            </div>
@@ -121,7 +122,7 @@
 				                    <label title="缩略图选择" class="btn btn-primary fileinput-button" style="width:200px">
 				                 		<i class="glyphicon glyphicon-upload"></i>
 				                    	<span>签名界面缩略图</span>
-				               			<input type="file" name="file2" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,image/bmp">
+				               			<input type="file" name="file2" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,image/bmp" required>
 				                     </label>
 				                </p>
 				            </div>
@@ -135,7 +136,7 @@
 				                    <label title="签名框图片选择" class="btn btn-primary fileinput-button" style="width:200px">
 				                 		<i class="glyphicon glyphicon-upload"></i>
 				                    	<span>签名界面签名框图片</span>
-				               			<input type="file" name="file3" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,image/bmp">
+				               			<input type="file" name="file3" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,image/bmp" required>
 				                     </label>
 				                </p>
 				            </div>
@@ -148,7 +149,7 @@
 	                    <label class="btn btn-primary fileinput-button video_label" style="width:200px" data-placement="auto right" data-trigger="manual">
 	                 		<i class="glyphicon glyphicon-upload"></i>
 	                    	<span>视频文件选择</span>
-	               			<input type="file" name="file4" accept="video/x-ms-wmv,video/mp4">
+	               			<input type="file" name="file4" accept="video/x-ms-wmv,video/mp4" required>
 	                     </label>
                     </div>
                 </div>
@@ -167,7 +168,6 @@
                         <a href="{{ctx.contextPath}}/manage/android_template/list" class="btn btn-default">返 回</a>
                     </div>
                 </div>
-                <input type="hidden" name="areaJson" id="areaJson"/>
             </form>
         </div>
     </div>
@@ -248,6 +248,8 @@
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
 <script>
+var formData;
+var modalData;
 $(function() {
 	//选择文件后提交
     $("input[type='file']").on("change", function() {
@@ -266,8 +268,13 @@ $(function() {
 		}
     });
     
-    $("#form").bootstrapValidator();
+    $("#form").bootstrapValidator({
+   		fields:{areaJson:{validators:{
+   			notEmpty: {}}}}
+    });
     $(".modal-content").bootstrapValidator();
+    formData = $("#form").data('bootstrapValidator');
+    modalData = $(".modal-content").data('bootstrapValidator');
 });
 
 $('#myModal').on('show.bs.modal', function(event) { 
@@ -292,7 +299,7 @@ $('#myModal').on('show.bs.modal', function(event) {
 //Modal验证销毁重构
 $('#myModal').on('hide.bs.modal', function() {
 	$('#index').val("");
-	$(".modal-content").data('bootstrapValidator').resetForm();
+	modalData.resetForm();
 });
 
 function showPreview(source,name) { 
@@ -317,8 +324,8 @@ function setWH(isChecked, isValid){
 		$('input[name="height"]').val('');
 	}
 	if(isValid){
-		$(".modal-content").data('bootstrapValidator').revalidateField('width');
-		$(".modal-content").data('bootstrapValidator').revalidateField('height');
+		modalData.revalidateField('width');
+		modalData.revalidateField('height');
 	}
 }
 $('#copyFromSubSystem').change(function(){
@@ -330,8 +337,8 @@ $('select[name="subSystem_id"]').change(function(){
 
 var area_json = [];
 function setArea(){
-	$(".modal-content").bootstrapValidator('validate');
-	if($(".modal-content").data('bootstrapValidator').isValid()){
+	modalData.validate();
+	if(modalData.isValid()){
 		var subSystem_id = $('select[name="subSystem_id"]').val();
 		var subSystem_name = $('select[name="subSystem_id"]').find("option:selected").text();
 		var x = $('input[name="x"]').val();
@@ -380,6 +387,7 @@ function setArea(){
 		$('#index').val("");
 		
 		$('#areaJson').val(JSON.stringify(area_json));
+		formData.revalidateField('areaJson');
 	}
 }
 
@@ -393,6 +401,10 @@ function deleteArea(index){
 		}
 	})
 	$('#areaJson').val(JSON.stringify(area_json));
+	if($('#areaJson').val() == '[]'){
+		$('#areaJson').val("");
+		formData.revalidateField('areaJson');
+	}
 }
 </script>
 </body>

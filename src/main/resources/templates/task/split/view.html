@@ -51,8 +51,8 @@
                        <th>返回结果</th>
                        <!-- <th>左上角横坐标</th>
                        <th>左上角纵坐标</th> -->
-                       <th>区域宽度</th>
-                       <th>区域高度</th>
+                       <th>宽度</th>
+                       <th>高度</th>
                    </tr>
                    </thead>
                    <tbody id="subTask_div"></tbody>
@@ -82,8 +82,7 @@
     </div>
 </div>
 <div class="modal-footer">
-	<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>  
-	<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+	<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
 </div>
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
@@ -110,15 +109,17 @@ function loadSubTask(){
 
 function putSubTask(obj){
 	var statusClass = (obj.isFail)?"error":"";
-	var subTask = "<tr><td>" + obj.fileArea.subSystem.name +" [" + obj.fileArea.subSystem.ip + "]</td><td>";
-	subTask += obj.fileName + "</td><td class='" + statusClass + "'>";
-	subTask += obj.statusText + "</td><td>";
-	subTask += obj.errMsg + "</td><td>";
-/* 	subTask += obj.fileArea.x + "</td><td>";
-	subTask += obj.fileArea.y + "</td><td>"; */
-	subTask += obj.fileArea.width + "</td><td>";
-	subTask += obj.fileArea.height + "</td><td></tr>";
-	$('#subTask_div').append(subTask);
+	if(obj.fileArea != null){
+		var subTask = "<tr><td>" + obj.fileArea.subSystem.name +" [" + obj.fileArea.subSystem.ip + "]</td><td>";
+		subTask += obj.fileName + "</td><td class='" + statusClass + "'>";
+		subTask += obj.statusText + "</td><td>";
+		subTask += obj.errMsg + "</td><td>";
+	/* 	subTask += obj.fileArea.x + "</td><td>";
+		subTask += obj.fileArea.y + "</td><td>"; */
+		subTask += obj.fileArea.width + "</td><td>";
+		subTask += obj.fileArea.height + "</td><td></tr>";
+		$('#subTask_div').append(subTask);
+	}
 }
 </script>
 </body>

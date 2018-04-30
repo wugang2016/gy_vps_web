@@ -69,7 +69,7 @@
 	                    <label class="btn btn-primary fileinput-button" style="width:200px" data-placement="auto right" data-trigger="manual">
 	                 		<i class="glyphicon glyphicon-upload"></i>
 	                    	<span>视频文件选择</span>
-	               			<input type="file" name="file" accept="video/x-ms-wmv,video/mp4">
+	               			<input type="file" name="file" accept="video/x-ms-wmv,video/mp4" required>
 	                     </label>
                     </div>
                 </div>
@@ -78,6 +78,13 @@
                     <div class="col-sm-10">
                     	<textarea class="form-control" name="fileResource.fileDesc" placeholder="文件描述" rows="5" maxlength="100" required>{{#realplayTask}}{{#realplayTask.fileResource}}{{#realplayTask.fileResource.fileDesc}}{{.}}{{/realplayTask.fileResource.fileDesc}}{{/realplayTask.fileResource}}{{/realplayTask}}</textarea>
                         {{#fileResource.fileErr}}<span class="error">{{.}}</span>{{/fileResource.fileErr}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-2 control-label">任务密码</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control"  name="taskPassword" placeholder="任务密码" required>
+                        {{#taskPasswordErr}}<span class="error">{{.}}</span>{{/taskPasswordErr}}
                     </div>
                 </div>
                 <div class="form-group">
@@ -110,13 +117,6 @@
 	                    </div>
 	                </div>
 	                <div class="form-group">
-	                    <label for="inputCode" class="col-sm-2 control-label">任务密码</label>
-	                    <div class="col-sm-10">
-	                        <input type="password" class="form-control"  name="taskPassword" placeholder="任务密码" required>
-	                        {{#taskPasswordErr}}<span class="error">{{.}}</span>{{/taskPasswordErr}}
-	                    </div>
-	                </div>
-	                <div class="form-group">
 	                    <label for="inputCode" class="col-sm-2 control-label"></label>
 	                    <div class="col-sm-10">
 	                        <input type="checkbox" name="repeate" {{#realplayTask}}{{#repeate}}checked{{/repeate}}{{/realplayTask}}>
@@ -141,6 +141,7 @@
 <script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap-multiselect.min.js"></script>
 <script>
+var formData;
 $(function() {
 	//选择文件后提交
     $(".fileinput-button").on("change", "input[type='file']", function() {
@@ -178,6 +179,7 @@ $(function() {
         e.preventDefault();
         goSubmit();
     });
+    formData = $("#form").data('bootstrapValidator');
     changeGoPlay();
 });
 
@@ -194,7 +196,7 @@ function goSubmit(){
 	if(confirm("一旦创建成功不可修改，确认提交？")){
 		$("#submiting").html("<img src='/css/img/small-loading.gif'>上传中,请稍后...");
 		$("input[name='taskPassword']").val($.md5($("input[name='taskPassword']").val()));
-		$("#form").data('bootstrapValidator').disableSubmitButtons(true).defaultSubmit();
+		formData.disableSubmitButtons(true).defaultSubmit();
 	}else{
 		$('#form').bootstrapValidator('disableSubmitButtons', false);
 	}

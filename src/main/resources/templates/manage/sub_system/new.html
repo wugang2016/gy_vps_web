@@ -61,16 +61,16 @@
             </div>
             <form class="form-horizontal" method="post" id="form" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="inputCode" class="col-sm-2 control-label">分系统名称</label>
+                    <label for="inputCode" class="col-sm-2 control-label">设备名称</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="name" placeholder="分系统名称" value="{{#subSystem}}{{#name}}{{.}}{{/name}}{{/subSystem}}" required>
+                        <input type="text" class="form-control"  name="name" placeholder="ECUE设备名称" value="{{#subSystem}}{{#name}}{{.}}{{/name}}{{/subSystem}}" required>
                         {{#nameErr}}<span class="error">{{.}}</span>{{/nameErr}}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputName" class="col-sm-2 control-label">子系统IP地址</label>
+                    <label for="inputName" class="col-sm-2 control-label">设备IP地址</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="ip" placeholder="子系统IP地址" value="{{#subSystem}}{{#ip}}{{.}}{{/ip}}{{/subSystem}}" required ipv4="true">
+                        <input type="text" class="form-control"  name="ip" placeholder="ECUE设备IP地址" value="{{#subSystem}}{{#ip}}{{.}}{{/ip}}{{/subSystem}}" required ipv4="true">
                         {{#ipErr}}<span class="error">{{.}}</span>{{/ipErr}}
                     </div>
                 </div>
@@ -90,7 +90,7 @@
                     </div>
                 </div>-->
                 <div class="form-group">
-                    <label for="inputSubmittingEnd" class="col-sm-2 control-label">盒子地址</label>
+                    <label for="inputSubmittingEnd" class="col-sm-2 control-label">盒子IP地址</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control"  name="boxIp" placeholder="盒子IP地址" value="{{#subSystem}}{{#boxIp}}{{.}}{{/boxIp}}{{/subSystem}}" required ipv4="true">
                         {{#boxIpErr}}<span class="error">{{.}}</span>{{/boxIpErr}}
@@ -160,7 +160,17 @@ $(function() {
     $(".fileinput-button").on("change", "input[type='file']", function() {
         showPreview($("input[name='file']"));
     });
-    $("#form").bootstrapValidator();
+    $("#form").bootstrapValidator({
+    	fields: {
+        	boxIp: {
+    	        validators: {
+    	            different: {
+    	                field: 'ip',
+    	             	message: '盒子IP和设备IP不能相同'
+    	            }
+    	        }
+        	}
+        }});
 });
 
 function showPreview(source) { 
