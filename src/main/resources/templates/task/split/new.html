@@ -65,7 +65,7 @@
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-2 control-label">任务名称</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="taskName" placeholder="任务名称" value="{{#splitTask}}{{#taskName}}{{.}}{{/taskName}}{{/splitTask}}"  required>
+                        <input type="text" class="form-control"  name="taskName" placeholder="任务名称" value="{{#splitTask}}{{#taskName}}{{.}}{{/taskName}}{{/splitTask}}"  required maxlength="30">
                         {{#taskNameErr}}<span class="error">{{.}}</span>{{/taskNameErr}}
                     </div>
                 </div>
@@ -202,7 +202,7 @@ function putArea(obj){
 	newArea += obj.y + "</td><td>";
 	newArea += obj.width + "</td><td>";
 	newArea += obj.height + "</td><td>";
-	newArea += "<input type='text' class='form-control' data-id='"+obj.id+"' placeholder='自定义文件名称' value='" + obj.subSystem.name + "'></td></tr>";
+	newArea += "<input type='text' class='form-control' data-id='"+obj.id+"' placeholder='自定义文件名称'></td></tr>";
 	$('#area_div').append(newArea);
 }
 

@@ -162,7 +162,11 @@ public class SplitTaskController {
 				SplitSubTask subTask = new SplitSubTask();
 				subTask.setTaskId(splitTask.getId());
 				subTask.setFileArea(area);
-				subTask.setFileName(area.getCustomFileName());
+				if(area.getCustomFileName() != null && area.getCustomFileName().trim().length() > 0) {
+					subTask.setFileName(area.getCustomFileName());
+				}else {
+					subTask.setFileName(splitTask.getDefaultFileName());
+				}
 				subTask.setStatus(SubTaskStatus.PENDING.index());
 				splitSubTaskService.insert(subTask);
 			}

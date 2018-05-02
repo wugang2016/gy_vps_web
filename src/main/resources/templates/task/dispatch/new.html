@@ -65,7 +65,7 @@
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-2 control-label">任务名称</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="taskName" placeholder="任务名称" value="{{#dispatchTask}}{{#taskName}}{{.}}{{/taskName}}{{/dispatchTask}}"  required>
+                        <input type="text" class="form-control"  name="taskName" placeholder="任务名称" value="{{#dispatchTask}}{{#taskName}}{{.}}{{/taskName}}{{/dispatchTask}}"  required maxlength="30">
                         {{#taskNameErr}}<span class="error">{{.}}</span>{{/taskNameErr}}
                     </div>
                 </div>

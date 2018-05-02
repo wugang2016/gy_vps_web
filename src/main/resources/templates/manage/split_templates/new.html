@@ -173,13 +173,13 @@
                 <div class="form-group">
                     <label for="inputEditingEnd" class="col-sm-3 control-label">区域宽度</label>
                     <div class="col-sm-9">
-                        <input type="number" class="form-control " name="width" placeholder="区域宽度" required>
+                        <input type="number" class="form-control " name="width" placeholder="区域宽度" required min="2" max="1920" even="true">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputClosingDate" class="col-sm-3 control-label">区域高度</label>
                     <div class="col-sm-9">
-                        <input type="number" class="form-control " name="height" placeholder="区域高度" required>
+                        <input type="number" class="form-control " name="height" placeholder="区域高度" required min="2" max="1080" even="true">
                     </div>
                 </div>
                 <input type="hidden" id="index">
@@ -234,12 +234,18 @@ $('#myModal').on('hide.bs.modal', function() {
 });
 
 function setWH(isChecked, isValid){
+	modalData.resetField('width');
+	modalData.resetField('height');
 	if(isChecked){
 		$('input[name="width"]').val($('#sub_id_'+$('select[name="subSystem_id"]').val()).attr('width-data'));
 		$('input[name="height"]').val($('#sub_id_'+$('select[name="subSystem_id"]').val()).attr('height-data'));
+		$('input[name="width"]').attr("disabled","true");
+		$('input[name="height"]').attr("disabled","true");
 	}else{
 		$('input[name="width"]').val('');
 		$('input[name="height"]').val('');
+		$('input[name="width"]').removeAttr("disabled");
+		$('input[name="height"]').removeAttr("disabled");
 	}
 	if(isValid){
 		modalData.revalidateField('width');
