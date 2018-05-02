@@ -101,6 +101,14 @@ public class AdminController {
     	return "admin/set";
     }
     
+    @PostMapping("/reboot")
+    public String reboot(Map<String, Object> model,
+    		HttpServletRequest request)
+    {
+    	LOGGER.info("reboot now");
+    	return "admin/set";
+    }
+    
     @PostMapping("/setPwd")
     public String setPwd(Map<String, Object> model,
             HttpServletRequest request,
