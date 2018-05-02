@@ -34,9 +34,9 @@ public class ControllerInterceptor {
                 }
                 sb.setLength(sb.length() - 1);
                 sb.append(")");
-                logger.info(sb.toString());
+                log_info(sb.toString());
             } else {
-                logger.info("调用 " + fullMethodName + "()");
+            	log_info("调用 " + fullMethodName + "()");
             }
         }
 
@@ -53,9 +53,18 @@ public class ControllerInterceptor {
         long end = System.currentTimeMillis();
         long elapsedMilliseconds = end - start;
         if (needLog) {
-            logger.info(fullMethodName + " 执行结束，耗时: " + elapsedMilliseconds + " 毫秒");
+        	log_info(fullMethodName + " 执行结束，耗时: " + elapsedMilliseconds + " 毫秒");
         }
 
         return result;
+    }
+    
+    private void log_info(String log){
+    	if(log.contains("getEntity") 
+    			|| log.contains("getStatus")) {
+    		//不打印log
+    	}else {
+            logger.info(log);
+    	}
     }
 }
