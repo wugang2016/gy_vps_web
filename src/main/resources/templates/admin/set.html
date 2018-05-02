@@ -186,13 +186,14 @@
                     <small>系统管理</small>
                 </h1>
             </div>
-            <form id="form4" class="form-horizontal" action="{{ctx.contextPath}}/admin/reboot" onsubmit="return rebootCheck()" method="post">
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-9">
-                        <button type="submit" class="btn btn-primary">重启系统</button>
-                    </div>
-                </div>
-         	</form>
+            <div class="form-horizontal" >
+	            <div class="form-group">
+	                <div class="col-sm-offset-3 col-sm-9">
+	                    <button type="button" class="btn btn-primary" onclick="rebootCheck()">重启系统</button>
+	                	<p id="reboot_line"></p>
+	                </div>
+	            </div>
+            </div>
          </div>
 </div> <!-- /container -->
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
@@ -247,7 +248,6 @@ function loadSQ(){
 	$.ajax({
 	    url: "/admin/loadSQ",
 	    type: "POST",
-	    async: true,
 	    success: function(data){
 	        if(data){
 	        	var obj = $.parseJSON(data);
@@ -269,7 +269,18 @@ function pageTimeout(){
 }
 
 function rebootCheck(){
-	return confirm("重启系统将导致现有服务中断，是否继续？");
+	if(confirm("重启系统将导致现有服务中断，是否继续？")){
+		$("#reboot_line").html("#&gt reboot");
+		$.ajax({
+		    url: "/admin/reboot",
+		    type: "POST",
+		    async: true,
+		    success: function(data){
+		    	$("#reboot_line").append("<p/>#&gt "+data);
+		    	$("#reboot_line").append("<p/>执行完毕！请稍后刷新页面重新登录！");
+		    }
+		});
+	}
 }
 </script>
 </body>

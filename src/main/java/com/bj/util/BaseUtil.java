@@ -4,9 +4,12 @@
 package com.bj.util;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -167,6 +170,26 @@ public class BaseUtil {
 		}
     }
     
-	public static void main(String[] args) throws IOException {
+    public static String exec(String cmdStr) {
+    	LOGGER.info("执行Shell命令：{}", cmdStr);
+    	StringBuffer sb = new StringBuffer();
+    	try {
+	        String[] cmds = {"/bin/sh","-c", cmdStr};  
+	        Process pro = Runtime.getRuntime().exec(cmds);  
+	        pro.waitFor();  
+	        InputStream in = pro.getInputStream();  
+	        BufferedReader read = new BufferedReader(new InputStreamReader(in));  
+	        String line = null;  
+	        while((line = read.readLine())!=null){  
+	        	sb.append(line).append("\n");
+	        }
+            LOGGER.info("Shell返回消息：{}", sb);
+	    } catch (Exception e) {
+	        LOGGER.info("Shell执行错误：{}", e);
+	    }
+	    return sb.toString();
+    }
+    
+	public static void main(String[] args) throws IOException, InterruptedException {
 	}
 }

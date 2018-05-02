@@ -102,11 +102,11 @@ public class AdminController {
     }
     
     @PostMapping("/reboot")
-    public String reboot(Map<String, Object> model,
+    public @ResponseBody String reboot(Map<String, Object> model,
     		HttpServletRequest request)
     {
-    	LOGGER.info("reboot now");
-    	return "admin/set";
+    	if(!isLogin(request)) {return "admin/login";}
+    	return BaseUtil.exec("reboot");
     }
     
     @PostMapping("/setPwd")
