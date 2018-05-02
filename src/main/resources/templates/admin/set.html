@@ -179,6 +179,20 @@
 	                </div>
 	            </div>
 			</form>
+			
+			<!-- ###############################系统管理################################# -->
+         	<div class="page-header">
+                <h1>系统管理
+                    <small>系统管理</small>
+                </h1>
+            </div>
+            <form id="form4" class="form-horizontal" action="{{ctx.contextPath}}/admin/reboot" onsubmit="return rebootCheck()" method="post">
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-primary">重启系统</button>
+                    </div>
+                </div>
+         	</form>
          </div>
 </div> <!-- /container -->
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
@@ -252,6 +266,10 @@ function loadSQ(){
 }
 function pageTimeout(){
 	window.location.href = "/admin";
+}
+
+function rebootCheck(){
+	return confirm("重启系统将导致现有服务中断，是否继续？");
 }
 </script>
 </body>

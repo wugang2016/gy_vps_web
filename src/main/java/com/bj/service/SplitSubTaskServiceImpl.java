@@ -3,14 +3,17 @@
  */
 package com.bj.service;
 
+import java.io.File;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bj.dao.mapper.SplitSubTaskMapper;
 import com.bj.pojo.SplitSubTask;
+import com.bj.util.Contants;
 
 /**
  * @author LQK
@@ -21,6 +24,9 @@ public class SplitSubTaskServiceImpl implements SplitSubTaskService {
 
     @Resource
     private SplitSubTaskMapper splitSubTaskMapper;
+    
+    @Value("${bijie.upload.file.path}")
+    private String uploadFileDir;
 
 	@Override
 	public SplitSubTask findById(int id) {
@@ -34,7 +40,19 @@ public class SplitSubTaskServiceImpl implements SplitSubTaskService {
 
 	@Override
 	public int insert(SplitSubTask SplitSubTask) {
-		return splitSubTaskMapper.insert(SplitSubTask);
+		int result = splitSubTaskMapper.insert(SplitSubTask);
+		
+		String ip = SplitSubTask.getFileArea().getSubSystem().getIp();
+		ip = ip.replaceAll("//.", "_");
+		if(result > 0) {
+			File dir = new File(uploadFileDir + File.separator + Contants.SPLIT_FILE_SUB_PATH + File.separator + SplitSubTask.getId() +'_' +ip);
+			if(!dir.exists()) {
+				dir.mkdirs();
+			}
+			//sendMessageService.onlySendMessage(splitTask.format());
+		}
+		
+		return result;
 	}
 
 	@Override
