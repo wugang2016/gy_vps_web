@@ -6,6 +6,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.bj.util.ErrorMessage;
+
 /**
  * The persistent class for the tbl_file_split_task database table.
  * 
@@ -29,6 +31,8 @@ public class SplitTask extends BaseTask{
 
 	private String taskDesc;
 
+	private Integer errCode;
+
 	private SplitTemplates splitTemplate;
 
 	private String defaultFileName;
@@ -39,6 +43,14 @@ public class SplitTask extends BaseTask{
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getErrCode() {
+		return errCode;
+	}
+
+	public void setErrCode(Integer errCode) {
+		this.errCode = errCode;
 	}
 
 	public String getEndTime() {
@@ -115,6 +127,14 @@ public class SplitTask extends BaseTask{
 			return this.srcFilePath.substring(this.srcFilePath.lastIndexOf(File.separator)+1);
 		}
 		return "";
+	}
+	
+	public String getErrMsg() {
+		String msg = ErrorMessage.getProperty(this.errCode+"");
+		if(msg == null && this.errCode != null) {
+			msg = this.errCode+"";
+		}
+		return msg;
 	}
 	
 	public boolean getIsFail() {

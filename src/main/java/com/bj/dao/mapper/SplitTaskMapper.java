@@ -28,6 +28,7 @@ public interface SplitTaskMapper {
             @Result(property = "srcFilePath", column = "src_file_path"),
             @Result(property = "startTime", column = "start_time"),
             @Result(property = "endTime", column = "end_time"),
+            @Result(property = "errCode", column = "error_code"),
             @Result(property = "splitTemplate", javaType = SubSystemInfo.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
 	SplitTask findById(@Param("id") int id);
 	
@@ -40,6 +41,7 @@ public interface SplitTaskMapper {
             @Result(property = "srcFilePath", column = "src_file_path"),
             @Result(property = "startTime", column = "start_time"),
             @Result(property = "endTime", column = "end_time"),
+            @Result(property = "errCode", column = "error_code"),
             @Result(property = "splitTemplate", javaType = SubSystemInfo.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
     List<SplitTask> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
     
