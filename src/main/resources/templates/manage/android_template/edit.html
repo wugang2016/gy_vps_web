@@ -162,7 +162,7 @@
                 <div class="form-group">
                     <label for="inputCode" class="col-sm-2 control-label">签名界面背景视频</label>
                     <div class="col-sm-10">
-	                    <label class="btn btn-primary fileinput-button video_label" style="width:200px" data-placement="auto right" data-trigger="manual">
+	                    <label class="btn btn-primary fileinput-button video_label" style="width:200px" data-placement="right" data-trigger="manual">
 	                 		<i class="glyphicon glyphicon-upload"></i>
 	                    	<span>视频文件选择</span>
 	               			<input type="file" name="file4" accept="video/x-ms-wmv,video/mp4">
@@ -269,7 +269,8 @@
 var formData;
 var modalData;
 var area_json = [];
-$(function() {
+var tipIsShow = false;
+$(function() {	
 	//选择文件后提交
     $("input[type='file']").on("change", function() {
     	var name = $(this).attr("name");
@@ -285,9 +286,6 @@ $(function() {
 	area_json.push({"index1":{{id}},"x":{{x}},"y":{{y}},"w":{{w}},"h":{{h}},"subSystem":{"id":{{subSystem.id}}}});
 	{{/realplayAreas}}
 	$('#areaJson').val(JSON.stringify(area_json));
-	
-	var videoPath = '{{#androidRealplayTemplate}}{{#videoName}}{{.}}{{/videoName}}{{/androidRealplayTemplate}}';
-	showVideoName(videoPath);
 
     $("#form").bootstrapValidator({
    		fields:{areaJson:{validators:{
@@ -296,6 +294,17 @@ $(function() {
     $(".modal-content").bootstrapValidator();
     formData = $("#form").data('bootstrapValidator');
     modalData = $(".modal-content").data('bootstrapValidator');
+
+	var videoPath = '{{#androidRealplayTemplate}}{{#videoName}}{{.}}{{/videoName}}{{/androidRealplayTemplate}}';
+	$(window).scroll(function () {
+	    var a = $(".video_label").offset().top;
+	    if (a >= $(window).scrollTop() && a < ($(window).scrollTop() + $(window).height() - 30)) {
+	        if(!tipIsShow){
+	        	tipIsShow = true;
+		    	showVideoName(videoPath);
+	        }
+	    }
+	});
 });
 
 $('#myModal').on('show.bs.modal', function(event) { 
