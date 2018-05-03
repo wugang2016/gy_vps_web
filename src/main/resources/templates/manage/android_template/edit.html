@@ -296,16 +296,22 @@ $(function() {
     modalData = $(".modal-content").data('bootstrapValidator');
 
 	var videoPath = '{{#androidRealplayTemplate}}{{#videoName}}{{.}}{{/videoName}}{{/androidRealplayTemplate}}';
+	pdShow(videoPath);
 	$(window).scroll(function () {
-	    var a = $(".video_label").offset().top;
-	    if (a >= $(window).scrollTop() && a < ($(window).scrollTop() + $(window).height() - 30)) {
-	        if(!tipIsShow){
-	        	tipIsShow = true;
-		    	showVideoName(videoPath);
-	        }
-	    }
+		pdShow(videoPath);
 	});
 });
+
+function pdShow(videoPath){
+    var a = $(".video_label").offset().top;
+    if (a >= $(window).scrollTop() && a < ($(window).scrollTop() + $(window).height() - 30)) {
+        if(!tipIsShow){
+        	console.log("show");
+        	tipIsShow = true;
+	    	showVideoName(videoPath);
+        }
+    }
+}
 
 $('#myModal').on('show.bs.modal', function(event) { 
 	var index = $(event.relatedTarget).data("index");
