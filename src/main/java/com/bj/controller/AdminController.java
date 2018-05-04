@@ -50,7 +50,8 @@ public class AdminController {
     private String uploadFileDir;
     
     @GetMapping(value= {"","/","/login","/setML","/setPwd","/setDoPwd"})
-    public String goLogin(Map<String, Object> model) {
+    public String goLogin(HttpServletRequest request) {
+		request.getSession().removeAttribute(LOGIN_PASS);
         return "admin/login";
     }
     
@@ -80,6 +81,13 @@ public class AdminController {
         	return "admin/login";
         }
     }
+    
+    @GetMapping("/logout")
+    public String doLogin(Map<String, Object> model,
+            HttpServletRequest request) {
+		request.getSession().removeAttribute(LOGIN_PASS);
+        return "admin/login";
+	}
     
     @PostMapping("/setML")
     public String setML(Map<String, Object> model,

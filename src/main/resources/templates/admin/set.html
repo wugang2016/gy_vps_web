@@ -24,7 +24,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a>为确保安全，使用完毕后请及时关闭此页面</a></li>
+                <li><a>为确保安全，使用完毕后请及时注销或关闭</a></li>
+                <li><a href="#" onclick="logout()">[注销]</a></li>
             </ul>
         </div>
     </div>
@@ -280,6 +281,12 @@ function rebootCheck(){
 		    	$("#reboot_line").append("<p/>执行完毕！请稍后刷新页面重新登录！");
 		    }
 		});
+	}
+}
+
+function logout(){
+	if(confirm("确定要注销登录？")){
+		window.location.href = "/admin/logout";
 	}
 }
 </script>
