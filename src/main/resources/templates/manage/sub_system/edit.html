@@ -77,7 +77,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">端口</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" name="port" placeholder="端口" value="{{#subSystem}}{{#port}}{{.}}{{/port}}{{/subSystem}}">
+                        <input type="number" class="form-control" name="port" placeholder="端口" value="{{#subSystem}}{{#port}}{{.}}{{/port}}{{/subSystem}}" min="1024" max="65536">
                         {{#portErr}}<span class="error">{{.}}</span>{{/portErr}}
                     </div>
                 </div>

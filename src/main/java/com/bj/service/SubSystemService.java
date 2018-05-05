@@ -15,7 +15,9 @@ public interface SubSystemService {
 	List<SubSystemInfo> findAll(int offset,  int rowCount);
 	int countAll();
 	int countByIp(String ip);
+	int countByBoxIp(String ip);
 	int countByIpExcept(String ip,int id);
+	int countByBoxIpExcept(String ip,int id);
 	int insert(SubSystemInfo subSystemInfo);
 	int update(SubSystemInfo subSystemInfo);
 	int detele(int id);

@@ -86,10 +86,29 @@ public class SubSystemController {
         	model.put("subSystem", subSystem);
             return "manage/sub_system/new";
     	}
+    	
+    	if(!subSystem.getBoxIp().isEmpty()) {
+    		if(subSystemService.countByIp(subSystem.getBoxIp()) > 0) {
+        		redirectAttributes.addFlashAttribute("hasError", true);
+                redirectAttributes.addFlashAttribute("message", "BOX IP地址与其它系统冲突！");
+                return "redirect:/manage/sub_system/list";
+        	}
+    		else if(subSystemService.countByBoxIp(subSystem.getBoxIp()) > 0)
+        	{
+        		redirectAttributes.addFlashAttribute("hasError", true);
+                redirectAttributes.addFlashAttribute("message", "BOX IP地址与其它系统BOX IP地址冲突！");
+                return "redirect:/manage/sub_system/list";
+        	}
+    	}
 
     	if(subSystemService.countByIp(subSystem.getIp()) > 0) {
     		redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "IP地址与其它系统冲突！");
+    	}
+    	else if(subSystemService.countByBoxIp(subSystem.getIp()) > 0)
+    	{
+    		redirectAttributes.addFlashAttribute("hasError", true);
+            redirectAttributes.addFlashAttribute("message", "IP地址与其它系统BOX IP地址冲突！");
     	}
     	else {
     		if(file.getSize() > 0) {
@@ -133,10 +152,30 @@ public class SubSystemController {
             return "manage/sub_system/edit";
     	}
     	
+    	if(!subSystem.getBoxIp().isEmpty()) {
+    		if(subSystemService.countByIp(subSystem.getBoxIp()) > 0) {
+        		redirectAttributes.addFlashAttribute("hasError", true);
+                redirectAttributes.addFlashAttribute("message", "BOX IP地址与其它系统冲突！");
+                return "redirect:/manage/sub_system/list";
+        	}
+    		else if(subSystemService.countByBoxIpExcept(subSystem.getBoxIp(),subSystem.getId()) > 0)
+        	{
+        		redirectAttributes.addFlashAttribute("hasError", true);
+                redirectAttributes.addFlashAttribute("message", "BOX IP地址与其它系统BOX IP地址冲突！");
+                return "redirect:/manage/sub_system/list";
+        	}
+    	}
+    	
     	if(subSystemService.countByIpExcept(subSystem.getIp(),subSystem.getId()) > 0) {
     		redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("message", "IP地址与其它系统冲突！");
-    	} else {
+    	}
+    	else if(subSystemService.countByBoxIp(subSystem.getIp())> 0)
+    	{
+    		redirectAttributes.addFlashAttribute("hasError", true);
+            redirectAttributes.addFlashAttribute("message", "IP地址与其它系统BOX IP地址冲突！");
+    	}
+    	else {
     		if(file.getSize() > 0) {
     			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
     			String newFileName = BaseUtil.getStrRandom(Contants.FILE_NAME_LENGTH) + ext;

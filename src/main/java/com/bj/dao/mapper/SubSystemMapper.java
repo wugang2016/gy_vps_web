@@ -66,6 +66,9 @@ public interface SubSystemMapper {
     @Select("SELECT count(1) FROM tbl_sub_sys_info where ip=#{ip}")
     int countByIp(@Param("ip") String ip);
     
+    @Select("SELECT count(1) FROM tbl_sub_sys_info where box_ip=#{ip}")
+    int countByBoxIp(@Param("ip") String ip);
+    
     @Select("SELECT count(1) FROM tbl_sub_sys_info where ip=#{ip} and sub_sys_id!=#{id}")
     int countByIpExcept(@Param("ip") String ip , @Param("id") int id);
     
@@ -74,4 +77,7 @@ public interface SubSystemMapper {
     
     @Delete("DELETE FROM tbl_sub_sys_info where sub_sys_id=#{id}")
     int delete(int id);
+
+    @Select("SELECT count(1) FROM tbl_sub_sys_info where box_ip=#{ip} and sub_sys_id!=#{id}")
+	int countByBoxIpExcept(@Param("ip") String ip, @Param("id") int id);
 }

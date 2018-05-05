@@ -49,6 +49,9 @@ public class AdminController {
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
     
+    @Value("${bijie.vps.home.path}")
+    private String vpsHomeDir;
+    
     @GetMapping(value= {"","/","/login","/setML","/setPwd","/setDoPwd"})
     public String goLogin(HttpServletRequest request) {
 		request.getSession().removeAttribute(LOGIN_PASS);
@@ -182,10 +185,11 @@ public class AdminController {
     	if(!isLogin(request)) {return "admin/login";}
     	if(file.getSize() <= 0) {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "缺少切割视频文件！");
+            redirectAttributes.addFlashAttribute("message", "缺少License文件！");
             return "redirect:/task/split/new";
     	}else {
-			BaseUtil.doSaveFile(uploadFileDir + File.separator + Contants.LICENSE_FILE_SUB_PATH, file, null);
+			//BaseUtil.doSaveFile(vpsHomeDir + File.separator + Contants.LICENSE_FILE_SUB_PATH, file, null);
+    		BaseUtil.doSaveFile(vpsHomeDir, file, null);
     	}
     	model.put("message", "上传成功"); 
     	return "admin/set";

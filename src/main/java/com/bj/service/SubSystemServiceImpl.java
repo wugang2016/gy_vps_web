@@ -80,4 +80,15 @@ public class SubSystemServiceImpl implements SubSystemService {
 	public int countByIpExcept(String ip, int id) {
 		return subSystemInfoMapper.countByIpExcept(ip,id);
 	}
+
+	@Override
+	public int countByBoxIp(String ip) {
+		return subSystemInfoMapper.countByBoxIp(ip);
+	}
+
+	@Override
+	public int countByBoxIpExcept(String ip, int id) {
+		// TODO Auto-generated method stub
+		return subSystemInfoMapper.countByBoxIpExcept(ip,id);
+	}
 }

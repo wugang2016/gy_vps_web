@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,12 +20,18 @@ import com.bj.service.AndroidRealplayTemplateService;
 public class TemplateController {
 	@Resource
 	private AndroidRealplayTemplateService androidRealplayTemplateService;
+	
+	@Value("${bijie.service.ip}")
+    private String serviceIp;
+	
+	@Value("${bijie.httpd.port}")
+    private int port;
 	  
 	@RequestMapping("api/v1/get_realtime_template")
     public TemplateList templateList() {
 		int c = androidRealplayTemplateService.countAll();
 		int page = c/20 + 1;
-		String ip = "192.168.9.21";
+		String ip = serviceIp;
 		List<Template> templates = new ArrayList<Template>();
 	    for(int i=0; i<page; ++i) {
 	    	List<AndroidRealplayTemplate> androidRealplayTemplates =  androidRealplayTemplateService.findAll(i*20,20);
@@ -33,10 +40,10 @@ public class TemplateController {
 				
 				Template tem1 = new Template(androidRealplayTemplate.getId(),
 						androidRealplayTemplate.getName(),
-						"http://"+ip+"/dl/"+androidRealplayTemplate.getMiniPicPath(),
-						"http://"+ip+"/dl/"+androidRealplayTemplate.getPicPath(),
-						"http://"+ip+"/dl/"+androidRealplayTemplate.getBackgroudVideo(),
-						"http://"+ip+"/dl/"+androidRealplayTemplate.getSigPicBoderPath(),
+						"http://"+ip+":"+port+"/dl/"+androidRealplayTemplate.getMiniPicPath(),
+						"http://"+ip+":"+port+"/dl/"+androidRealplayTemplate.getPicPath(),
+						"http://"+ip+":"+port+"/dl/"+androidRealplayTemplate.getBackgroudVideo(),
+						"http://"+ip+":"+port+"/dl/"+androidRealplayTemplate.getSigPicBoderPath(),
 						androidRealplayTemplate.getLongitude(),
 						androidRealplayTemplate.getLatitude()
 						);
