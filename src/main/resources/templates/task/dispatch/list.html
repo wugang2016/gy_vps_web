@@ -84,6 +84,7 @@
                         <th>分发任务名称</th>
                         <th>切割任务名称</th>
                         <th>状态</th>
+                        <th>返回结果</th>
                         <th>开始时间</th>
                         <th>操作</th>
                     </tr>
@@ -95,6 +96,7 @@
                         <td>{{taskName}}</td>
                         <td>{{#splitTask}}{{splitTask.taskName}}{{/splitTask}}</td>
                         <td id="status_{{id}}" data-status="{{status}}" class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
+                        <td id="errMsg_{{id}}">{{#errMsg}}{{.}}{{/errMsg}}</td>
                         <td>{{#startTime}}{{.}}{{/startTime}}</td>
                         <td>
                         	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/dispatch/{{id}}/delete" onsubmit="return delCheck()">
@@ -247,6 +249,7 @@ function loopStatus(){
 	        	if(status != (obj.status+"")){ //变化了、去更新 
 	        		$('#status_'+id).attr("data-status", obj.status);
 	        		$('#status_'+id).html(obj.statusText);
+	        		$('#errMsg_'+id).html(obj.errMsg);
 	        		if(obj.statusText.indexOf("失败") != -1){
 	        			$('#status_'+id).addClass("error");
 	        		}else{

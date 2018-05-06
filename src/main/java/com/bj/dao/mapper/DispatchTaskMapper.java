@@ -28,6 +28,7 @@ public interface DispatchTaskMapper {
             @Result(property = "taskDesc", column = "task_desc"),
             @Result(property = "startTime", column = "start_time"),
             @Result(property = "endTime", column = "end_time"),
+            @Result(property = "errCode", column = "error_code"),
             @Result(property = "splitTask", javaType = SplitTask.class, column = "split_task_id", one = @One(select = "com.bj.dao.mapper.SplitTaskMapper.findById"))})
 	DispatchTask findById(@Param("id") int id);
 	
@@ -39,6 +40,7 @@ public interface DispatchTaskMapper {
             @Result(property = "taskDesc", column = "task_desc"),
             @Result(property = "startTime", column = "start_time"),
             @Result(property = "endTime", column = "end_time"),
+            @Result(property = "errCode", column = "error_code"),
             @Result(property = "splitTask", javaType = SplitTask.class, column = "split_task_id", one = @One(select = "com.bj.dao.mapper.SplitTaskMapper.findById"))})
     List<DispatchTask> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
 

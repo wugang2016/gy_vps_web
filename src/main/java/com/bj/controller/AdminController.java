@@ -3,7 +3,6 @@
  */
 package com.bj.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.Map;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bj.pojo.SysUser;
 import com.bj.service.SysParamService;
@@ -180,13 +178,12 @@ public class AdminController {
     @PostMapping("/upload_license")
     public String upload(Map<String, Object> model,
             HttpServletRequest request,
-            final @RequestParam("file") MultipartFile file,
-			final RedirectAttributes redirectAttributes) throws IOException {
+            final @RequestParam("file") MultipartFile file) throws IOException {
     	if(!isLogin(request)) {return "admin/login";}
     	if(file.getSize() <= 0) {
-            redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "缺少License文件！");
-            return "redirect:/task/split/new";
+    		model.put("hasError", true);
+    		model.put("message", "缺少License文件！");
+        	return "admin/set";
     	}else {
 			//BaseUtil.doSaveFile(vpsHomeDir + File.separator + Contants.LICENSE_FILE_SUB_PATH, file, null);
     		BaseUtil.doSaveFile(vpsHomeDir, file, null);

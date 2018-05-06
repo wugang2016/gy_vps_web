@@ -4,6 +4,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.bj.util.ErrorMessage;
+
 /**
  * The persistent class for the tbl_file_split_task database table.
  * 
@@ -24,6 +26,8 @@ public class DispatchTask extends BaseTask{
 	private Integer status;
 
 	private String taskDesc;
+
+	private Integer errCode;
 
 	private SplitTask splitTask;
 	
@@ -83,6 +87,14 @@ public class DispatchTask extends BaseTask{
 		this.splitTask = splitTask;
 	}
 
+	public Integer getErrCode() {
+		return errCode;
+	}
+
+	public void setErrCode(Integer errCode) {
+		this.errCode = errCode;
+	}
+
 	/****** 自定义 *********/
 	public String getStatusText() {
 		return TaskStatus.values()[status].text();
@@ -98,6 +110,14 @@ public class DispatchTask extends BaseTask{
 	
 	public boolean getIsDispatch() {
 		return TaskStatus.values()[status].allowDispatchForDispatchTask();
+	}
+	
+	public String getErrMsg() {
+		String msg = ErrorMessage.getProperty(this.errCode+"");
+		if(msg == null && this.errCode != null) {
+			msg = this.errCode+"";
+		}
+		return msg;
 	}
 	
 	public String format() {
