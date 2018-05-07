@@ -103,7 +103,7 @@
                         <td>
                         	<form id="delForm1_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/realplay/{{id}}/delete" onsubmit="return delCheck()">
 	                            <span id="js_{{id}}">{{#allowStop}}<a href="#" data-toggle="modal" data-target="#stopModal" data-id="{{id}}">结束播放</a>{{/allowStop}}</span>
-	                            <span id="bf_{{id}}">{{#allowReplay}}<a href="#" data-toggle="modal" data-target="#replayModal" data-id="{{id}}" data-repeate="{{#repeate}}true{{/repeate}}">再次播放</a>{{/allowReplay}}</span>
+	                            <span id="bf_{{id}}">{{#allowReplay}}<a href="#" data-toggle="modal" data-target="#replayModal" data-id="{{id}}" data-templatetype="{{#splitTemplate.type}}{{.}}{{/splitTemplate.type}}" data-repeate="{{#repeate}}true{{/repeate}}">再次播放</a>{{/allowReplay}}</span>
 	                            <span id="sc_{{id}}">{{#isDelete}}<a href="#" onclick="$('#delForm1_{{id}}').submit()">删除</a>{{/isDelete}}</span>
                             </form>
                         </td>
@@ -181,7 +181,7 @@
 
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="replayModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
-	<div class="modal-dialog">
+	<div class="modal-dialog" style="width:750px">
 		<div class="modal-content">
 			<div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -195,6 +195,16 @@
                     <label for="inputCode" class="col-sm-3 control-label">任务密码</label>
                     <div class="col-sm-9">
                         <input type="password" class="form-control"  name="taskPassword" placeholder="任务密码" required>
+                    </div>
+                </div>
+                <div class="form-group" id="ecueBox2">
+                    <label for="inputName" class="col-sm-3 control-label">选择ECUE设备</label>
+                    <div class="col-sm-9">
+                    	<select id="subSystemIds2" name="subSystemIds2" multiple="multiple" required>
+                        	{{#subSystems}}
+                        	<option value="{{id}}">{{name}} [{{ip}}]</option>
+                        	{{/subSystems}}
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -315,6 +325,11 @@ $(function() {
 	
 	$('#replayModal').on('show.bs.modal', function (event) {
 		$("#taskId").val($(event.relatedTarget).data("id"));
+		if($(event.relatedTarget).data("templatetype")+"" === '1'){
+			$(this).find("#ecueBox2").show();
+		}else{
+			$(this).find("#ecueBox2").hide();
+		}
 		if($(event.relatedTarget).data("repeate")+"" === 'true'){
 			$(this).find("input[name='repeate']").prop("checked",true);
 		}else{
@@ -330,6 +345,8 @@ $(function() {
 	//Modal验证销毁重构
 	$('#replayModal').on('hide.bs.modal', function() {
 		$(this).find(".alert").hide();
+		$('#subSystemIds2').multiselect('deselectAll', false);
+    	$('#subSystemIds2').multiselect('updateButtonText');
 		replayModalData.resetForm();
 	});
 	$('#goplayModal').on('hide.bs.modal', function() {
@@ -344,6 +361,7 @@ $(function() {
 	});
 	
     $('#subSystemIds').multiselect({nonSelectedText: '未选择'});
+    $('#subSystemIds2').multiselect({nonSelectedText: '未选择'});
 	$('#splitTemplateId').on("change",function(){
 		var type = $(this).find("option:selected").attr("data-type");
 		if(type === "1"){
@@ -383,10 +401,12 @@ function replay(){
 		var url = "/task/realplay/" + $('#taskId').val() + "/replay";
 		var repeate = $('#replayModal').find("input[name='repeate']").prop("checked");
 		var taskPwd = $.md5($('#replayModal').find("input[name='taskPassword']").val());
+		var subSystemIds = $("#subSystemIds2").val();
 	    $.ajax({
 	        url: url,
 	        type: "POST",
-	        data:{repeate:repeate,taskPassword:taskPwd},
+	        traditional:true,
+	        data:{repeate:repeate,taskPassword:taskPwd,subSystemIds:subSystemIds},
 	        success: function(data){
 	            if(data == "1"){
 	            	alert("请求已发送！");

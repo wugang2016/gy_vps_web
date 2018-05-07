@@ -114,6 +114,8 @@ public class RealplayTaskController {
             HttpServletRequest request,
             @RequestParam(value = "a", defaultValue = "0") int refresh,
             @RequestParam(value = "p", defaultValue = "1") int page) {
+    	List<SubSystemInfo> lists = subSystemService.findAll(0, 200);
+    	model.put("subSystems", lists);
     	int count = realplayTaskService.countAll();
     	List<RealplayTask> realplayTasks = realplayTaskService.findAll((page - 1) * Pagination.DEFAULT_PAGE_SIZE, Pagination.DEFAULT_PAGE_SIZE);
         Pagination pagination = new Pagination(request, page, count, Pagination.DEFAULT_PAGE_SIZE);
@@ -248,12 +250,14 @@ public class RealplayTaskController {
     public @ResponseBody String goReplay(@PathVariable("id") int id,
             final @RequestParam("repeate") Boolean repeate,
             final @RequestParam("taskPassword") String taskPassword,
+            final @RequestParam(value = "subSystemIds", defaultValue = "") Integer[] subSystemIds,
 			final RedirectAttributes redirectAttributes) throws IOException {
     	if(!sysParamService.validTaskPassword(taskPassword)) {
             return "任务密码错误";
     	}
     	RealplayTask realplayTask = realplayTaskService.findById(id);
     	realplayTask.setRepeate(repeate);
+    	realplayTask.setSubSystemIds(subSystemIds);
     	realplayTask.setStatus(TaskStatus.PENDING.index());
     	realplayTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	realplayTask.setEndTime(null);
