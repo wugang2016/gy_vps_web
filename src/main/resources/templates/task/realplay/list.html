@@ -334,6 +334,8 @@ $(function() {
 	});
 	$('#goplayModal').on('hide.bs.modal', function() {
 		$(this).find(".alert").hide();
+		$('#subSystemIds').multiselect('deselectAll', false);
+    	$('#subSystemIds').multiselect('updateButtonText');
 		goplayModalData.resetForm();
 	});
 	$('#stopModal').on('hide.bs.modal', function() {
