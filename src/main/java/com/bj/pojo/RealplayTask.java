@@ -1,5 +1,6 @@
 package com.bj.pojo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.bj.util.ErrorMessage;
@@ -19,7 +20,35 @@ public class RealplayTask extends BaseTask{
 	private Integer errCode;
 	
 	private Integer[] subSystemIds;
+	private String subSystemIdsStr;
 	
+	public String getSubSystemIdsStr() {
+		return subSystemIdsStr;
+	}
+	public void setSubSystemIdsStr(String subSystemIdsStr) {
+		this.subSystemIdsStr = subSystemIdsStr;
+		if(this.subSystemIdsStr != null)
+		{
+			String[] ecues = this.subSystemIdsStr.trim().split(",");
+			ArrayList<Integer> subSystemIdsList = new ArrayList<Integer>();
+			//subSystemIds = new Integer[ecues.length];
+			for (int i = 0; i < ecues.length; i++) {
+				String string = ecues[i];
+				try {
+					Integer v = Integer.parseInt(string);
+					subSystemIdsList.add(v);
+				}
+				catch(NumberFormatException e) {
+					
+				}				
+			}
+			subSystemIds = new Integer[subSystemIdsList.size()];
+			subSystemIdsList.toArray(subSystemIds);
+		}
+		else {
+			this.subSystemIdsStr = "";
+		}
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -97,6 +126,18 @@ public class RealplayTask extends BaseTask{
 	}
 	public void setSubSystemIds(Integer[] subSystemIds) {
 		this.subSystemIds = subSystemIds;
+		subSystemIdsStr="";
+		if(subSystemIds != null)
+		{
+			for(int i =0;i<this.subSystemIds.length;++i)
+			{
+				subSystemIdsStr += subSystemIds[i];
+				if(i != this.subSystemIds.length -1)
+				{
+					subSystemIdsStr += ',';
+				}
+			}
+		}
 	}
 	
 	public String getErrMsg() {

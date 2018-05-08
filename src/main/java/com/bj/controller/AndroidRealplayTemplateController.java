@@ -220,6 +220,8 @@ public class AndroidRealplayTemplateController {
             return "redirect:/manage/android_template/edit";
     	}
     	
+    	AndroidRealplayTemplate oldAndroidRealplayTemplate = androidRealplayTemplateService.findById(androidRealplayTemplate.getId());
+    	
     	List<AndroidRealplayArea> areaList = new ArrayList<AndroidRealplayArea>();
     	if(areaJson != null && areaJson.length() > 10) {
     		JSONArray jsonArray = JSONArray.fromObject(areaJson);
@@ -272,6 +274,42 @@ public class AndroidRealplayTemplateController {
 				}
 				androidRealplayAreaService.batchInsert(areaList);
 			}
+			
+			if(oldAndroidRealplayTemplate != null) {
+				if(oldAndroidRealplayTemplate.getBackgroudVideo() != null && androidRealplayTemplate.getBackgroudVideo() != null) {
+					if(!oldAndroidRealplayTemplate.getBackgroudVideo().equalsIgnoreCase(androidRealplayTemplate.getBackgroudVideo())){
+						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getBackgroudVideo();
+						BaseUtil.deleteFile(fullpath);
+						LOGGER.info("delete old BackgroudVideo:"+fullpath + " BackgroudVideo:"+androidRealplayTemplate.getBackgroudVideo());
+					}
+				}
+				
+				if(oldAndroidRealplayTemplate.getMiniPicPath() != null && androidRealplayTemplate.getMiniPicPath() != null) {
+					if(!oldAndroidRealplayTemplate.getMiniPicPath().equalsIgnoreCase(androidRealplayTemplate.getMiniPicPath())){
+						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getMiniPicPath();
+						BaseUtil.deleteFile(fullpath);
+						LOGGER.info("delete old MiniPicPath:"+fullpath+ " MiniPicPath"+androidRealplayTemplate.getMiniPicPath());
+					}
+				}
+				
+				if(oldAndroidRealplayTemplate.getPicPath() != null && androidRealplayTemplate.getPicPath() != null) {
+					if(!oldAndroidRealplayTemplate.getPicPath().equalsIgnoreCase(androidRealplayTemplate.getPicPath())){
+						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getPicPath();
+						BaseUtil.deleteFile(fullpath
+								);
+						LOGGER.info("delete old PicPath:"+fullpath + " PicPath"+androidRealplayTemplate.getPicPath());
+					}
+				}
+				
+				if(oldAndroidRealplayTemplate.getSigPicBoderPath()!=null && androidRealplayTemplate.getSigPicBoderPath() != null) {
+					if(!oldAndroidRealplayTemplate.getSigPicBoderPath().equalsIgnoreCase(androidRealplayTemplate.getSigPicBoderPath())){
+						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getSigPicBoderPath();
+						BaseUtil.deleteFile(fullpath);
+						LOGGER.info("delete old SigPicBoderPath:"+fullpath+ " new:SigPicBoderPath"+androidRealplayTemplate.getSigPicBoderPath());
+					}
+				}
+			}
+		
             redirectAttributes.addFlashAttribute("message", "保存成功！");
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
@@ -284,10 +322,40 @@ public class AndroidRealplayTemplateController {
     @Transactional
     @PostMapping("/android_template/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
-    							final RedirectAttributes redirectAttributes) throws IOException {    	
+    							final RedirectAttributes redirectAttributes) throws IOException {   
+    	
+    	AndroidRealplayTemplate oldAndroidRealplayTemplate = androidRealplayTemplateService.findById(id);
     	//先删除模板对应的切割区域
     	if(androidRealplayAreaService.deteleByTemplateId(id) >= 0) {
 			if(androidRealplayTemplateService.delete(id) > 0){
+				
+				//delete files
+				if(oldAndroidRealplayTemplate != null) {
+					if(oldAndroidRealplayTemplate.getBackgroudVideo() != null) {
+						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getBackgroudVideo();
+						BaseUtil.deleteFile(fullpath);
+						LOGGER.info("delete old BackgroudVideo:"+fullpath);
+					}
+					
+					if(oldAndroidRealplayTemplate.getMiniPicPath() != null) {
+						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getMiniPicPath();
+						BaseUtil.deleteFile(fullpath);
+						LOGGER.info("delete old MiniPicPath:"+fullpath);	
+					}
+					
+					if(oldAndroidRealplayTemplate.getPicPath() != null) {
+						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getPicPath();
+						BaseUtil.deleteFile(fullpath);
+						LOGGER.info("delete old PicPath:"+fullpath);
+					}
+					
+					if(oldAndroidRealplayTemplate.getSigPicBoderPath()!=null) {
+						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getSigPicBoderPath();
+						BaseUtil.deleteFile(fullpath);
+						LOGGER.info("delete old SigPicBoderPath:"+fullpath);
+					}
+				}
+				
 	            redirectAttributes.addFlashAttribute("message", "删除成功！");
 	    	}else{
 	            redirectAttributes.addFlashAttribute("hasError", true);

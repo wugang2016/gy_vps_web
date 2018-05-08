@@ -28,6 +28,7 @@ public interface RealplayTaskMapper {
             @Result(property = "startTime", column = "start_time"),
             @Result(property = "endTime", column = "end_time"),
             @Result(property = "errCode", column = "error_code"),
+            @Result(property = "subSystemIdsStr", column = "ecue_list"),
             @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.FileResourceMapper.findById")),
             @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
     RealplayTask findById(@Param("id") int id);
@@ -38,6 +39,7 @@ public interface RealplayTaskMapper {
             @Result(property = "startTime", column = "start_time"),
             @Result(property = "endTime", column = "end_time"),
             @Result(property = "errCode", column = "error_code"),
+            @Result(property = "subSystemIdsStr", column = "ecue_list"),
             @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.FileResourceMapper.findById")),
             @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
 	List<RealplayTask> findByFileId(int fileId);
@@ -49,14 +51,15 @@ public interface RealplayTaskMapper {
             @Result(property = "startTime", column = "start_time"),
             @Result(property = "endTime", column = "end_time"),
             @Result(property = "errCode", column = "error_code"),
+            @Result(property = "subSystemIdsStr", column = "ecue_list"),
             @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.FileResourceMapper.findById")),
             @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
     List<RealplayTask> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
 
     @Insert("INSERT INTO tbl_file_realplay_task " +
-            "   (file_id, template_id, repeate, start_time, status) " +
+            "   (file_id, template_id, repeate, start_time, status, ecue_list) " +
             "VALUES " +
-            "   (#{fileResource.id}, #{splitTemplate.id}, #{repeate}, #{startTime}, #{status})")
+            "   (#{fileResource.id}, #{splitTemplate.id}, #{repeate}, #{startTime}, #{status}, #{subSystemIdsStr})")
     @Options(useGeneratedKeys=true,keyColumn="task_id")
     int insert(RealplayTask realplayTask);
 

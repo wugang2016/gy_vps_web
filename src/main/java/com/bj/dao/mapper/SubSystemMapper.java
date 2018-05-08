@@ -44,9 +44,9 @@ public interface SubSystemMapper {
     List<SubSystemInfo> findByIp(@Param("ip") String ip);
     
     @Insert("INSERT INTO tbl_sub_sys_info " +
-            "   (sub_sys_name, ip, port, box_ip, width, height, longitude, latitude, pic_path) " +
+            "   (sub_sys_name, ip, port, box_ip, width, height, longitude, latitude, pic_path, content_width, content_height) " +
             "VALUES " +
-            "   (#{name}, #{ip}, #{port}, #{boxIp}, #{width}, #{height}, #{longitude}, #{latitude}, #{picPath})")
+            "   (#{name}, #{ip}, #{port}, #{boxIp}, #{width}, #{height}, #{longitude}, #{latitude}, #{picPath}, #{content_width}, #{content_height})")
     @Options(useGeneratedKeys=true,keyColumn="sub_sys_id")
     int insert(SubSystemInfo subSystemInfo);
 
@@ -57,6 +57,8 @@ public interface SubSystemMapper {
     		"   t.box_ip = #{boxIp}, " +
     		"   t.width = #{width}, " +
     		"   t.height = #{height}," +
+    		"   t.content_width = #{content_width}, " +
+    		"   t.content_height = #{content_height}," +
     		"   t.longitude = #{longitude}," +
     		"   t.latitude = #{latitude}," +
     		"   t.pic_path = #{picPath}" +

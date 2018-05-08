@@ -218,7 +218,7 @@ function goSubmit(){
 	    	})
 		});
 		$('#areaJson').val(JSON.stringify(area_json));
-		$("#submiting").html("<img src='/css/img/small-loading.gif'>上传中,请稍后...");
+		$("#submiting").html("<img src='/css/img/small-loading.gif'>上传中,请稍候...");
 		$("input[name='taskPassword']").val($.md5($("input[name='taskPassword']").val()));
 		$("#form").data('bootstrapValidator').disableSubmitButtons(true).defaultSubmit();
 	}else{

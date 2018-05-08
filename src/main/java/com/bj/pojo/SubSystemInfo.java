@@ -39,6 +39,11 @@ public class SubSystemInfo {
 	@Range(min=1, max=2160, message = "高度范围1-2160")
 	@NotNull(message = "高度不能为空")
 	private Integer height;
+	@Range(min=1, max=3980, message = "宽度范围1-3980")
+	private Integer content_width; 
+
+	@Range(min=1, max=2160, message = "高度范围1-2160")
+	private Integer content_height;
 	
 	private Double longitude;
 	private Double latitude;
@@ -130,6 +135,20 @@ public class SubSystemInfo {
 	public void setPicPath(String picPath) {
 		this.picPath = picPath;
 	}
+	
+	public Integer getContent_width() {
+		return content_width;
+	}
+	public void setContent_width(Integer content_width) {
+		this.content_width = content_width;
+	}
+	public Integer getContent_height() {
+		return content_height;
+	}
+	public void setContent_height(Integer content_height) {
+		this.content_height = content_height;
+	}
+	
 	public String format(String opt){
 		String str = "{ \"opt\":\""+opt+"\",\"tbl_name\":\"tbl_sub_sys_info\",\"value\":";
 		JSONObject obj = JSONObject.fromObject(this);

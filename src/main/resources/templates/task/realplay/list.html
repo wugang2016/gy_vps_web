@@ -137,7 +137,7 @@
                         <td>{{fileName}}</td>
                         <td>{{fileDesc}}</td>
                         <td>
-                        	<form id="delForm2_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/realplay/file/{{id}}/delete" onsubmit="return delCheck()">
+                        	<form id="delForm2_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/realplay/file/{{id}}/delete" onsubmit="return delFileCheck()">
 	                            <a href="#" data-toggle="modal" data-target="#goplayModal" data-id="{{id}}">发起播放</a>
 	                            <a href="#" onclick="$('#delForm2_{{id}}').submit()">删除</a>
                             </form>
@@ -373,6 +373,9 @@ $(function() {
 });
 function delCheck(){
 	return confirm("确认要删除此记录？");
+}
+function delFileCheck(){
+	return confirm("确认要删除此文件？");
 }
 function stopPlay(){
 	stopModalData.validate();

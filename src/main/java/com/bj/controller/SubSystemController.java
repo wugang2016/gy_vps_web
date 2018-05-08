@@ -225,25 +225,27 @@ public class SubSystemController {
     	byte[] pic = FileTypeUtil.getBytes(path);
         try {
             FileType imgType = FileTypeUtil.getType(path);
-            switch(imgType.name()){
-                case "PNG":  
-                    he.setContentType(MediaType.IMAGE_PNG);  
-                    break;  
-                case "JPG":
-                    he.setContentType(MediaType.IMAGE_JPEG);  
-                    break;  
-                case "JPEG":  
-                    he.setContentType(MediaType.IMAGE_JPEG);  
-                    break;  
-                case "GIF":  
-                    he.setContentType(MediaType.IMAGE_GIF);  
-                    break;  
-                case "BMP":  
-                    he.setContentType(MediaType.valueOf("image/bmp"));  
-                    break;  
-                default:  
-                    he.setContentType(MediaType.IMAGE_JPEG);  
-                    break;  
+            if(null != imgType) {
+            	 switch(imgType.name()){
+	                 case "PNG":  
+	                     he.setContentType(MediaType.IMAGE_PNG);  
+	                     break;  
+	                 case "JPG":
+	                     he.setContentType(MediaType.IMAGE_JPEG);  
+	                     break;  
+	                 case "JPEG":  
+	                     he.setContentType(MediaType.IMAGE_JPEG);  
+	                     break;  
+	                 case "GIF":  
+	                     he.setContentType(MediaType.IMAGE_GIF);  
+	                     break;  
+	                 case "BMP":  
+	                     he.setContentType(MediaType.valueOf("image/bmp"));  
+	                     break;  
+	                 default:  
+	                     he.setContentType(MediaType.IMAGE_JPEG);  
+	                     break;  
+            	 }
             }
         } catch (IOException e) {
         	LOGGER.error(e.toString());

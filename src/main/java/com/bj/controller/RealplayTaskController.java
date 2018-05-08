@@ -220,7 +220,13 @@ public class RealplayTaskController {
     public String doDeleteFile(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {
     	if(realplayTaskService.findByFileId(id).size() <= 0){
-			if(realplayTaskService.delete(id) > 0){
+    		FileResource file = fileResourceService.findById(id);
+			if(fileResourceService.delete(id) > 0){
+				if(file != null) {
+					String filepath = uploadFileDir + File.separator + file.getFilePath();
+					BaseUtil.deleteFile(filepath);
+					LOGGER.info("delete file:"+filepath);
+				}
 	            redirectAttributes.addFlashAttribute("message", "删除成功！");
 	    	}else{
 	            redirectAttributes.addFlashAttribute("hasError", true);

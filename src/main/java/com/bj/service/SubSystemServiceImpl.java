@@ -41,6 +41,12 @@ public class SubSystemServiceImpl implements SubSystemService {
 
 	@Override
 	public int insert(SubSystemInfo subSystemInfo) {
+		if(subSystemInfo.getContent_width() == null) {
+			subSystemInfo.setContent_width(subSystemInfo.getWidth());
+		}
+		if(subSystemInfo.getContent_height() == null) {
+			subSystemInfo.setContent_height(subSystemInfo.getHeight());
+		}
 		int result = subSystemInfoMapper.insert(subSystemInfo);
 		if(result > 0) {
 			sendMessageService.onlySendMessage(subSystemInfo.format("add"));

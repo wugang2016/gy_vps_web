@@ -190,8 +190,24 @@ public class SplitTaskController {
     @PostMapping("/split/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {
+    	SplitTask task = splitTaskService.findById(id);
     	if(dispatchTaskService.countBySplitTaskId(id) == 0){
 			if(splitTaskService.delete(id) > 0){
+				//删除文件
+				if(task != null) {
+					int tid = task.getId();
+					String dir = uploadFileDir + File.separator + Contants.SPLIT_FILE_SUB_PATH + File.separator + tid;
+					BaseUtil.deleteDirectory(dir);
+					LOGGER.info("delete dir:"+dir);
+					
+					String srcpath = task.getSrcFilePath();
+					if(srcpath!=null && !srcpath.isEmpty()) {
+						String filepath = uploadFileDir + File.separator + task.getSrcFilePath();
+						BaseUtil.deleteFile(filepath);
+						LOGGER.info("delete file:"+filepath);
+					}
+				}
+				
 	            redirectAttributes.addFlashAttribute("message", "删除成功！");
 	    	}else{
 	            redirectAttributes.addFlashAttribute("hasError", true);

@@ -194,7 +194,7 @@ function changeGoPlay(){
 
 function goSubmit(){
 	if(confirm("一旦创建成功不可修改，确认提交？")){
-		$("#submiting").html("<img src='/css/img/small-loading.gif'>上传中,请稍后...");
+		$("#submiting").html("<img src='/css/img/small-loading.gif'>上传中,请稍候...");
 		$("input[name='taskPassword']").val($.md5($("input[name='taskPassword']").val()));
 		formData.disableSubmitButtons(true).defaultSubmit();
 	}else{
