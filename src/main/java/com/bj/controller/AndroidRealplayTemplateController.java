@@ -278,7 +278,7 @@ public class AndroidRealplayTemplateController {
 			if(oldAndroidRealplayTemplate != null) {
 				if(oldAndroidRealplayTemplate.getBackgroudVideo() != null && androidRealplayTemplate.getBackgroudVideo() != null) {
 					if(!oldAndroidRealplayTemplate.getBackgroudVideo().equalsIgnoreCase(androidRealplayTemplate.getBackgroudVideo())){
-						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getBackgroudVideo();
+						String fullpath = uploadFileDir + File.separator + oldAndroidRealplayTemplate.getBackgroudVideo();
 						BaseUtil.deleteFile(fullpath);
 						LOGGER.info("delete old BackgroudVideo:"+fullpath + " BackgroudVideo:"+androidRealplayTemplate.getBackgroudVideo());
 					}
@@ -286,7 +286,7 @@ public class AndroidRealplayTemplateController {
 				
 				if(oldAndroidRealplayTemplate.getMiniPicPath() != null && androidRealplayTemplate.getMiniPicPath() != null) {
 					if(!oldAndroidRealplayTemplate.getMiniPicPath().equalsIgnoreCase(androidRealplayTemplate.getMiniPicPath())){
-						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getMiniPicPath();
+						String fullpath = uploadFileDir + File.separator + oldAndroidRealplayTemplate.getMiniPicPath();
 						BaseUtil.deleteFile(fullpath);
 						LOGGER.info("delete old MiniPicPath:"+fullpath+ " MiniPicPath"+androidRealplayTemplate.getMiniPicPath());
 					}
@@ -294,7 +294,7 @@ public class AndroidRealplayTemplateController {
 				
 				if(oldAndroidRealplayTemplate.getPicPath() != null && androidRealplayTemplate.getPicPath() != null) {
 					if(!oldAndroidRealplayTemplate.getPicPath().equalsIgnoreCase(androidRealplayTemplate.getPicPath())){
-						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getPicPath();
+						String fullpath = uploadFileDir + File.separator + oldAndroidRealplayTemplate.getPicPath();
 						BaseUtil.deleteFile(fullpath
 								);
 						LOGGER.info("delete old PicPath:"+fullpath + " PicPath"+androidRealplayTemplate.getPicPath());
@@ -303,7 +303,7 @@ public class AndroidRealplayTemplateController {
 				
 				if(oldAndroidRealplayTemplate.getSigPicBoderPath()!=null && androidRealplayTemplate.getSigPicBoderPath() != null) {
 					if(!oldAndroidRealplayTemplate.getSigPicBoderPath().equalsIgnoreCase(androidRealplayTemplate.getSigPicBoderPath())){
-						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getSigPicBoderPath();
+						String fullpath = uploadFileDir + File.separator + oldAndroidRealplayTemplate.getSigPicBoderPath();
 						BaseUtil.deleteFile(fullpath);
 						LOGGER.info("delete old SigPicBoderPath:"+fullpath+ " new:SigPicBoderPath"+androidRealplayTemplate.getSigPicBoderPath());
 					}
@@ -332,25 +332,25 @@ public class AndroidRealplayTemplateController {
 				//delete files
 				if(oldAndroidRealplayTemplate != null) {
 					if(oldAndroidRealplayTemplate.getBackgroudVideo() != null) {
-						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getBackgroudVideo();
+						String fullpath = uploadFileDir + File.separator + oldAndroidRealplayTemplate.getBackgroudVideo();
 						BaseUtil.deleteFile(fullpath);
 						LOGGER.info("delete old BackgroudVideo:"+fullpath);
 					}
 					
 					if(oldAndroidRealplayTemplate.getMiniPicPath() != null) {
-						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getMiniPicPath();
+						String fullpath = uploadFileDir + File.separator + oldAndroidRealplayTemplate.getMiniPicPath();
 						BaseUtil.deleteFile(fullpath);
 						LOGGER.info("delete old MiniPicPath:"+fullpath);	
 					}
 					
 					if(oldAndroidRealplayTemplate.getPicPath() != null) {
-						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getPicPath();
+						String fullpath = uploadFileDir + File.separator + oldAndroidRealplayTemplate.getPicPath();
 						BaseUtil.deleteFile(fullpath);
 						LOGGER.info("delete old PicPath:"+fullpath);
 					}
 					
 					if(oldAndroidRealplayTemplate.getSigPicBoderPath()!=null) {
-						String fullpath = uploadFileDir+oldAndroidRealplayTemplate.getSigPicBoderPath();
+						String fullpath = uploadFileDir + File.separator + oldAndroidRealplayTemplate.getSigPicBoderPath();
 						BaseUtil.deleteFile(fullpath);
 						LOGGER.info("delete old SigPicBoderPath:"+fullpath);
 					}

@@ -48,7 +48,6 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping("/task")
 public class RealplayTaskController {
-    @SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(RealplayTaskController.class);
     private static final String SUCCESS = "1";
 

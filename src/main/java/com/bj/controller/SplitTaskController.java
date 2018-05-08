@@ -51,7 +51,6 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping("/task")
 public class SplitTaskController {
-    @SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(SplitTaskController.class);
 
     @Resource
