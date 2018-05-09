@@ -346,54 +346,59 @@ function setArea(){
 	modalData.validate();
 	if(modalData.isValid()){
 		var subSystem_id = $('select[name="subSystem_id"]').val();
-		var subSystem_name = $('select[name="subSystem_id"]').find("option:selected").text();
-		var x = $('input[name="x"]').val();
-		var y = $('input[name="y"]').val();
-		var width = $('input[name="width"]').val();
-		var height = $('input[name="height"]').val();
-		
-		var index = $('#index').val();
-		var newAreaTD = "<td>" + subSystem_name + "</td><td>";
-		newAreaTD += x + "</td><td>";
-		newAreaTD += y + "</td><td>";
-		newAreaTD += width + "</td><td>";
-		newAreaTD += height + "</td><td>";
-		newAreaTD += "<a href='#' data-toggle='modal' data-target='#myModal' data-index='"+index+"'>编辑</a> ";
-		newAreaTD += "<a href='#' onclick='deleteArea("+index+")'>删除</a></td>";
-
-		if(index != ""){ //编辑
-			$('#tr_'+index).html(newAreaTD);
-			$.each(area_json,function(i,obj){
-				if(index == obj.index1){
-					obj.subSystem.id = subSystem_id;
-					obj.x = x;
-					obj.y = y;
-					obj.w = width;
-					obj.h = height;
-				}
-			});
-		}else{ //新增
-			index = parseInt(Math.random() * 10000); 
-			newAreaTD = newAreaTD.replace("data-index=''","data-index='"+index+"'");
-			newAreaTD = newAreaTD.replace("deleteArea()","deleteArea("+index+")");
-			var newTR = "<tr id='tr_"+index+"'>" + newAreaTD + "</tr>";
-			$('#area_div').append(newTR);
-			//存入json
-			area_json.push({"index1":index,"x":x,"y":y,"w":width,"h":height,"subSystem":{"id":subSystem_id}});
+		var existsId = $('#ss_'+subSystem_id).val();
+		if(typeof(existsId) === 'undefined'){
+			var subSystem_name = $('select[name="subSystem_id"]').find("option:selected").text();
+			var x = $('input[name="x"]').val();
+			var y = $('input[name="y"]').val();
+			var width = $('input[name="width"]').val();
+			var height = $('input[name="height"]').val();
+			
+			var index = $('#index').val();
+			var newAreaTD = "<td>" + subSystem_name + "<input type='hidden' id='ss_" + subSystem_id +"'></td><td>";
+			newAreaTD += x + "</td><td>";
+			newAreaTD += y + "</td><td>";
+			newAreaTD += width + "</td><td>";
+			newAreaTD += height + "</td><td>";
+			newAreaTD += "<a href='#' data-toggle='modal' data-target='#myModal' data-index='"+index+"'>编辑</a> ";
+			newAreaTD += "<a href='#' onclick='deleteArea("+index+")'>删除</a></td>";
+	
+			if(index != ""){ //编辑
+				$('#tr_'+index).html(newAreaTD);
+				$.each(area_json,function(i,obj){
+					if(index == obj.index1){
+						obj.subSystem.id = subSystem_id;
+						obj.x = x;
+						obj.y = y;
+						obj.w = width;
+						obj.h = height;
+					}
+				});
+			}else{ //新增
+				index = parseInt(Math.random() * 10000); 
+				newAreaTD = newAreaTD.replace("data-index=''","data-index='"+index+"'");
+				newAreaTD = newAreaTD.replace("deleteArea()","deleteArea("+index+")");
+				var newTR = "<tr id='tr_"+index+"'>" + newAreaTD + "</tr>";
+				$('#area_div').append(newTR);
+				//存入json
+				area_json.push({"index1":index,"x":x,"y":y,"w":width,"h":height,"subSystem":{"id":subSystem_id}});
+			}
+					
+			//隐藏并清空
+			$('#myModal').modal('hide');
+			$('select[name="subSystem_id"] option:first').prop("selected", 'selected');  
+			$('#copyFromSubSystem').prop("checked",'');
+			$('input[name="x"]').val('');
+			$('input[name="y"]').val('');
+			$('input[name="width"]').val('');
+			$('input[name="height"]').val('');
+			$('#index').val("");
+			
+			$('#areaJson').val(JSON.stringify(area_json));
+			formData.revalidateField('areaJson');
+		}else{
+			alert("该ECUE主控已存在，不可重复添加！");
 		}
-				
-		//隐藏并清空
-		$('#myModal').modal('hide');
-		$('select[name="subSystem_id"] option:first').prop("selected", 'selected');  
-		$('#copyFromSubSystem').prop("checked",'');
-		$('input[name="x"]').val('');
-		$('input[name="y"]').val('');
-		$('input[name="width"]').val('');
-		$('input[name="height"]').val('');
-		$('#index').val("");
-		
-		$('#areaJson').val(JSON.stringify(area_json));
-		formData.revalidateField('areaJson');
 	}
 }
 
