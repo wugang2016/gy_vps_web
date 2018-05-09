@@ -235,6 +235,7 @@
                     </div>
                 </div>
                 <input type="hidden" id="index">
+                <input type="hidden" id="ssid">
 				<!-- 内容 -->
 			</div>
 			<div class="modal-footer">
@@ -279,9 +280,11 @@ $(function() {
 
 $('#myModal').on('show.bs.modal', function(event) { 
 	var index = $(event.relatedTarget).data("index");
+	var ssid = $(event.relatedTarget).data("ssid");
 	if(typeof(index) != 'undefined'){ //编辑
 		$('#myModalLabel').html("编辑切割区域");
 		$('#index').val(index);
+		$('#ssid').val(ssid);
 		$.each(area_json,function(i,obj){
 			if(index == obj.index1){
 				$("select[name='subSystem_id']").val(obj.subSystem.id);
@@ -299,6 +302,7 @@ $('#myModal').on('show.bs.modal', function(event) {
 //Modal验证销毁重构
 $('#myModal').on('hide.bs.modal', function() {
 	$('#index').val("");
+	$('#ssid').val("");
 	modalData.resetForm();
 });
 
@@ -345,9 +349,10 @@ var area_json = [];
 function setArea(){
 	modalData.validate();
 	if(modalData.isValid()){
+		var ssid = $('#ssid').val();
 		var subSystem_id = $('select[name="subSystem_id"]').val();
 		var existsId = $('#ss_'+subSystem_id).val();
-		if(typeof(existsId) === 'undefined'){
+		if(typeof(existsId) === 'undefined' || (ssid+"" === subSystem_id+"")){
 			var subSystem_name = $('select[name="subSystem_id"]').find("option:selected").text();
 			var x = $('input[name="x"]').val();
 			var y = $('input[name="y"]').val();
@@ -360,7 +365,7 @@ function setArea(){
 			newAreaTD += y + "</td><td>";
 			newAreaTD += width + "</td><td>";
 			newAreaTD += height + "</td><td>";
-			newAreaTD += "<a href='#' data-toggle='modal' data-target='#myModal' data-index='"+index+"'>编辑</a> ";
+			newAreaTD += "<a href='#' data-toggle='modal' data-target='#myModal' data-index='"+index+"' data-ssid='"+subSystem_id+"'>编辑</a> ";
 			newAreaTD += "<a href='#' onclick='deleteArea("+index+")'>删除</a></td>";
 	
 			if(index != ""){ //编辑
@@ -393,6 +398,7 @@ function setArea(){
 			$('input[name="width"]').val('');
 			$('input[name="height"]').val('');
 			$('#index').val("");
+			$('#ssid').val("");
 			
 			$('#areaJson').val(JSON.stringify(area_json));
 			formData.revalidateField('areaJson');
