@@ -22,5 +22,7 @@ public class Contants {
 	public static final String KEY_BITERATE_1080P = "biterate.1080p";
 	public static final String KEY_BITERATE_720P = "biterate.720p";
 	public static final String KEY_BITERATE_4CIF = "biterate.4cif";
+	public static final String KEY_ANDROID_TSMODE_LEFTWIDTH = "android.realplay.tsmode.leftwidth";
+	public static final String KEY_ANDROID_TSMODE_SHIFTWIDTH = "android.realplay.tsmode.shiftwidth";
 	public static final String KEY_TASK_PASSWORD = "task.password";
 }

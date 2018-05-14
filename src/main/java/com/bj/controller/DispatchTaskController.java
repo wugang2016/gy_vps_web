@@ -193,6 +193,32 @@ public class DispatchTaskController {
     }
 
     @Transactional
+    @PostMapping("/dispatch/{taskId}/failedAgain")
+    public @ResponseBody String dispatchFailedAgain(@PathVariable("taskId") int taskId,
+            final @RequestParam("taskPassword") String taskPassword) throws IOException {
+    	if(!sysParamService.validTaskPassword(taskPassword)) {
+            return "任务密码错误";
+    	}
+    	DispatchTask dispatchTask = dispatchTaskService.findById(taskId);
+    	List<DispatchSubTask> dispatchSubTaskList = dispatchSubTaskService.findByTaskId(taskId);
+    	dispatchTask.setStatus(TaskStatus.PENDING.index());
+    	dispatchTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+    	dispatchTask.setEndTime(null);
+		if(dispatchTaskService.insert(dispatchTask) > 0){
+			//存入子任务表
+			for(int i=0; i<dispatchSubTaskList.size(); i++) {
+				DispatchSubTask subTask = dispatchSubTaskList.get(i);
+				if(subTask.getIsFail()) {
+					subTask.setTaskId(dispatchTask.getId());
+					subTask.setStatus(SubTaskStatus.PENDING.index());
+					dispatchSubTaskService.insert(subTask);
+				}
+			}
+    	}
+        return "1";
+    }
+    
+    @Transactional
     @PostMapping("/dispatch/{taskId}/again")
     public @ResponseBody String dispatchAgain(@PathVariable("taskId") int taskId,
             final @RequestParam("taskPassword") String taskPassword) throws IOException {

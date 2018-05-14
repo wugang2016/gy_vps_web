@@ -102,6 +102,7 @@
                         	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/dispatch/{{id}}/delete" onsubmit="return delCheck()">
 	                            <a href="{{ctx.contextPath}}/task/dispatch/{{id}}/view" data-toggle="modal" data-target="#myModal">详细</a>
 	                            <span id="ff_{{id}}">{{#isDispatch}}<a href="#" data-toggle="modal" data-target="#againModal" data-id="{{id}}">再次分发</a>{{/isDispatch}}</span>
+	                            <span id="failed_ff_{{id}}">{{#isFailedDispatch}}<a href="#" data-toggle="modal" data-target="#failedAgainModal" data-id="{{id}}">失败重试</a>{{/isFailedDispatch}}</span>
 	                            <span id="sc_{{id}}">{{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}</span>
                             </form>
                         </td>
@@ -177,11 +178,40 @@
 	</div>
 </div>
 
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="failedAgainModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+	<div class="modal-dialog" style="width:400px">
+		<div class="modal-content">
+			<div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">分发条件</h4>
+            	<p class="alert alert-danger" role="alert" style="display:none">
+            		<em>系统提示：</em><span id="msg"></span>
+            	</p>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">任务密码</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control"  name="taskPassword" placeholder="任务密码" required>
+                    </div>
+              		<input type="hidden" name="taskId" id="taskId">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="failAgain()">提交</button>
+            </div>
+		</div>
+	</div>
+</div>
+
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
 <script>
 var againModalData;
+var failAgainModalData;
 $(function(){
 	loopStatus();
 	setRefreshText({{#refresh}}{{.}}{{/refresh}});
@@ -192,6 +222,14 @@ $(function(){
 	$('#againModal').on('show.bs.modal', function (event) {
 		$("#taskId").val($(event.relatedTarget).data("id"));
 	});
+	
+	$('#failedAgainModal').find(".modal-content").bootstrapValidator();
+	failAgainModalData = $('#againModal').find(".modal-content").data('bootstrapValidator');
+	
+	$('#failedAgainModal').on('show.bs.modal', function (event) {
+		$("#taskId").val($(event.relatedTarget).data("id"));
+	});
+	
 	//Modal验证销毁重构
 	$('#againModal').on('hide.bs.modal', function() {
 		$('#againModal').find(".alert").hide();
@@ -218,6 +256,29 @@ function again(){
 	            }else{
 	            	$('#againModal').find(".alert").show();
 	            	$('#againModal').find("#msg").html(data);
+	            }
+	        }
+	    });
+	}
+}
+
+function failAgain(){
+	againModalData.validate();
+	if(againModalData.isValid()){
+		var id = $('#taskId').val();
+		var taskPwd = $.md5($('#failedAgainModal').find("input[name='taskPassword']").val());
+	    $.ajax({
+	        url: "/task/dispatch/"+id+"/failAgain",
+	        type: "POST",
+	        async: true,
+	        data:{taskPassword:taskPwd},
+	        success: function(data){
+	            if(data == "1"){
+	            	alert("发送成功！");
+	            	location.reload();
+	            }else{
+	            	$('#failedAgainModal').find(".alert").show();
+	            	$('#failedAgainModal').find("#msg").html(data);
 	            }
 	        }
 	    });
@@ -260,6 +321,11 @@ function loopStatus(){
 	        			$('#ff_'+id).html('<a href="#" data-toggle="modal" data-target="#againModal" data-id="'+id+'">再次分发</a>');
 	        		}else{
 	        			$('#ff_'+id).html("");
+	        		}
+	        		if(obj.isFailedDispatch){
+	        			$('#failed_ff_'+id).html('<a href="#" data-toggle="modal" data-target="#failedAgainModal" data-id="'+id+'">失败重试</a>');
+	        		}else{
+	        			$('#failed_ff_'+id).html("");
 	        		}
 	        		if(obj.isDelete){
 	        			$('#sc_'+id).html("<a href='#' onclick=\"$('#delForm_"+id+"').submit()\">删除</a>");

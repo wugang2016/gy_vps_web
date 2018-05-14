@@ -112,6 +112,10 @@ public class DispatchTask extends BaseTask{
 		return TaskStatus.values()[status].allowDispatchForDispatchTask();
 	}
 	
+	public boolean getIsFailedDispatch() {
+		return TaskStatus.values()[status].allowFailedDispatchForDispatchTask();
+	}
+	
 	public String getErrMsg() {
 		String msg = ErrorMessage.getProperty(this.errCode+"");
 		if(msg == null && this.errCode != null) {

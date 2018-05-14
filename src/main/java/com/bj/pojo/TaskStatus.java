@@ -42,4 +42,8 @@ public enum TaskStatus {
 	public boolean allowDispatchForDispatchTask() {
 		return (this.compareTo(SUCCESS) == 0 || this.compareTo(FAILED) == 0);
 	}
+	
+	public boolean allowFailedDispatchForDispatchTask() {
+		return (this.compareTo(FAILED) == 0);
+	}
 }

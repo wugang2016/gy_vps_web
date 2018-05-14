@@ -70,6 +70,33 @@
                 </div>
          	</form>
          	
+         	<!-- ###############################视频码率设置################################# -->
+            <div class="page-header">
+                <h1>Android实时流参数设置
+                    <small>Android实时流参数</small>
+                </h1>
+            </div>
+            <form id="form_android_ts" class="form-horizontal" action="{{ctx.contextPath}}/admin/setAndroidTsMode" method="post">
+
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">太升国际左侧视频分辨率宽度</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control w_300"  name="tsModeLeftwidth" placeholder="太升国际左侧视频宽度" value="{{#tsModeLeftwidth}}{{.}}{{/tsModeLeftwidth}}" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">太升国际左侧视频校准位移宽度</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control w_300"  name="tsModeShiftwidth" placeholder="太升国际左侧位移视频宽度" value="{{#tsModeShiftwidth}}{{.}}{{/tsModeShiftwidth}}" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-primary">提 交</button>
+                    </div>
+                </div>
+         	</form>
+         	
          	<!-- ###############################管理员密码修改################################# -->
          	<div class="page-header">
                 <h1>修改管理密码

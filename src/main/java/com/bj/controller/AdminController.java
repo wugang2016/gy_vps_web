@@ -110,6 +110,24 @@ public class AdminController {
     	return "admin/set";
     }
     
+    @PostMapping("/setAndroidTsMode")
+    public String setAndroidTsMode(Map<String, Object> model,
+            HttpServletRequest request,
+            @RequestParam(value = "tsModeLeftwidth") String tsModeLeftwidth,
+            @RequestParam(value = "tsModeShiftwidth") String tsModeShiftwidth) {
+    	if(!isLogin(request)) {return "admin/login";}
+    	if(BaseUtil.isEmpty(tsModeLeftwidth) || BaseUtil.isEmpty(tsModeShiftwidth)) {
+        	model.put("hasError", true);
+        	model.put("message", "参数不可为空"); 
+        	return "admin/set";
+    	}
+		updateAndSendMsg(Contants.KEY_ANDROID_TSMODE_LEFTWIDTH, tsModeLeftwidth);
+		updateAndSendMsg(Contants.KEY_ANDROID_TSMODE_SHIFTWIDTH, tsModeShiftwidth);
+    	model.put("message", "修改参数成功"); 
+    	loginedInit(model);
+    	return "admin/set";
+    }
+    
     @PostMapping("/reboot")
     public @ResponseBody String reboot(Map<String, Object> model,
     		HttpServletRequest request)
@@ -221,6 +239,8 @@ public class AdminController {
         model.put("b1080", sysParamService.findByKey(Contants.KEY_BITERATE_1080P));
         model.put("b720", sysParamService.findByKey(Contants.KEY_BITERATE_720P));
         model.put("b4cif", sysParamService.findByKey(Contants.KEY_BITERATE_4CIF));
+        model.put("tsModeLeftwidth", sysParamService.findByKey(Contants.KEY_ANDROID_TSMODE_LEFTWIDTH));
+        model.put("tsModeShiftwidth", sysParamService.findByKey(Contants.KEY_ANDROID_TSMODE_SHIFTWIDTH));
     }
     
     /**
