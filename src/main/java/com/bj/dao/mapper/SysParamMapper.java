@@ -1,5 +1,6 @@
 package com.bj.dao.mapper;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -19,4 +20,10 @@ public interface SysParamMapper {
     		"   value = #{value} " +
             "   where `key` = #{key}")
 	int updateValue(@Param("key") String key, @Param("value") String value);
+    
+    @Insert("INSERT INTO tbl_sys_param " +
+            "   (key,value) " +
+            "VALUES " +
+            "   (#{key}, #{value})")
+    int insert(@Param("key") String key, @Param("value") String value);
 }

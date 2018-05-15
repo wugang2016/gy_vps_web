@@ -51,4 +51,9 @@ public class SysParamServiceImpl implements SysParamService{
 		return taskPassword.equals(findByKey(Contants.KEY_TASK_PASSWORD));
 	}
 
+	@Override
+	public int insert(String key, String value) {
+		return sysParamMapper.insert(key,value);
+	}
+
 }

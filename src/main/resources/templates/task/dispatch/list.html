@@ -195,7 +195,7 @@
                     <div class="col-sm-9">
                         <input type="password" class="form-control"  name="taskPassword" placeholder="任务密码" required>
                     </div>
-              		<input type="hidden" name="taskId" id="taskId">
+              		<input type="hidden" name="taskId2" id="taskId2">
                 </div>
             </div>
             <div class="modal-footer">
@@ -227,13 +227,17 @@ $(function(){
 	failAgainModalData = $('#againModal').find(".modal-content").data('bootstrapValidator');
 	
 	$('#failedAgainModal').on('show.bs.modal', function (event) {
-		$("#taskId").val($(event.relatedTarget).data("id"));
+		$("#taskId2").val($(event.relatedTarget).data("id"));
 	});
 	
 	//Modal验证销毁重构
 	$('#againModal').on('hide.bs.modal', function() {
 		$('#againModal').find(".alert").hide();
 		againModalData.resetForm();
+	});
+	$('#failedAgainModal').on('hide.bs.modal', function() {
+		$('#failedAgainModal').find(".alert").hide();
+		failAgainModalData.resetForm();
 	});
 });
 function delCheck(){
@@ -263,12 +267,12 @@ function again(){
 }
 
 function failAgain(){
-	againModalData.validate();
-	if(againModalData.isValid()){
-		var id = $('#taskId').val();
+	failAgainModalData.validate();
+	if(failAgainModalData.isValid()){
+		var id = $('#taskId2').val();
 		var taskPwd = $.md5($('#failedAgainModal').find("input[name='taskPassword']").val());
 	    $.ajax({
-	        url: "/task/dispatch/"+id+"/failAgain",
+	        url: "/task/dispatch/"+id+"/failedAgain",
 	        type: "POST",
 	        async: true,
 	        data:{taskPassword:taskPwd},
