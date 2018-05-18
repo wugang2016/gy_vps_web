@@ -44,5 +44,11 @@ public class AndroidRealplayTemplateServiceImpl implements AndroidRealplayTempla
 	public int delete(int id) {
 		return androidRealplayTemplateMapper.delete(id);
 	}
+
+	@Override
+	public List<AndroidRealplayTemplate> findAllByAsc(int offset, int rowCount) {
+		// TODO Auto-generated method stub
+		return androidRealplayTemplateMapper.findAllByAsc(offset, rowCount);
+	}
 	
 }

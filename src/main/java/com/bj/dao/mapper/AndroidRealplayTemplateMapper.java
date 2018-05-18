@@ -41,6 +41,17 @@ public interface AndroidRealplayTemplateMapper {
             @Result(property = "realplayAreas", javaType = List.class, column = "template_id", many = @Many(select = "com.bj.dao.mapper.AndroidRealplayAreaMapper.findByTemplateId"))})
     List<AndroidRealplayTemplate> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
 
+    @Select("SELECT * FROM tbl_android_realplay_template order by template_id asc " +
+            "LIMIT #{offset}, #{rowCount}")
+    @Results(value = {
+            @Result(property = "id", column = "template_id"),
+            @Result(property = "miniPicPath", column = "mini_pic_path"),
+            @Result(property = "picPath", column = "pic_path"),
+            @Result(property = "backgroudVideo", column = "backgroud_video"),
+            @Result(property = "sigPicBoderPath", column = "sig_pic_boder_path"),
+            @Result(property = "realplayAreas", javaType = List.class, column = "template_id", many = @Many(select = "com.bj.dao.mapper.AndroidRealplayAreaMapper.findByTemplateId"))})
+    List<AndroidRealplayTemplate> findAllByAsc(@Param("offset") int offset, @Param("rowCount") int rowCount);
+
     @Insert("INSERT INTO tbl_android_realplay_template " +
             "   (name, `desc`, longitude, latitude, mini_pic_path, pic_path, backgroud_video, sig_pic_boder_path) " +
             "VALUES " +

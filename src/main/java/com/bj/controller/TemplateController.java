@@ -34,7 +34,7 @@ public class TemplateController {
 		String ip = serviceIp;
 		List<Template> templates = new ArrayList<Template>();
 	    for(int i=0; i<page; ++i) {
-	    	List<AndroidRealplayTemplate> androidRealplayTemplates =  androidRealplayTemplateService.findAll(i*20,20);
+	    	List<AndroidRealplayTemplate> androidRealplayTemplates =  androidRealplayTemplateService.findAllByAsc(i*20,20);
 	    	for (Iterator<AndroidRealplayTemplate> iterator = androidRealplayTemplates.iterator(); iterator.hasNext();) {
 				AndroidRealplayTemplate androidRealplayTemplate = iterator.next();
 				

@@ -30,8 +30,8 @@ public class SubSystemInfo {
 	private Integer port;
 	//@NotBlank(message = "挂载地址不能为空")
 	private String mntPath;
-	@NotEmpty(message = "盒子IP不能为空")
-	@Pattern(regexp="^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$", message = "IP地址非法") 
+	//@NotEmpty(message = "盒子IP不能为空")
+	//@Pattern(regexp="^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$", message = "IP地址非法") 
 	private String boxIp;
 	@Range(min=1, max=3980, message = "宽度范围1-3980")
 	@NotNull(message = "宽度不能为空")

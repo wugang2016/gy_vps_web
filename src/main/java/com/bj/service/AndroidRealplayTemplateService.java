@@ -7,6 +7,7 @@ import com.bj.pojo.AndroidRealplayTemplate;
 public interface AndroidRealplayTemplateService {
 	AndroidRealplayTemplate findById(int id);
     List<AndroidRealplayTemplate> findAll(int offset, int rowCount);
+    List<AndroidRealplayTemplate> findAllByAsc(int offset, int rowCount);
     int insert(AndroidRealplayTemplate androidRealplayTemplate);
     int update(AndroidRealplayTemplate androidRealplayTemplate);
     int countAll();
