@@ -67,8 +67,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public MultipartConfigElement multipartConfigElement() {
 		ApplicationHome home = new ApplicationHome(getClass());
-	    File jarFile = home.getSource();
-	    String tmpPath = jarFile.getParentFile().getPath() + File.separator + "tmp";
+	    File dirFile = home.getDir();
+	    String tmpPath = dirFile.getPath() + File.separator + "tmp";
 	    File tmpDir = new File(tmpPath);
 	    if(!tmpDir.exists()) {
 	    	tmpDir.mkdirs();

@@ -6,9 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
@@ -51,10 +49,6 @@ public class ExcelCenter{
     public AdminExcelTask getAdminExportTask(UUID taskId) {
         return lastExportJobs.get(taskId);
     }
-
-    private List<AdminExcelTask> tasks = new CopyOnWriteArrayList<>();
-
-    private AtomicInteger nPendingImportJobs = new AtomicInteger(0);
 
     public ExportEcueJob exportEcueExcel() {
         File tmpFile = new File(excelExportTmpDir, "exportEcueExcel" + UUID.randomUUID());

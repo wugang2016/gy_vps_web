@@ -25,7 +25,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bj.job.AdminExcelTask;
@@ -161,7 +160,7 @@ public class ExportController {
         model.put("task", task);
         if (task != null) {
             if (task.getEndTime() == null) {
-                model.put("autoRefresh?", true);
+                model.put("autoRefresh", true);
             } else {
                 File file = task.getFile();
                 URI relativePath = new File(excelExportTmpDir).toURI().relativize(file.toURI());
@@ -171,4 +170,40 @@ public class ExportController {
         return "data-export-status";
     }
 
+    @GetMapping("/data-export/ajax/{taskId}")
+    public @ResponseBody String ajaxExportTaskStatus(@PathVariable UUID taskId,
+                                       Map<String, Object> model,
+                                       HttpServletResponse response) {
+    	showExportTaskStatus(taskId, model, response);
+    	if(model.get("task") != null){
+    		AdminExcelTask task = (AdminExcelTask)model.get("task");
+			JSONObject obj = new JSONObject();
+			obj.put("taskId", task.getTaskId().toString());
+			obj.put("status", task.getStatus());
+			obj.put("startTime", task.getStartTime()==null?"-":BaseUtil.format(task.getStartTime(), "yyyy-MM-dd HH:mm:ss"));
+			obj.put("endTime", task.getEndTime()==null?"-":BaseUtil.format(task.getEndTime(), "yyyy-MM-dd HH:mm:ss"));
+			obj.put("autoRefresh", model.get("autoRefresh")==null?"":model.get("autoRefresh"));
+			obj.put("taskFilePath", model.get("taskFilePath")==null?"":model.get("taskFilePath"));
+	        return obj.toString();
+    	}else {
+            return "";
+    	}
+    }
+
+    @GetMapping(value = "/data-export/download/{taskId}/{name:.*}",
+            produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    @ResponseBody
+    public FileSystemResource downloadExportFile(@PathVariable UUID taskId,
+    													 @PathVariable("name") String name,
+                                                         HttpServletResponse response) throws UnsupportedEncodingException {
+    	AdminExcelTask task = excelCenter.getAdminExportTask(taskId);
+    	String filename = "Object.xls";
+        if (task != null) {
+        	filename = task.getFilename();
+        }
+        response.setHeader("Content-Disposition", "attachment; " +
+                "filename=\"" + URLEncoder.encode(filename, "UTF-8") + "\";" +
+                "filename*=utf-8''" + URLEncoder.encode(filename, "UTF-8"));
+        return new FileSystemResource(new File(excelExportTmpDir, name));
+    }
 }

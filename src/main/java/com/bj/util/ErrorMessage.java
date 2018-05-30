@@ -36,8 +36,8 @@ public class ErrorMessage {
 
 			//读取外部配置文件->map
 			ApplicationHome home = new ApplicationHome(getClass());
-		    File jarFile = home.getSource();
-		    String filePath = jarFile.getParentFile().getPath() + File.separator + fileName;
+		    File dirFile = home.getDir();
+		    String filePath = dirFile.getPath() + File.separator + fileName;
 		    File file = new File(filePath);
 		    if(file.exists()) {
 				resource = new PathResource(filePath);

@@ -14,8 +14,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
-@SpringBootApplication
 @EnableAsync
+@SpringBootApplication
 @EnableTransactionManagement
 public class WebApplication {
 

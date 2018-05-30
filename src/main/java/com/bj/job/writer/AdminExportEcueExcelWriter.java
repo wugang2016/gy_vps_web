@@ -30,12 +30,18 @@ public class AdminExportEcueExcelWriter {
         }
         for (SubSystemInfo ecue : ecues) {
             Row row = sheet.createRow(rowNum++);
-            row.createCell(1, CellType.STRING).setCellValue(ecue.getName());
-            row.createCell(2, CellType.STRING).setCellValue(ecue.getIp());
-            row.createCell(3, CellType.STRING).setCellValue(ecue.getPort());
-            row.createCell(4, CellType.STRING).setCellValue(ecue.getBoxIp());
-            row.createCell(5, CellType.STRING).setCellValue(ecue.getWidth());
-            row.createCell(6, CellType.STRING).setCellValue(ecue.getHeight());
+            row.createCell(0, CellType.STRING).setCellValue(ecue.getName());
+            row.createCell(1, CellType.STRING).setCellValue(ecue.getIp());
+            row.createCell(2, CellType.STRING).setCellValue(ecue.getPort());
+            row.createCell(3, CellType.STRING).setCellValue(ecue.getBoxIp());
+            row.createCell(4, CellType.STRING).setCellValue(ecue.getWidth());
+            row.createCell(5, CellType.STRING).setCellValue(ecue.getHeight());
+            try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
     }
 
@@ -47,13 +53,13 @@ public class AdminExportEcueExcelWriter {
         rowNum = 0;
         Row row = sheet.createRow(rowNum++);
         // 序号										联行行号
-        row.createCell(1, CellType.STRING).setCellValue("设备名称");
-        row.createCell(2, CellType.STRING).setCellValue("IP");
-        row.createCell(3, CellType.STRING).setCellValue("端口");
-        row.createCell(4, CellType.STRING).setCellValue("盒子IP");
-        row.createCell(5, CellType.STRING).setCellValue("区域宽度");
-        row.createCell(6, CellType.STRING).setCellValue("区域高度");
-        sheet.createFreezePane(4, 1);
+        row.createCell(0, CellType.STRING).setCellValue("设备名称");
+        row.createCell(1, CellType.STRING).setCellValue("IP");
+        row.createCell(2, CellType.STRING).setCellValue("端口");
+        row.createCell(3, CellType.STRING).setCellValue("盒子IP");
+        row.createCell(4, CellType.STRING).setCellValue("区域宽度");
+        row.createCell(5, CellType.STRING).setCellValue("区域高度");
+        //sheet.createFreezePane(4, 1);
     }
 
     public void close() throws IOException {
