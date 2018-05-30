@@ -6,11 +6,13 @@ package com.bj.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -23,9 +25,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bj.job.AdminExcelTask;
 import com.bj.job.AdminStatusTask;
+import com.bj.job.ExcelCenter;
 import com.bj.service.JobService;
 import com.bj.util.BaseUtil;
 import com.bj.util.ComputerMonitorUtil;
@@ -47,6 +52,9 @@ public class ExportController {
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
+    
+    @Value("${bijie.excel.export-tmpdir}")
+    private String excelExportTmpDir;
     
     @PostMapping("/system_status")
     public @ResponseBody String getStatus() {
@@ -128,4 +136,39 @@ public class ExportController {
                 "filename*=utf-8''" + URLEncoder.encode(filename, "UTF-8"));
         return new FileSystemResource(new File(task.getZipPath()));
     }
+    
+    /*************************************/
+    /*** Excel export/import manager *****/
+    /*************************************/
+    @Resource
+    private ExcelCenter excelCenter;
+
+    @GetMapping("/data-export/ecue")
+    public String doExportEcueExcel() throws IOException {
+    	AdminExcelTask exportTask = excelCenter.exportEcueExcel();
+        return "redirect:/data-export/task/" + exportTask.getTaskId();
+    }
+    
+    @GetMapping("/data-export/task/{taskId}")
+    public String showExportTaskStatus(@PathVariable UUID taskId,
+                                       Map<String, Object> model,
+                                       HttpServletResponse response) {
+        response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+        response.setHeader("Expires", "0");
+        response.setHeader("Pragma", "no-cache");
+
+        AdminExcelTask task = excelCenter.getAdminExportTask(taskId);
+        model.put("task", task);
+        if (task != null) {
+            if (task.getEndTime() == null) {
+                model.put("autoRefresh?", true);
+            } else {
+                File file = task.getFile();
+                URI relativePath = new File(excelExportTmpDir).toURI().relativize(file.toURI());
+                model.put("taskFilePath", relativePath.toString());
+            }
+        }
+        return "data-export-status";
+    }
+
 }

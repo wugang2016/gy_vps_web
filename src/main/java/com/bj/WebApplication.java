@@ -27,6 +27,16 @@ public class WebApplication {
         SpringApplication.run(WebApplication.class, args);
     }
 
+    @Bean(name = "importExecutor")
+    public ExecutorService importExecutor() {
+        return Executors.newSingleThreadExecutor();
+    }
+
+    @Bean(name = "exportExecutor")
+    public ExecutorService exportExecutor() {
+        return Executors.newSingleThreadExecutor();
+    }
+    
     @Bean(name = "statusExecutor")
     public ExecutorService statusExecutor() {
         return Executors.newSingleThreadExecutor();
