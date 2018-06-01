@@ -48,6 +48,11 @@ public class SubSystemInfo {
 	private Double longitude;
 	private Double latitude;
 	private String picPath;
+
+	private Integer srcWidthPixels;
+	private Integer srcHeightPixels;
+	private Integer realWidthPixels;
+	private Integer realHeightPixels;
 	
 	public Integer getId() {
 		return id;
@@ -99,6 +104,54 @@ public class SubSystemInfo {
 		this.height = height;
 	}
 	
+	/**
+	 * @return the srcWidthPixels
+	 */
+	public Integer getSrcWidthPixels() {
+		return srcWidthPixels;
+	}
+	/**
+	 * @param srcWidthPixels the srcWidthPixels to set
+	 */
+	public void setSrcWidthPixels(Integer srcWidthPixels) {
+		this.srcWidthPixels = srcWidthPixels;
+	}
+	/**
+	 * @return the srcHeightPixels
+	 */
+	public Integer getSrcHeightPixels() {
+		return srcHeightPixels;
+	}
+	/**
+	 * @param srcHeightPixels the srcHeightPixels to set
+	 */
+	public void setSrcHeightPixels(Integer srcHeightPixels) {
+		this.srcHeightPixels = srcHeightPixels;
+	}
+	/**
+	 * @return the realWidthPixels
+	 */
+	public Integer getRealWidthPixels() {
+		return realWidthPixels;
+	}
+	/**
+	 * @param realWidthPixels the realWidthPixels to set
+	 */
+	public void setRealWidthPixels(Integer realWidthPixels) {
+		this.realWidthPixels = realWidthPixels;
+	}
+	/**
+	 * @return the realHeightPixels
+	 */
+	public Integer getRealHeightPixels() {
+		return realHeightPixels;
+	}
+	/**
+	 * @param realHeightPixels the realHeightPixels to set
+	 */
+	public void setRealHeightPixels(Integer realHeightPixels) {
+		this.realHeightPixels = realHeightPixels;
+	}
 	/**
 	 * @return the longitude
 	 */
