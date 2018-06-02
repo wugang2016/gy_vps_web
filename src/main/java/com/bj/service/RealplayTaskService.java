@@ -7,7 +7,7 @@ import com.bj.pojo.RealplayTask;
 public interface RealplayTaskService {
 	RealplayTask findById(int id);
 	List<RealplayTask> findByFileId(int fileId);
-    List<RealplayTask> findAll(int offset, int rowCount);
+    List<RealplayTask> findAll(int order, String by, int offset, int rowCount);
     int insert(RealplayTask realplayTask);
     int update(RealplayTask realplayTask);
     int countAll();

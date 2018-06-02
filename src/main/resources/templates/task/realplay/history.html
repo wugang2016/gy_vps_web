@@ -79,13 +79,13 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>#ID</th>
-                        <th>文件名称</th>
-                        <th>切割模板</th>
-                        <th>播放状态</th>
-                        <th>返回结果</th>
-                        <th>循环播放</th>
-                        <th>开始时间</th>
+                        <th>#ID <a id="sort_0" href="#" class="text-ccc glyphicon glyphicon-chevron-down"></a></th>
+                        <th>文件名称 <a id="sort_1" href="#" class="text-ccc glyphicon glyphicon-chevron-down"></a></th>
+                        <th>切割模板 <a id="sort_2" href="#" class="text-ccc glyphicon glyphicon-chevron-down"></a></th>
+                        <th>播放状态 <a id="sort_3" href="#" class="text-ccc glyphicon glyphicon-chevron-down"></a></th>
+                        <th>返回结果 <a id="sort_4" href="#" class="text-ccc glyphicon glyphicon-chevron-down"></a></th>
+                        <th>循环播放 <a id="sort_5" href="#" class="text-ccc glyphicon glyphicon-chevron-down"></a></th>
+                        <th>开始时间 <a id="sort_6" href="#" class="text-ccc glyphicon glyphicon-chevron-down"></a></th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -259,6 +259,7 @@ $(function(){
 		stopModalData.resetForm();
 	});
     $('#subSystemIds2').multiselect({nonSelectedText: '未选择'});
+    initSort();
 })
 
 function stopPlay(){
@@ -323,6 +324,33 @@ function refresh(s){
 		url = "/task/realplay/history?a="+s
 	}
 	window.location.href = url;
+}
+
+function initSort(){
+	var c_order = '{{#order}}{{.}}{{/order}}';
+	var c_sort = '{{#sort}}{{.}}{{/sort}}';
+	c_order = c_order===''?"0":c_order;
+	c_sort = c_sort===''?'down':c_sort;
+	$("a[id^='sort_']").each(function(){
+		//init
+		var id = $(this).attr("id");
+		var index = id.split("_")[1];
+		if(index+'' === c_order){
+			$(this).attr("class","glyphicon glyphicon-chevron-" + c_sort);
+		}else{
+			$(this).attr("class","text-ccc glyphicon glyphicon-chevron-down");
+		}
+		//bind
+		$(this).bind('click',function(){
+			var url = "/task/realplay/history?";
+			var cls = $(this).attr("class");
+			var sort = "down";
+			if(cls.indexOf("ccc") == -1 && cls.indexOf("down") != -1){
+				sort = "up";
+			}
+			window.location.href = url + "order=" + index + "&sort=" + sort;
+		});
+	});
 }
 
 function loopStatus(){

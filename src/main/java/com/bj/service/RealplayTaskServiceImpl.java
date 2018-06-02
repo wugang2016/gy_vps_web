@@ -3,6 +3,7 @@
  */
 package com.bj.service;
 
+import java.io.File;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -33,8 +34,36 @@ public class RealplayTaskServiceImpl implements RealplayTaskService {
 	}
 
 	@Override
-	public List<RealplayTask> findAll(int offset, int rowCount) {
-		return realplayTaskMapper.findAll(offset, rowCount);
+	public List<RealplayTask> findAll(int order, String sort, int offset, int rowCount) {
+		sort = "up".equals(sort)?"asc":"desc";
+		String property = "task_id";
+		switch (order) {
+		case 1:
+			property = "SUBSTRING_INDEX(b.file_path,'" + (File.separator.equals("\\")?"\\\\":File.separator) + "',-1)"; //file
+			break;
+		case 2:
+			property = "c.name"; //split_template
+			break;
+		case 3:
+			property = "status";
+			break;
+		case 4:
+			property = "error_code";
+			break;
+		case 5:
+			property = "repeate";
+			break;
+		case 6:
+			property = "start_time";
+			break;
+		default:
+			break;
+		}
+		if(order == 1 || order == 2) {
+			return realplayTaskMapper.findAllByOrderGLB(property, sort, offset, rowCount);
+		}else {
+			return realplayTaskMapper.findAllByOrder(property, sort, offset, rowCount);
+		}
 	}
 
 	@Override

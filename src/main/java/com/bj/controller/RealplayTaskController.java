@@ -83,7 +83,7 @@ public class RealplayTaskController {
     	//最近任务
     	int showNum = 5;
     	int count = realplayTaskService.countAll();
-    	List<RealplayTask> realplayTasks = realplayTaskService.findAll(0, showNum);
+    	List<RealplayTask> realplayTasks = realplayTaskService.findAll(0, "down", 0, showNum);
         model.put("showMore?", count > showNum);
         model.put("realplayTasks", realplayTasks);
         
@@ -112,17 +112,27 @@ public class RealplayTaskController {
     public String goHistory(Map<String, Object> model,
             HttpServletRequest request,
             @RequestParam(value = "a", defaultValue = "0") int refresh,
-            @RequestParam(value = "p", defaultValue = "1") int page) {
+            @RequestParam(value = "p", defaultValue = "1") int page,
+            @RequestParam(value = "order", defaultValue = "0") int order,
+            @RequestParam(value = "sort", defaultValue = "down") String sort) { 
     	List<SubSystemInfo> lists = subSystemService.findAll(0, 200);
     	model.put("subSystems", lists);
     	int count = realplayTaskService.countAll();
-    	List<RealplayTask> realplayTasks = realplayTaskService.findAll((page - 1) * Pagination.DEFAULT_PAGE_SIZE, Pagination.DEFAULT_PAGE_SIZE);
+    	List<RealplayTask> realplayTasks = realplayTaskService.findAll(order, sort, (page - 1) * Pagination.DEFAULT_PAGE_SIZE, Pagination.DEFAULT_PAGE_SIZE);
+    	
+    	for(int i=0; i<realplayTasks.size(); i++) {
+    		RealplayTask r = realplayTasks.get(i);
+    		System.out.println("ID=" + r.getId());
+    	}
+    	
         Pagination pagination = new Pagination(request, page, count, Pagination.DEFAULT_PAGE_SIZE);
         model.put("realplayTasks", realplayTasks);
         model.put("pagination", pagination);
         if(refresh > 0) {
             model.put("refresh", refresh);
         }
+        model.put("order", order);
+        model.put("sort", sort);
         return "task/realplay/history";
     }
 

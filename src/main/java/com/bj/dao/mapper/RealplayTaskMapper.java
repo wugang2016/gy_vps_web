@@ -44,7 +44,7 @@ public interface RealplayTaskMapper {
             @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
 	List<RealplayTask> findByFileId(int fileId);
     
-    @Select("SELECT * FROM tbl_file_realplay_task order by task_id desc " +
+    @Select("SELECT * FROM tbl_file_realplay_task order by ${property} ${sort} " +
             "LIMIT #{offset}, #{rowCount} ")
     @Results(value = {
             @Result(property = "id", column = "task_id"),
@@ -54,7 +54,20 @@ public interface RealplayTaskMapper {
             @Result(property = "subSystemIdsStr", column = "ecue_list"),
             @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.FileResourceMapper.findById")),
             @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
-    List<RealplayTask> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
+    List<RealplayTask> findAllByOrder(@Param("property") String property, @Param("sort") String sort, @Param("offset") int offset, @Param("rowCount") int rowCount);
+
+    @Select("select a.* from tbl_file_realplay_task a, tbl_file_src b, tbl_file_split_template c " +
+    		"where a.file_id=b.src_file_id and a.template_id=c.template_id order by ${property} ${sort} " +
+            "LIMIT #{offset}, #{rowCount} ")
+    @Results(value = {
+            @Result(property = "id", column = "task_id"),
+            @Result(property = "startTime", column = "start_time"),
+            @Result(property = "endTime", column = "end_time"),
+            @Result(property = "errCode", column = "error_code"),
+            @Result(property = "subSystemIdsStr", column = "ecue_list"),
+            @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.FileResourceMapper.findById")),
+            @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
+    List<RealplayTask> findAllByOrderGLB(@Param("property") String property, @Param("sort") String sort, @Param("offset") int offset, @Param("rowCount") int rowCount);
 
     @Insert("INSERT INTO tbl_file_realplay_task " +
             "   (file_id, template_id, repeate, start_time, status, ecue_list) " +
