@@ -86,6 +86,7 @@
                         <th>播放状态</th>
                         <th>返回结果</th>
                         <th>循环播放</th>
+                        <th>播放时长</th>
                         <th>开始时间</th>
                         <th>操作</th>
                     </tr>
@@ -99,6 +100,7 @@
                         <td id="status_{{id}}" data-status="{{status}}" data-repeate="{{#repeate}}true{{/repeate}}" class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
                         <td id="errMsg_{{id}}">{{#errMsg}}{{.}}{{/errMsg}}</td>
                         <td>{{#repeate}}是{{/repeate}}{{^repeate}}否{{/repeate}}</td>
+                        <td>{{#maxPlayTime}}{{.}}分钟{{/maxPlayTime}}{{^maxPlayTime}}-{{/maxPlayTime}}</td>
                         <td>{{#startTime}}{{.}}{{/startTime}}</td>
                         <td>
                         	<form id="delForm1_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/realplay/{{id}}/delete" onsubmit="return delCheck()">
@@ -214,6 +216,12 @@
                     </div>
                     <input type="hidden" name="taskId" id="taskId">
                 </div>
+                <div id="max_time" class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">播放时长</label>
+                    <div class="col-sm-9">
+                        <input type="number" name="maxPlayTime"  class="form-control" placeholder="播放时长（分钟）" required>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -265,6 +273,12 @@
                     <label for="inputCode" class="col-sm-3 control-label"></label>
                     <div class="col-sm-9">
                         <input type="checkbox" name="repeate">循环播放
+                    </div>
+                </div>
+                <div id="max_time" class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">播放时长</label>
+                    <div class="col-sm-9">
+                        <input type="number" name="maxPlayTime"  class="form-control" placeholder="播放时长（分钟）" required>
                     </div>
                 </div>
              	<input type="hidden" name="fileId" id="fileId">
@@ -335,9 +349,11 @@ $(function() {
 		}else{
 			$(this).find("input[name='repeate']").prop("checked",false);
 		}
+		initMaxPlayTime('#replayModal');
 	});
 	$('#goplayModal').on('show.bs.modal', function (event) {
 		$("#fileId").val($(event.relatedTarget).data("id"));
+		initMaxPlayTime('#goplayModal');
 	});
 	$('#stopModal').on('show.bs.modal', function (event) {
 		$("#stopTaskId").val($(event.relatedTarget).data("id"));
@@ -370,7 +386,20 @@ $(function() {
 			$('#ecueBox').hide();
 		}
 	});
+	$('#replayModal').find("input[name='repeate']").on('change', function(){
+		initMaxPlayTime('#replayModal');
+	});
+	$('#goplayModal').find("input[name='repeate']").on('change', function(){
+		initMaxPlayTime('#goplayModal');
+	})
 });
+function initMaxPlayTime(modalId){
+	if($(modalId).find("input[name='repeate']").prop('checked')){
+		$(modalId).find("#max_time").show(200);
+	}else{
+		$(modalId).find("#max_time").hide(200);
+	}
+} 
 function delCheck(){
 	return confirm("确认要删除此记录？");
 }
@@ -403,13 +432,14 @@ function replay(){
 	if(replayModalData.isValid()){
 		var url = "/task/realplay/" + $('#taskId').val() + "/replay";
 		var repeate = $('#replayModal').find("input[name='repeate']").prop("checked");
+		var maxPlayTime = $('#replayModal').find("input[name='maxPlayTime']").val();
 		var taskPwd = $.md5($('#replayModal').find("input[name='taskPassword']").val());
 		var subSystemIds = $("#subSystemIds2").val();
 	    $.ajax({
 	        url: url,
 	        type: "POST",
 	        traditional:true,
-	        data:{repeate:repeate,taskPassword:taskPwd,subSystemIds:subSystemIds},
+	        data:{repeate:repeate,maxPlayTime:maxPlayTime,taskPassword:taskPwd,subSystemIds:subSystemIds},
 	        success: function(data){
 	            if(data == "1"){
 	            	alert("请求已发送！");
@@ -428,13 +458,14 @@ function goplay(){
 		var url = "/task/realplay/" + $('#fileId').val() + "/goplay";
 		var templateId = $('#goplayModal').find("select[name='splitTemplateId']").val();
 		var repeate = $('#goplayModal').find("input[name='repeate']").prop("checked");
+		var maxPlayTime = $('#goplayModal').find("input[name='maxPlayTime']").val();
 		var taskPwd = $.md5($('#goplayModal').find("input[name='taskPassword']").val());
 		var subSystemIds = $("#subSystemIds").val();
 	    $.ajax({
 	        url: url,
 	        type: "POST",
 	        traditional:true,
-	        data:{templateId:templateId,repeate:repeate,taskPassword:taskPwd,subSystemIds:subSystemIds},
+	        data:{templateId:templateId,repeate:repeate,maxPlayTime:maxPlayTime,taskPassword:taskPwd,subSystemIds:subSystemIds},
 	        success: function(data){
 	            if(data == "1"){
 	            	alert("请求已发送！");

@@ -18,6 +18,7 @@ public class RealplayTask extends BaseTask{
 	private String endTime;
 	private Integer status;
 	private Integer errCode;
+	private Integer maxPlayTime;
 	
 	private Integer[] subSystemIds;
 	private String subSystemIdsStr;
@@ -100,6 +101,18 @@ public class RealplayTask extends BaseTask{
 	}
 	public void setErrCode(Integer errCode) {
 		this.errCode = errCode;
+	}
+	/**
+	 * @return the maxPlayTime
+	 */
+	public Integer getMaxPlayTime() {
+		return maxPlayTime;
+	}
+	/**
+	 * @param maxPlayTime the maxPlayTime to set
+	 */
+	public void setMaxPlayTime(Integer maxPlayTime) {
+		this.maxPlayTime = maxPlayTime;
 	}
 	public String getStatusText() {
 		return PlayStatus.values()[status].text();

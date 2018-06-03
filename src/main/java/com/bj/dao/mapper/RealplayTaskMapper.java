@@ -29,6 +29,7 @@ public interface RealplayTaskMapper {
             @Result(property = "endTime", column = "end_time"),
             @Result(property = "errCode", column = "error_code"),
             @Result(property = "subSystemIdsStr", column = "ecue_list"),
+            @Result(property = "maxPlayTime", column = "max_play_time"),
             @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.FileResourceMapper.findById")),
             @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
     RealplayTask findById(@Param("id") int id);
@@ -40,6 +41,7 @@ public interface RealplayTaskMapper {
             @Result(property = "endTime", column = "end_time"),
             @Result(property = "errCode", column = "error_code"),
             @Result(property = "subSystemIdsStr", column = "ecue_list"),
+            @Result(property = "maxPlayTime", column = "max_play_time"),
             @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.FileResourceMapper.findById")),
             @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
 	List<RealplayTask> findByFileId(int fileId);
@@ -52,6 +54,7 @@ public interface RealplayTaskMapper {
             @Result(property = "endTime", column = "end_time"),
             @Result(property = "errCode", column = "error_code"),
             @Result(property = "subSystemIdsStr", column = "ecue_list"),
+            @Result(property = "maxPlayTime", column = "max_play_time"),
             @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.FileResourceMapper.findById")),
             @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
     List<RealplayTask> findAllByOrder(@Param("property") String property, @Param("sort") String sort, @Param("offset") int offset, @Param("rowCount") int rowCount);
@@ -65,14 +68,15 @@ public interface RealplayTaskMapper {
             @Result(property = "endTime", column = "end_time"),
             @Result(property = "errCode", column = "error_code"),
             @Result(property = "subSystemIdsStr", column = "ecue_list"),
+            @Result(property = "maxPlayTime", column = "max_play_time"),
             @Result(property = "fileResource", javaType = FileResource.class, column = "file_id", one = @One(select = "com.bj.dao.mapper.FileResourceMapper.findById")),
             @Result(property = "splitTemplate", javaType = SplitTemplates.class, column = "template_id", one = @One(select = "com.bj.dao.mapper.SplitTemplatesMapper.findById"))})
     List<RealplayTask> findAllByOrderGLB(@Param("property") String property, @Param("sort") String sort, @Param("offset") int offset, @Param("rowCount") int rowCount);
 
     @Insert("INSERT INTO tbl_file_realplay_task " +
-            "   (file_id, template_id, repeate, start_time, status, ecue_list) " +
+            "   (file_id, template_id, repeate, start_time, status, ecue_list, max_play_time) " +
             "VALUES " +
-            "   (#{fileResource.id}, #{splitTemplate.id}, #{repeate}, #{startTime}, #{status}, #{subSystemIdsStr})")
+            "   (#{fileResource.id}, #{splitTemplate.id}, #{repeate}, #{startTime}, #{status}, #{subSystemIdsStr}, #{maxPlayTime})")
     @Options(useGeneratedKeys=true,keyColumn="task_id")
     int insert(RealplayTask realplayTask);
 
@@ -82,6 +86,7 @@ public interface RealplayTaskMapper {
     		"   t.repeate = #{repeate}, " +
     		"   t.start_time = #{startTime}, " +
     		"   t.status = #{status} " +
+    		"   t.max_play_time = #{maxPlayTime} " +
             "   where task_id=#{id}")
     int update(RealplayTask realplayTask);
 
