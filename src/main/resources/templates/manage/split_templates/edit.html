@@ -72,6 +72,16 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="inputCode" class="col-sm-2 control-label">模板类型</label>
+                    <div class="col-sm-10">
+                        <select name="type" class="form-control" required>
+                        	<option value="0">自定义切割</option>
+                        	<!-- <option value="1">默认模板</option> -->
+                        	<option value="2">无需切割</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="inputName" class="col-sm-2 control-label">视频切割区域</label>
                     <div class="col-sm-10">
 						<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal">新增切割区域</button>
@@ -159,10 +169,11 @@
                         {{#subSystemErr}}<span class="error">{{.}}</span>{{/subSystemErr}}
                         
                         {{#subSystems}}
-                        <input type="hidden" id="sub_id_{{id}}" width-data="{{width}}" height-data="{{height}}">
+                        <input type="hidden" id="sub_id_{{id}}" width-data="{{#content_width}}{{.}}{{/content_width}}" height-data="{{#content_height}}{{.}}{{/content_height}}">
                         {{/subSystems}}
                     </div>
                 </div>
+                <span id="areaBody">
                 <div class="form-group">
                     <label for="inputName" class="col-sm-3 control-label">左上角横坐标</label>
                     <div class="col-sm-9">
@@ -180,7 +191,7 @@
                     <div class="col-sm-9">
 						<div class="checkbox">
 					        <label>
-								<input type="checkbox" id="copyFromSubSystem">复制ECUE主控的宽度和高度
+								<input type="checkbox" id="copyFromSubSystem">复制ECUE主控的源视频分辨率
 					        </label>
 				      </div>
                     </div>
@@ -197,6 +208,7 @@
                         <input type="number" class="form-control " name="height" placeholder="区域高度" required min="2" max="1080" even="true">
                     </div>
                 </div>
+                </span>
                 <input type="hidden" id="index">
                 <input type="hidden" id="ssid">
 				<!-- 内容 -->
@@ -214,7 +226,20 @@
 <script>
 var formData;
 var modalData;
+var old_type = $('select[name="type"]').val();
 $(function(){
+	$('select[name="type"]').val('{{#splitTemplates}}{{#type}}{{.}}{{/type}}{{/splitTemplates}}')
+	$('select[name="type"]').on("change", function(){
+		if(confirm("更改模板类型，需重新选择切割区域，是否继续？")){
+			$('tr[id^="tr_"]').each(function(){
+				var index = $(this).attr("id").split("_")[1];
+				deleteArea(index);
+			});
+			old_type = $('select[name="type"]').val();
+		}else{
+			$('select[name="type"]').val(old_type);
+		}
+	});
 	{{#fileAreas}}
 	area_json.push({"index1":{{id}},"x":{{x}},"y":{{y}},"width":{{width}},"height":{{height}},"subSystem":{"id":{{subSystem.id}}}});
 	{{/fileAreas}}
@@ -255,6 +280,11 @@ $('select[name="subSystem_id"]').change(function(){
 });
 
 $('#myModal').on('show.bs.modal', function(event) { 
+	if($('select[name="type"]').val()+'' === "2"){
+		$('#areaBody').hide();
+	}else{
+		$('#areaBody').show();
+	}
 	var index = $(event.relatedTarget).data("index");
 	var ssid = $(event.relatedTarget).data("ssid");
 	if(typeof(index) != 'undefined'){ //编辑
@@ -294,6 +324,9 @@ function setArea(){
 			var y = $('input[name="y"]').val();
 			var width = $('input[name="width"]').val();
 			var height = $('input[name="height"]').val();
+			if($('select[name="type"]').val()+'' === "2"){
+				x=0;y=0;width=0;height=0;
+			}
 			
 			var index = $('#index').val();
 			var newAreaTD ="<td>" + subSystem_name + "<input type='hidden' id='ss_" + subSystem_id +"'></td></td><td>";

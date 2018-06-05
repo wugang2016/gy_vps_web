@@ -97,31 +97,27 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEditingEnd" class="col-sm-2 control-label">区域宽度</label>
+                    <label for="inputEditingEnd" class="col-sm-2 control-label">实际视频分辨率</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control " name="width" placeholder="区域宽度" value="{{#subSystem}}{{#width}}{{.}}{{/width}}{{/subSystem}}" required min="2" max="1920" even="true">
-                        {{#widthErr}}<span class="error">{{.}}</span>{{/widthErr}}
+                    	<div class="input-group">
+                        	<input type="number" class="form-control " name="width" placeholder="区域宽度" value="{{#subSystem}}{{#width}}{{.}}{{/width}}{{/subSystem}}" required min="2" max="1920" even="true">
+                         	<span class="input-group-addon">*</span>
+                         	<input type="number" class="form-control " name="height" placeholder="区域高度" value="{{#subSystem}}{{#height}}{{.}}{{/height}}{{/subSystem}}" required min="2" max="1080" even="true">
+                         </div>
+                         {{#widthErr}}<span class="error">{{.}}</span>{{/widthErr}}
+                         {{#heightErr}}<span class="error">{{.}}</span>{{/heightErr}}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputClosingDate" class="col-sm-2 control-label">区域高度</label>
+                    <label for="inputEditingEnd" class="col-sm-2 control-label">源视频分辨率</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control " name="height" placeholder="区域高度" value="{{#subSystem}}{{#height}}{{.}}{{/height}}{{/subSystem}}" required min="2" max="1080" even="true">
-                        {{#heightErr}}<span class="error">{{.}}</span>{{/heightErr}}
-                    </div>
-                </div>
-                <div class="form-group" style="display:none">
-                    <label for="inputEditingEnd" class="col-sm-2 control-label">内容宽度</label>
-                    <div class="col-sm-10">
-                        <input type="number" class="form-control " name="content_width" placeholder="内容宽度" value="{{#subSystem}}{{#content_width}}{{.}}{{/content_width}}{{/subSystem}}" required min="2" max="1920" even="true">
-                        {{#widthErr}}<span class="error">{{.}}</span>{{/widthErr}}
-                    </div>
-                </div>
-                <div class="form-group" style="display:none">
-                    <label for="inputClosingDate" class="col-sm-2 control-label">内容高度</label>
-                    <div class="col-sm-10">
-                        <input type="number" class="form-control " name="content_height" placeholder="内容高度" value="{{#subSystem}}{{#content_height}}{{.}}{{/content_height}}{{/subSystem}}" required min="2" max="1080" even="true">
-                        {{#heightErr}}<span class="error">{{.}}</span>{{/heightErr}}
+                    	<div class="input-group">
+				            <input type="number" class="form-control" name="content_width" placeholder="源视频宽度" value="{{#subSystem}}{{#content_width}}{{.}}{{/content_width}}{{/subSystem}}" required min="2" max="1920" even="true">
+				            <span class="input-group-addon">*</span>
+				            <input type="number" class="form-control" name="content_height" placeholder="源视频高度" value="{{#subSystem}}{{#content_height}}{{.}}{{/content_height}}{{/subSystem}}" required min="2" max="1080" even="true">
+				        </div>
+                        {{#content_widthErr}}<span class="error">{{.}}</span>{{/content_widthErr}}
+                        {{#content_heightErr}}<span class="error">{{.}}</span>{{/content_heightErr}}
                     </div>
                 </div>
                 

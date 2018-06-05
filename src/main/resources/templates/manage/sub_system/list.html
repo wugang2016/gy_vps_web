@@ -87,8 +87,8 @@
                         <td>{{port}}</td>
                         <!-- <td>{{mntPath}}</td> -->
                         <td>{{boxIp}}</td>
-                        <td>{{#srcWidthPixels}}{{.}}{{/srcWidthPixels}}*{{#srcHeightPixels}}{{.}}{{/srcHeightPixels}}</td>
-                        <td>{{#realWidthPixels}}{{.}}{{/realWidthPixels}}*{{#realHeightPixels}}{{.}}{{/realHeightPixels}}</td>
+                        <td>{{#content_width}}{{.}}{{/content_width}}*{{#content_height}}{{.}}{{/content_height}}</td>
+                        <td>{{#width}}{{.}}{{/width}}*{{#height}}{{.}}{{/height}}</td>
                         <td>
                         	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/manage/sub_system/{{id}}/delete" onsubmit="return delCheck()">
 	                            <a href="{{ctx.contextPath}}/manage/sub_system/{{id}}/edit">编辑</a>

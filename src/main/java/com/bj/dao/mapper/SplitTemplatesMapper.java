@@ -41,13 +41,14 @@ public interface SplitTemplatesMapper {
     @Insert("INSERT INTO tbl_file_split_template " +
             "   (name, `desc`, type) " +
             "VALUES " +
-            "   (#{name}, #{desc}, 0)")
+            "   (#{name}, #{desc}, #{type})")
     @Options(useGeneratedKeys=true,keyColumn="template_id",keyProperty="id")
     int insert(SplitTemplates splitTemplates);
 
     @Update("UPDATE tbl_file_split_template t set" +
     		"   t.name = #{name}, " +
-    		"   t.desc = #{desc}  " +
+    		"   t.desc = #{desc}, " +
+    		"   t.type = #{type}  " +
     		"   where t.template_id = #{id}")
     int update(SplitTemplates splitTemplates);
     

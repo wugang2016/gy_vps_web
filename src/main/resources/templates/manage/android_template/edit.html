@@ -214,7 +214,7 @@
                         {{#subSystemErr}}<span class="error">{{.}}</span>{{/subSystemErr}}
                         
                         {{#subSystems}}
-                        <input type="hidden" id="sub_id_{{id}}" width-data="{{width}}" height-data="{{height}}">
+                        <input type="hidden" id="sub_id_{{id}}" width-data="{{#content_width}}{{.}}{{/content_width}}" height-data="{{#content_height}}{{.}}{{/content_height}}">
                         {{/subSystems}}
                     </div>
                 </div>
@@ -235,7 +235,7 @@
                     <div class="col-sm-9">
 						<div class="checkbox">
 					        <label>
-								<input type="checkbox" id="copyFromSubSystem">复制ECUE主控的宽度和高度
+								<input type="checkbox" id="copyFromSubSystem">复制ECUE主控的源视频分辨率
 					        </label>
 				      </div>
                     </div>

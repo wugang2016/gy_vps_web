@@ -24,11 +24,7 @@ public interface SubSystemMapper {
             @Result(property = "id", column = "sub_sys_id"),
             @Result(property = "name", column = "sub_sys_name"),
             @Result(property = "boxIp", column = "box_ip"),
-            @Result(property = "picPath", column = "pic_path"),
-            @Result(property = "srcWidthPixels", column = "src_width_pixels"),
-            @Result(property = "srcHeightPixels", column = "src_height_pixels"),
-            @Result(property = "realWidthPixels", column = "real_width_pixels"),
-            @Result(property = "realHeightPixels", column = "real_height_pixels")})
+            @Result(property = "picPath", column = "pic_path")})
     SubSystemInfo findById(@Param("id") int id);
     
     @Select("SELECT * FROM tbl_sub_sys_info order by sub_sys_id desc " +
@@ -37,11 +33,7 @@ public interface SubSystemMapper {
             @Result(property = "id", column = "sub_sys_id"),
             @Result(property = "name", column = "sub_sys_name"),
             @Result(property = "boxIp", column = "box_ip"),
-            @Result(property = "picPath", column = "pic_path"),
-            @Result(property = "srcWidthPixels", column = "src_width_pixels"),
-            @Result(property = "srcHeightPixels", column = "src_height_pixels"),
-            @Result(property = "realWidthPixels", column = "real_width_pixels"),
-            @Result(property = "realHeightPixels", column = "real_height_pixels")})
+            @Result(property = "picPath", column = "pic_path")})
     List<SubSystemInfo> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
     
     @Select("SELECT * FROM tbl_sub_sys_info where ip=#{ip}" )
@@ -49,17 +41,13 @@ public interface SubSystemMapper {
             @Result(property = "id", column = "sub_sys_id"),
             @Result(property = "name", column = "sub_sys_name"),
             @Result(property = "boxIp", column = "box_ip"),
-            @Result(property = "picPath", column = "pic_path"),
-            @Result(property = "srcWidthPixels", column = "src_width_pixels"),
-            @Result(property = "srcHeightPixels", column = "src_height_pixels"),
-            @Result(property = "realWidthPixels", column = "real_width_pixels"),
-            @Result(property = "realHeightPixels", column = "real_height_pixels")})
+            @Result(property = "picPath", column = "pic_path")})
     List<SubSystemInfo> findByIp(@Param("ip") String ip);
     
     @Insert("INSERT INTO tbl_sub_sys_info " +
-            "   (sub_sys_name, ip, port, box_ip, width, height, longitude, latitude, pic_path, content_width, content_height, src_width_pixels, src_height_pixels, real_width_pixels, real_height_pixels) " +
+            "   (sub_sys_name, ip, port, box_ip, width, height, longitude, latitude, pic_path, content_width, content_height) " +
             "VALUES " +
-            "   (#{name}, #{ip}, #{port}, #{boxIp}, #{width}, #{height}, #{longitude}, #{latitude}, #{picPath}, #{content_width}, #{content_height}, #{srcWidthPixels}, #{srcHeightPixels}, #{realWidthPixels}, #{realHeightPixels})")
+            "   (#{name}, #{ip}, #{port}, #{boxIp}, #{width}, #{height}, #{longitude}, #{latitude}, #{picPath}, #{content_width}, #{content_height})")
     @Options(useGeneratedKeys=true,keyColumn="sub_sys_id")
     int insert(SubSystemInfo subSystemInfo);
 
@@ -74,11 +62,7 @@ public interface SubSystemMapper {
     		"   t.content_height = #{content_height}," +
     		"   t.longitude = #{longitude}," +
     		"   t.latitude = #{latitude}," +
-    		"   t.pic_path = #{picPath}," +
-    		"   t.src_width_pixels = #{srcWidthPixels}," +
-    		"   t.src_height_pixels = #{srcHeightPixels}," +
-    		"   t.real_width_pixels = #{realWidthPixels}," +
-    		"   t.real_height_pixels = #{realHeightPixels}" +
+    		"   t.pic_path = #{picPath}" +
             "   where sub_sys_id=#{id}")
     int update(SubSystemInfo subSystemInfo);
 
