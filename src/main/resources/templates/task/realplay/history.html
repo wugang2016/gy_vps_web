@@ -99,7 +99,7 @@
                         <td id="status_{{id}}" data-status="{{status}}" data-repeate="{{#repeate}}true{{/repeate}}" class="{{#isFail}}error{{/isFail}}">{{statusText}}</td>
                         <td id="errMsg_{{id}}">{{#errMsg}}{{.}}{{/errMsg}}</td>
                         <td>{{#repeate}}是{{/repeate}}{{^repeate}}否{{/repeate}}</td>
-                        <td>{{#maxPlayTime}}{{.}}分钟{{/maxPlayTime}}{{^maxPlayTime}}-{{/maxPlayTime}}</td>
+                        <td>{{#maxPlayTimeStr}}{{.}}{{/maxPlayTimeStr}}{{^maxPlayTimeStr}}-{{/maxPlayTimeStr}}</td>
                         <td>{{#startTime}}{{.}}{{/startTime}}</td>
                         <td>
                         	<form id="delForm1_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/realplay/{{id}}/delete" onsubmit="return delCheck()">
@@ -184,7 +184,20 @@
                 <div id="max_time" class="form-group">
                     <label for="inputCode" class="col-sm-3 control-label">播放时长</label>
                     <div class="col-sm-9">
-                        <input type="number" name="maxPlayTime"  class="form-control" placeholder="播放时长（分钟）" required>
+                   		<div class="input-group">
+                        	<select name="hhTime" class="form-control" required>
+                        		{{#hhs}}<option value="{{.}}">{{.}}</option>{{/hhs}}
+                        	</select>
+                        	<span class="input-group-addon">小时</span>
+                        	<select name="mmTime" class="form-control" required>
+                        		{{#mms}}<option value="{{.}}">{{.}}</option>{{/mms}}
+                        	</select>
+                        	<span class="input-group-addon">分钟</span>
+                        	<select name="ssTime" class="form-control" required>
+                        		{{#sss}}<option value="{{.}}">{{.}}</option>{{/sss}}
+                        	</select>
+                        	<span class="input-group-addon">秒</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -308,14 +321,16 @@ function replay(){
 	if(replayModalData.isValid()){
 		var url = "/task/realplay/" + $('#taskId').val() + "/replay";
 		var repeate = $('#replayModal').find("input[name='repeate']").prop("checked");
-		var maxPlayTime = $('#replayModal').find("input[name='maxPlayTime']").val();
+		var hh = $('#replayModal').find("select[name='hhTime']").val();
+		var mm = $('#replayModal').find("select[name='mmTime']").val();
+		var ss = $('#replayModal').find("select[name='ssTime']").val();
 		var taskPwd = $.md5($('#replayModal').find("input[name='taskPassword']").val());
 		var subSystemIds = $("#subSystemIds2").val();
 	    $.ajax({
 	        url: url,
 	        type: "POST",
 	        traditional:true,
-	        data:{repeate:repeate,maxPlayTime:maxPlayTime,taskPassword:taskPwd,subSystemIds:subSystemIds},
+	        data:{repeate:repeate,hh:hh,mm:mm,ss:ss,taskPassword:taskPwd,subSystemIds:subSystemIds},
 	        success: function(data){
 	            if(data == "1"){
 	            	alert("请求已发送！");

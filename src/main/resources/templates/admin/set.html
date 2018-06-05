@@ -172,7 +172,7 @@
 	                <label for="inputCode" class="col-sm-3 control-label">激活状态</label>
 	                <div class="col-sm-9 form-control-static">
 	                	<span id="active">-</span>&nbsp;
-	                	<a href="#" onclick="loadSQ()">重新获取</a>
+	                	<a href="#" onclick="handLoadSQ()">重新获取</a>
 	                	<span id="loading"></span>
 	                </div>
 	            </div>
@@ -228,6 +228,8 @@
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
 <script>
+var timer;
+var ssTimeout = 600000;
 $(function() {
 	//选择文件后提交
     $("#form4").on("change", "input[type='file']", function() {
@@ -268,8 +270,14 @@ $(function() {
     	}
     }});
     loadSQ();
-    setTimeout("pageTimeout()",600000);
+    timer = setTimeout("pageTimeout()",ssTimeout);
 });
+
+function handLoadSQ(){
+	clearTimeout(timer);
+	loadSQ();
+	timer = setTimeout("pageTimeout()",ssTimeout);
+}
 
 function loadSQ(){
 	$("#loading").html("<img src='/css/img/small-loading.gif'>获取中...");

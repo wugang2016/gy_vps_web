@@ -105,6 +105,7 @@ public class RealplayTaskController {
         if(refresh > 0) {
             model.put("refresh", refresh);
         }
+        initSelectTime(model);
         return "task/realplay/list";
     }
 
@@ -127,6 +128,7 @@ public class RealplayTaskController {
         }
         model.put("order", order);
         model.put("sort", sort);
+        initSelectTime(model);
         return "task/realplay/history";
     }
 
@@ -139,6 +141,7 @@ public class RealplayTaskController {
     	List<SubSystemInfo> lists = subSystemService.findAll(0, 200);
     	model.put("subSystems", lists);
         model.put("templates", templates);
+        initSelectTime(model);
         return "task/realplay/new";
     }
 
@@ -258,7 +261,9 @@ public class RealplayTaskController {
     @PostMapping("/realplay/{id}/replay")
     public @ResponseBody String goReplay(@PathVariable("id") int id,
             final @RequestParam("repeate") Boolean repeate,
-            final @RequestParam("maxPlayTime") Integer maxPlayTime,
+            final @RequestParam(value = "hh", defaultValue = "0") Integer hhTime,
+            final @RequestParam(value = "mm", defaultValue = "0") Integer mmTime,
+            final @RequestParam(value = "ss", defaultValue = "0") Integer ssTime,
             final @RequestParam("taskPassword") String taskPassword,
             final @RequestParam(value = "subSystemIds", defaultValue = "") Integer[] subSystemIds,
 			final RedirectAttributes redirectAttributes) throws IOException {
@@ -267,7 +272,9 @@ public class RealplayTaskController {
     	}
     	RealplayTask realplayTask = realplayTaskService.findById(id);
     	realplayTask.setRepeate(repeate);
-    	realplayTask.setMaxPlayTime(maxPlayTime);
+    	realplayTask.setHhTime(hhTime);
+    	realplayTask.setMmTime(mmTime);
+    	realplayTask.setSsTime(ssTime);
     	realplayTask.setSubSystemIds(subSystemIds);
     	realplayTask.setStatus(TaskStatus.PENDING.index());
     	realplayTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -281,7 +288,9 @@ public class RealplayTaskController {
     public @ResponseBody String goPlay(@PathVariable("fileId") int fileId,
             final @RequestParam("templateId") int templateId,
             final @RequestParam("repeate") Boolean repeate,
-            final @RequestParam("maxPlayTime") Integer maxPlayTime,
+            final @RequestParam(value = "hh", defaultValue = "0") Integer hhTime,
+            final @RequestParam(value = "mm", defaultValue = "0") Integer mmTime,
+            final @RequestParam(value = "ss", defaultValue = "0") Integer ssTime,
             final @RequestParam("taskPassword") String taskPassword,
             final @RequestParam(value = "subSystemIds", defaultValue = "") Integer[] subSystemIds,
 			final RedirectAttributes redirectAttributes) throws IOException {
@@ -294,11 +303,33 @@ public class RealplayTaskController {
     	realplayTask.setFileResource(fileResource);
     	realplayTask.setSplitTemplate(splitTemplates);
     	realplayTask.setRepeate(repeate);
-    	realplayTask.setMaxPlayTime(maxPlayTime);
+    	realplayTask.setHhTime(hhTime);
+    	realplayTask.setMmTime(mmTime);
+    	realplayTask.setSsTime(ssTime);
     	realplayTask.setSubSystemIds(subSystemIds);
     	realplayTask.setStartTime(BaseUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
     	realplayTask.setStatus(PlayStatus.PLAYING.index());
     	realplayTaskService.insert(realplayTask);
         return SUCCESS;
+    }
+    
+    /**
+     * 
+     * @param model
+     */
+    private void initSelectTime(Map<String, Object> model) {
+    	int[] hhs = new int[49];
+    	int[] mms = new int[60];
+    	int[] sss = new int[60];
+    	for(int i=0; i<60; ++i) {
+    		if(i <= 48) {
+    			hhs[i] = i;
+    		}
+    		mms[i] = i;
+    		sss[i] = i;
+    	}
+    	model.put("hhs", hhs);
+    	model.put("mms", mms);
+    	model.put("sss", sss);
     }
 }

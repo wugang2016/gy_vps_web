@@ -19,6 +19,9 @@ public class RealplayTask extends BaseTask{
 	private Integer status;
 	private Integer errCode;
 	private Integer maxPlayTime;
+	private Integer hhTime;
+	private Integer mmTime;
+	private Integer ssTime;
 	
 	private Integer[] subSystemIds;
 	private String subSystemIdsStr;
@@ -50,6 +53,28 @@ public class RealplayTask extends BaseTask{
 			this.subSystemIdsStr = "";
 		}
 	}
+	
+	public String getMaxPlayTimeStr() {
+		String formatTime = "";
+		int second = maxPlayTime;
+		if(second > 0) {
+	        long hours = second / 3600;            //转换小时
+	        second = second % 3600;                //剩余秒数
+	        long minutes = second /60;            //转换分钟
+	        second = second % 60;                //剩余秒数
+	        if(hours > 0) {
+	        	formatTime = hours + "小时";
+	        }
+	        if(minutes > 0) {
+	        	formatTime += minutes + "分";
+	        }
+	        formatTime += second + "秒";
+		}else {
+			return null;
+		}
+		return formatTime;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -101,6 +126,24 @@ public class RealplayTask extends BaseTask{
 	}
 	public void setErrCode(Integer errCode) {
 		this.errCode = errCode;
+	}
+	public Integer getHhTime() {
+		return hhTime;
+	}
+	public void setHhTime(Integer hhTime) {
+		this.hhTime = hhTime;
+	}
+	public Integer getMmTime() {
+		return mmTime;
+	}
+	public void setMmTime(Integer mmTime) {
+		this.mmTime = mmTime;
+	}
+	public Integer getSsTime() {
+		return ssTime;
+	}
+	public void setSsTime(Integer ssTime) {
+		this.ssTime = ssTime;
 	}
 	/**
 	 * @return the maxPlayTime

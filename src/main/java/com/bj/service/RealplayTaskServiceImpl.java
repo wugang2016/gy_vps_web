@@ -71,6 +71,7 @@ public class RealplayTaskServiceImpl implements RealplayTaskService {
 
 	@Override
 	public int insert(RealplayTask realplayTask) {
+		realplayTask.setMaxPlayTime(realplayTask.getHhTime()*3600+realplayTask.getMmTime()*60+realplayTask.getSsTime());
 		int result = realplayTaskMapper.insert(realplayTask);
 		if(result > 0) {
 			sendMessageService.onlySendMessage(realplayTask.format(OPT_PLAY));
