@@ -24,18 +24,18 @@ public interface SplitTemplatesMapper {
             @Result(property = "id", column = "template_id")})
     SplitTemplates findById(@Param("id") int id);
     
-    @Select("SELECT * FROM tbl_file_split_template where type = 1 ")
+    @Select("SELECT * FROM tbl_file_split_template where type =  #{type} ")
     @Results(value = {
             @Result(property = "id", column = "template_id")})
-    List<SplitTemplates> findDefaultTemplates();
+    List<SplitTemplates> findDefaultTemplatesByType(@Param("type") int type);
     
-    @Select("SELECT * FROM tbl_file_split_template where type !=1 order by template_id desc " +
+    @Select("SELECT * FROM tbl_file_split_template where type = 0 order by template_id desc " +
             "LIMIT #{offset}, #{rowCount} ")
     @Results(value = {
             @Result(property = "id", column = "template_id")})
     List<SplitTemplates> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
 
-    @Select("SELECT count(1) FROM tbl_file_split_template where type !=1")
+    @Select("SELECT count(1) FROM tbl_file_split_template where type = 0")
     int countAll();
 
     @Insert("INSERT INTO tbl_file_split_template " +

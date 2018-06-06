@@ -58,7 +58,7 @@ public class SplitTemplatesServiceImpl implements SplitTemplatesService {
 	}
 
 	@Override
-	public List<SplitTemplates> findDefaultTemplates() {
-		return splitTemplatesMapper.findDefaultTemplates();
+	public List<SplitTemplates> findDefaultTemplatesByType(int type) {
+		return splitTemplatesMapper.findDefaultTemplatesByType(type);
 	}
 }

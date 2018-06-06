@@ -18,5 +18,6 @@ public interface SplitTemplatesService {
 	int update(SplitTemplates splitTemplates);
 	int delete(int id);
 	SplitTemplates findById(int id);
-    List<SplitTemplates> findDefaultTemplates();
+    List<SplitTemplates> findDefaultTemplatesByType(int type);
+ 
 }
