@@ -54,7 +54,7 @@ public class RealplayTaskServiceImpl implements RealplayTaskService {
 			property = "repeate";
 			break;
 		case 6:
-			property = "max_play_time";
+			property = "max_duation";
 			break;
 		case 7:
 			property = "start_time";
