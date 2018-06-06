@@ -87,7 +87,7 @@
                         <th>播放状态</th>
                         <th>返回结果</th>
                         <th>循环播放</th>
-                        <th>播放时长</th>
+                        <th>最大播放时长</th>
                         <th>开始时间</th>
                         <th>操作</th>
                     </tr>
@@ -210,15 +210,8 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="inputCode" class="col-sm-3 control-label"></label>
-                    <div class="col-sm-9">
-                        <input type="checkbox" name="repeate">循环播放
-                    </div>
-                    <input type="hidden" name="taskId" id="taskId">
-                </div>
                 <div id="max_time" class="form-group">
-                    <label for="inputCode" class="col-sm-3 control-label">播放时长</label>
+                    <label for="inputCode" class="col-sm-3 control-label">最大播放时长</label>
                     <div class="col-sm-9">
                    		<div class="input-group">
                         	<select name="hhTime" class="form-control" required>
@@ -235,6 +228,13 @@
                         	<span class="input-group-addon">秒</span>
                         </div>
                     </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="checkbox" name="repeate">循环播放
+                    </div>
+                    <input type="hidden" name="taskId" id="taskId">
                 </div>
             </div>
             <div class="modal-footer">
@@ -283,14 +283,8 @@
                         <input type="password" class="form-control"  name="taskPassword" placeholder="任务密码" required>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="inputCode" class="col-sm-3 control-label"></label>
-                    <div class="col-sm-9">
-                        <input type="checkbox" name="repeate">循环播放
-                    </div>
-                </div>
                 <div id="max_time" class="form-group">
-                    <label for="inputCode" class="col-sm-3 control-label">播放时长</label>
+                    <label for="inputCode" class="col-sm-3 control-label">最大播放时长</label>
                     <div class="col-sm-9">
                    		<div class="input-group">
                         	<select name="hhTime" class="form-control" required>
@@ -306,6 +300,12 @@
                         	</select>
                         	<span class="input-group-addon">秒</span>
                         </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="checkbox" name="repeate">循环播放
                     </div>
                 </div>
              	<input type="hidden" name="fileId" id="fileId">
@@ -414,18 +414,20 @@ $(function() {
 		}
 	});
 	$('#replayModal').find("input[name='repeate']").on('change', function(){
-		initMaxPlayTime('#replayModal');
+		//initMaxPlayTime('#replayModal');
 	});
 	$('#goplayModal').find("input[name='repeate']").on('change', function(){
-		initMaxPlayTime('#goplayModal');
+		//initMaxPlayTime('#goplayModal');
 	})
 });
 function initMaxPlayTime(modalId){
+	$(modalId).find("select[name='mmTime']").val("30");//初始化30分钟
+	/* 
 	if($(modalId).find("input[name='repeate']").prop('checked')){
 		$(modalId).find("#max_time").show(200);
 	}else{
 		$(modalId).find("#max_time").hide(200);
-	}
+	} */
 } 
 function delCheck(){
 	return confirm("确认要删除此记录？");

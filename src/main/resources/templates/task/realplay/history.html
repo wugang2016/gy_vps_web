@@ -175,15 +175,8 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="inputCode" class="col-sm-3 control-label"></label>
-                    <div class="col-sm-9">
-                        <input type="checkbox" name="repeate">循环播放
-                    </div>
-                    <input type="hidden" name="taskId" id="taskId">
-                </div>
                 <div id="max_time" class="form-group">
-                    <label for="inputCode" class="col-sm-3 control-label">播放时长</label>
+                    <label for="inputCode" class="col-sm-3 control-label">最大播放时长</label>
                     <div class="col-sm-9">
                    		<div class="input-group">
                         	<select name="hhTime" class="form-control" required>
@@ -200,6 +193,13 @@
                         	<span class="input-group-addon">秒</span>
                         </div>
                     </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="checkbox" name="repeate">循环播放
+                    </div>
+                    <input type="hidden" name="taskId" id="taskId">
                 </div>
             </div>
             <div class="modal-footer">
@@ -283,16 +283,17 @@ $(function(){
 	});
     $('#subSystemIds2').multiselect({nonSelectedText: '未选择'});
 	$('#replayModal').find("input[name='repeate']").on('change', function(){
-		initMaxPlayTime('#replayModal');
+		//initMaxPlayTime('#replayModal');
 	});
     initSort();
 })
 function initMaxPlayTime(modalId){
-	if($(modalId).find("input[name='repeate']").prop('checked')){
+	$(modalId).find("select[name='mmTime']").val("30");//初始化30分钟
+	/* if($(modalId).find("input[name='repeate']").prop('checked')){
 		$(modalId).find("#max_time").show(200);
 	}else{
 		$(modalId).find("#max_time").hide(200);
-	}
+	} */
 } 
 
 function stopPlay(){
