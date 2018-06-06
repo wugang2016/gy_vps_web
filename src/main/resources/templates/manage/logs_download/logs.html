@@ -27,7 +27,7 @@
             		<span class="badge" id="mem">MEM: 00.00%</span>
             		<span class="badge" id="disk">DISK: 00.00%</span>
             	</a></li>
-                <li><a target="blank" href="{{ctx.contextPath}}/admin/login">高级设置</a></li>
+                <!-- <li><a target="blank" href="{{ctx.contextPath}}/admin/login">高级设置</a></li> -->
             </ul>
         </div>
     </div>
@@ -38,13 +38,12 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li><a href="{{ctx.contextPath}}/task/split/list">任务管理</a></li>
+                <li><a href="{{ctx.contextPath}}/task/split/list">控制中心</a></li>
+                <li><a href="{{ctx.contextPath}}/manage/sub_system/list">配置中心</a></li>
                 <li class="active submenu open">
-                    <a href="#">通用管理</a>
+                    <a href="#">管理中心</a>
                     <ul style="display: block;">
-                        <li><a href="{{ctx.contextPath}}/manage/sub_system/list">ECUE设备</a></li>
-                        <li><a href="{{ctx.contextPath}}/manage/split_templates/list">文件切割模板</a></li>
-                        <li><a href="{{ctx.contextPath}}/manage/android_template/list">Android实时流模板</a></li>
+                        <li><a href="{{ctx.contextPath}}/admin/login">高级设置</a></li>
                         <li class="active"><a href="{{ctx.contextPath}}/manage/logs_download">日志下载</a></li>
                     </ul>
                 </li>

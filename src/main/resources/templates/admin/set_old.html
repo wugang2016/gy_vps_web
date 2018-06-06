@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>高级设置 - 欧司朗视频切割软件</title>
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.css">
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrapValidator.min.css">
+    <!--[if lt IE 9]>
+    <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
+    <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/jquery.fileupload.css">
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/bijie.css">
+    <style></style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">欧司朗视频切割软件 <small>OSRAM video splitter</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a>为确保安全，使用完毕后请及时注销或关闭</a></li>
+                <li><a href="#" onclick="logout()">[注销]</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+        {{#message}}
+        <p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}" role="alert">
+        	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
+        {{/message}}
+        
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+         	<!-- ###############################视频码率设置################################# -->
+            <div class="page-header">
+                <h1>视频码率设置
+                    <small>切割视频码率参数</small>
+                </h1>
+            </div>
+            <form id="form1" class="form-horizontal" action="{{ctx.contextPath}}/admin/setML" method="post">
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">1080P码率(kbps)</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control w_300"  name="b1080" placeholder="1080P码率(kbps)" value="{{#b1080}}{{.}}{{/b1080}}" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">720P码率(kbps)</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control w_300"  name="b720" placeholder="720P码率(kbps)" value="{{#b720}}{{.}}{{/b720}}" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">小于720P码率(kbps)</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control w_300"  name="b4cif" placeholder="小于720P码率(kbps)" value="{{#b4cif}}{{.}}{{/b4cif}}" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-primary">提 交</button>
+                    </div>
+                </div>
+         	</form>
+         	
+         	<!-- ###############################视频码率设置################################# -->
+            <div class="page-header">
+                <h1>Android实时流参数设置
+                    <small>Android实时流参数</small>
+                </h1>
+            </div>
+            <form id="form_android_ts" class="form-horizontal" action="{{ctx.contextPath}}/admin/setAndroidTsMode" method="post">
+
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">太升国际左侧视频分辨率宽度</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control w_300"  name="tsModeLeftwidth" placeholder="太升国际左侧视频宽度" value="{{#tsModeLeftwidth}}{{.}}{{/tsModeLeftwidth}}" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">太升国际左侧视频校准位移宽度</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control w_300"  name="tsModeShiftwidth" placeholder="太升国际左侧位移视频宽度" value="{{#tsModeShiftwidth}}{{.}}{{/tsModeShiftwidth}}" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-primary">提 交</button>
+                    </div>
+                </div>
+         	</form>
+         	
+         	<!-- ###############################管理员密码修改################################# -->
+         	<div class="page-header">
+                <h1>修改管理密码
+                    <small>高级设置登录密码</small>
+                </h1>
+            </div>
+            <form id="form2" class="form-horizontal" action="{{ctx.contextPath}}/admin/setPwd" method="post">
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">旧密码</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control w_300" name="oldPassword" placeholder="旧密码" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">新密码</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control w_300"  name="password" placeholder="新密码" required  minlength="6" maxlength="32">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">重复新密码</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control w_300" name="password2" placeholder="重复新密码" required  minlength="6" maxlength="32">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-primary">提 交</button>
+                    </div>
+                </div>
+         	</form>
+         	
+         	<!-- ###############################任务密码修改################################# -->
+         	<div class="page-header">
+                <h1>修改任务密码
+                    <small>任务下发密码</small>
+                </h1>
+            </div>
+            <form id="form3" class="form-horizontal" action="{{ctx.contextPath}}/admin/setTaskPwd" method="post">
+                <div class="form-group">
+                    <label for="inputCode" class="col-sm-3 control-label">旧密码</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control w_300" name="oldTaskPassword" placeholder="旧密码" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">新密码</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control w_300"  name="taskPassword" placeholder="新密码" required  minlength="6" maxlength="32">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">重复新密码</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control w_300" name="taskPassword2" placeholder="重复新密码" required  minlength="6" maxlength="32">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-primary">提 交</button>
+                    </div>
+                </div>
+         	</form>
+         	
+         	<!-- ###############################任务密码修改################################# -->
+         	<div class="page-header">
+                <h1>License
+                    <small>授权信息</small>
+                </h1>
+            </div>
+			<form id="form4" class="form-horizontal" action="{{ctx.contextPath}}/admin/upload_license" method="post" enctype="multipart/form-data">
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">激活状态</label>
+	                <div class="col-sm-9 form-control-static">
+	                	<span id="active">-</span>&nbsp;
+	                	<a href="#" onclick="handLoadSQ()">重新获取</a>
+	                	<span id="loading"></span>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">有效时间</label>
+	                <div class="col-sm-9 form-control-static" id="expire_time">-</div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">文件切割功能</label>
+	                <div class="col-sm-9 form-control-static" id="file_split">-</div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">文件实时播放功能</label>
+	                <div class="col-sm-9 form-control-static" id="file_realtime_play">-</div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">Android实时播放功能</label>
+	                <div class="col-sm-9 form-control-static" id="android_realtime_play">-</div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label">机器码</label>
+	                <div class="col-sm-9 form-control-static" id="uuid">-</div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inputCode" class="col-sm-3 control-label"></label>
+	                <div class="col-sm-9 form-control-static">
+	                    <label title="License文件选择" class="btn btn-primary fileinput-button" style="width:200px">
+	                 		<i class="glyphicon glyphicon-upload"></i>
+	                    	<span>上传License文件</span>
+	               			<input type="file" name="file">
+	                     </label>
+	                </div>
+	            </div>
+			</form>
+			
+			<!-- ###############################系统管理################################# -->
+         	<div class="page-header">
+                <h1>系统管理
+                    <small>系统管理</small>
+                </h1>
+            </div>
+            <div class="form-horizontal" >
+	            <div class="form-group">
+	                <div class="col-sm-offset-3 col-sm-9">
+	                    <button type="button" class="btn btn-primary" onclick="rebootCheck()">重启系统</button>
+	                	<p id="reboot_line"></p>
+	                </div>
+	            </div>
+            </div>
+         </div>
+</div> <!-- /container -->
+<script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
+<script>
+var timer;
+var ssTimeout = 600000;
+$(function() {
+	//选择文件后提交
+    $("#form4").on("change", "input[type='file']", function() {
+    	var fileName = $("input[name='file']").val();
+    	if(fileName != ''){
+    		$("#form4").submit();
+    	}
+    });
+    $("#form1").bootstrapValidator();
+    $("#form2").bootstrapValidator({
+	fields: {
+    	password2: {
+	        validators: {
+	            identical: {
+	                field: 'password',
+              		message: '请与新密码输入相同的值'
+	            },
+	            different: {
+	                field: 'oldPassword',
+	             	message: '新密码和旧密码不能相同'
+	            }
+	        }
+    	}
+    }});
+    $("#form3").bootstrapValidator({
+    fields:{
+    	taskPassword2: {
+	        validators: {
+	            identical: {
+	                field: 'taskPassword',
+              		message: '请与新密码输入相同的值'
+	            },
+	            different: {
+	                field: 'oldTaskPassword',
+	             	message: '新密码和旧密码不能相同'
+	            }
+	        }
+    	}
+    }});
+    loadSQ();
+    timer = setTimeout("pageTimeout()",ssTimeout);
+});
+
+function handLoadSQ(){
+	clearTimeout(timer);
+	loadSQ();
+	timer = setTimeout("pageTimeout()",ssTimeout);
+}
+
+function loadSQ(){
+	$("#loading").html("<img src='/css/img/small-loading.gif'>获取中...");
+	$.ajax({
+	    url: "/admin/loadSQ",
+	    type: "POST",
+	    success: function(data){
+	        if(data){
+	        	var obj = $.parseJSON(data);
+	        	$('#expire_time').html(obj.expire_time);
+	        	$('#active').html(obj.active=='1'?'已激活':'未激活');
+	        	$('#file_split').html(obj.file_split=='1'?'支持':'不支持');
+	        	$('#file_realtime_play').html(obj.file_realtime_play=='1'?'支持':'不支持');
+	        	$('#android_realtime_play').html(obj.android_realtime_play=='1'?'支持':'不支持');
+	        	$('#uuid').html(obj.uuid);
+	        }
+	    },
+	    complete:function(){
+	  		$("#loading").html("");
+	    }
+	  });
+}
+function pageTimeout(){
+	window.location.href = "/admin";
+}
+
+function rebootCheck(){
+	if(confirm("重启系统将导致现有服务中断，是否继续？")){
+		$("#reboot_line").html("#&gt reboot");
+		$.ajax({
+		    url: "/admin/reboot",
+		    type: "POST",
+		    async: true,
+		    success: function(data){
+		    	$("#reboot_line").append("<p/>#&gt "+data);
+		    	$("#reboot_line").append("<p/>执行完毕！请稍后刷新页面重新登录！");
+		    }
+		});
+	}
+}
+
+function logout(){
+	if(confirm("确定要注销登录？")){
+		window.location.href = "/admin/logout";
+	}
+}
+</script>
+</body>
+</html>
