@@ -1,4 +1,4 @@
-package com.bj.job.writer;
+package com.bj.job.rw;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,13 +14,13 @@ import com.bj.pojo.SubSystemInfo;
 /**
  * 写入数据到Excel
  */
-public class AdminExportEcueExcelWriter {
+public class EcueExcelWriter {
     private final File outputFile;
     private HSSFWorkbook workbook;
     private Sheet sheet;
     private int rowNum;
 
-    public AdminExportEcueExcelWriter(File file) {
+    public EcueExcelWriter(File file) {
         this.outputFile = file;
     }
 
@@ -34,14 +34,10 @@ public class AdminExportEcueExcelWriter {
             row.createCell(1, CellType.STRING).setCellValue(ecue.getIp());
             row.createCell(2, CellType.STRING).setCellValue(ecue.getPort());
             row.createCell(3, CellType.STRING).setCellValue(ecue.getBoxIp());
-            row.createCell(4, CellType.STRING).setCellValue(ecue.getWidth());
-            row.createCell(5, CellType.STRING).setCellValue(ecue.getHeight());
-            try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            row.createCell(4, CellType.STRING).setCellValue(ecue.getContent_width()==null?0:ecue.getContent_width());
+            row.createCell(5, CellType.STRING).setCellValue(ecue.getContent_height()==null?0:ecue.getContent_height());
+            row.createCell(6, CellType.STRING).setCellValue(ecue.getWidth());
+            row.createCell(7, CellType.STRING).setCellValue(ecue.getHeight());
         }
     }
 
@@ -57,8 +53,10 @@ public class AdminExportEcueExcelWriter {
         row.createCell(1, CellType.STRING).setCellValue("IP");
         row.createCell(2, CellType.STRING).setCellValue("端口");
         row.createCell(3, CellType.STRING).setCellValue("盒子IP");
-        row.createCell(4, CellType.STRING).setCellValue("区域宽度");
-        row.createCell(5, CellType.STRING).setCellValue("区域高度");
+        row.createCell(4, CellType.STRING).setCellValue("源视频宽度");
+        row.createCell(5, CellType.STRING).setCellValue("源视频高度");
+        row.createCell(6, CellType.STRING).setCellValue("实际视频宽度");
+        row.createCell(7, CellType.STRING).setCellValue("实际视频高度");
         //sheet.createFreezePane(4, 1);
     }
 

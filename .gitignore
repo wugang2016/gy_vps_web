@@ -39,3 +39,4 @@ log/
 /.gitignore
 /README.md
 /logs/
+/tmp/

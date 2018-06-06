@@ -71,11 +71,11 @@
             <artifactId>poi</artifactId>
             <version>3.16</version>
         </dependency>
-        <!-- <dependency>
+        <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>3.16</version>
-        </dependency> -->
+        </dependency>
 		<dependency>
 		    <groupId>net.sf.json-lib</groupId>
 		    <artifactId>json-lib</artifactId>

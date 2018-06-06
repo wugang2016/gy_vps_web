@@ -9,6 +9,7 @@
     <script src="{{ctx.contextPath}}/js/vendor/html5shiv.min.js"></script>
     <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
     <![endif]-->
+    <link rel="stylesheet" href="{{ctx.contextPath}}/css/jquery.fileupload.css">
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bijie.css">
     <style></style>
 </head>
@@ -56,13 +57,29 @@
             <p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}" role="alert">
             	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
             {{/message}}
-            <div class="page-header">
-                <h1>ECUE设备
-                    <small>列表</small>
-                	<a href="{{ctx.contextPath}}/manage/sub_system/new" type="button" class="btn btn-primary"> 新增 </a>
-             		<!-- <a href="/data-export/ecue" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">导出</a> -->
-                </h1>
+            <div class="page-header row">
+            	<div class="col-sm-6">
+	                <h1>ECUE设备
+	                    <small>列表</small>
+                		<a href="{{ctx.contextPath}}/manage/sub_system/new" type="button" class="btn btn-primary"> 新增 </a>
+	                </h1>
+              	</div>
+	            <!-- <div class="col-sm-6">
+	                <div class="input-group pull-right">
+	                	<span class="navbar-form navbar-right">
+	                    	<a href="/data-export/ecue" class="btn btn-primary" data-toggle="modal" data-target="#exportModal">导出Excel</a>
+	             		</span>
+	                	<form id="importFileForm" class="navbar-form navbar-right"  action="/data-import/ecue" method="post" enctype="multipart/form-data">
+	             			<label title="导入" class="btn btn-success fileinput-button" style="width:100px">
+                                <i class="glyphicon glyphicon-upload"></i>
+                                <span id="importText">导入Excel</span>
+                                <input type="file" name="file">
+                            </label>
+	             		</form>
+	                </div>
+	            </div> -->
             </div>
+            
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -133,7 +150,12 @@
 </div>
 
 <!-- 模态框（Modal） -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:950px">
+		<div class="modal-content"></div>
+	</div>
+</div>
+<div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
 	<div class="modal-dialog" style="width:950px">
 		<div class="modal-content"></div>
 	</div>
@@ -141,8 +163,52 @@
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
 <script>
+$(function(){
+    //选择文件后提交
+    $(".fileinput-button").on("change", "input[type='file']", function() {
+    	importFile();
+    });
+    
+	$("#importModal").on("hidden.bs.modal", function() {
+		$(this).removeData("bs.modal"); 
+		window.location.href = "/manage/sub_system/list";
+	});
+    
+	$("#exportModal").on("hidden.bs.modal", function() {
+		$(this).removeData("bs.modal"); 
+	});
+});
+
 function delCheck(){
 	return confirm("确认要删除此记录？");
+}
+
+function importFile(){
+	$('#importText').html("<img src='/css/img/small-loading.gif'>上传中...");
+	var formData = new FormData($('#importFileForm')[0]);  
+    $.ajax({  
+        type: 'post',  
+        url: "/data-import/ecue",  
+        data: formData,  
+        cache: false,  
+        processData: false,  
+        contentType: false,  
+    }).success(function (data) {
+        if(data.indexOf('redirect') != -1){
+        	var url = data.split(":")[1];
+        	$("#importModal").modal({
+        		remote: url,
+        		backdrop: 'static',
+        		keyboard: false
+   			});
+        }else{
+        	alert(data);
+        }
+    }).error(function () {  
+        alert("上传失败");  
+    }).complete(function(){
+		$('#importText').html("导入Excel");
+    });  
 }
 </script>
 </body>
