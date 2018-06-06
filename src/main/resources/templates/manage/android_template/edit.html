@@ -332,6 +332,8 @@ $('#myModal').on('show.bs.modal', function(event) {
 		});
 	}else{
 		$('#myModalLabel').html("新增切割区域");
+	    $('#copyFromSubSystem').prop("checked", "true");
+	    setWH(true,true);
 	}
 });
 
@@ -340,6 +342,8 @@ $('#myModal').on('hide.bs.modal', function() {
 	$('#index').val("");
 	$('#ssid').val("");
 	modalData.resetForm();
+    $('#copyFromSubSystem').removeAttr("checked");
+    setWH(false,false);
 });
 
 function showVideoName(filePath){

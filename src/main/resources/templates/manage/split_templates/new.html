@@ -234,7 +234,7 @@ $(function() {
     modalData = $(".modal-content").data('bootstrapValidator');
 });
 
-$('#myModal').on('show.bs.modal', function(event) { 
+$('#myModal').on('show.bs.modal', function(event) {
 	if($('select[name="type"]').val()+'' === "2"){
 		$('#areaBody').hide();
 	}else{
@@ -257,6 +257,8 @@ $('#myModal').on('show.bs.modal', function(event) {
 		});
 	}else{
 		$('#myModalLabel').html("新增切割区域");
+	    $('#copyFromSubSystem').prop("checked", "true");
+	    setWH(true,true);
 	}
 });
 
@@ -265,6 +267,8 @@ $('#myModal').on('hide.bs.modal', function() {
 	$('#index').val("");
 	$('#ssid').val("");
 	modalData.resetForm();
+    $('#copyFromSubSystem').removeAttr("checked");
+    setWH(false,false);
 });
 
 function setWH(isChecked, isValid){
