@@ -25,12 +25,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.bj.dao.mapper.SubSystemMapper;
 import com.bj.job.rw.EcueExcelReader;
 import com.bj.job.rw.EcueExcelWriter;
 import com.bj.pojo.SubSystemInfo;
+import com.bj.service.SubSystemService;
 
 @Service
 public class ExcelCenter{
@@ -45,7 +44,7 @@ public class ExcelCenter{
     private ExecutorService exportExecutor;
     
     @Resource
-    private SubSystemMapper subSystemMapper;
+    private SubSystemService subSystemService;
 
     // 保留最近*导入*任务
     private LRUMap<UUID, AdminExcelTask> lastImportJobs = new LRUMap<>(10);
@@ -110,11 +109,11 @@ public class ExcelCenter{
             this.taskId = UUID.randomUUID();
             this.status = "未开始";
             lastImportJobs.put(taskId, this);
+            
         }
-        
+
         @Override
-        @Transactional
-        public void run() {
+        public void run(){
             this.status = "解析中...";
             this.startTime = new Date();
 
@@ -124,6 +123,9 @@ public class ExcelCenter{
                 input = new BufferedInputStream(new FileInputStream(file));
                 reader = new EcueExcelReader(input);
                 doImport(reader);
+            } catch (JobException e) {
+            	this.status = "导入Ecue失败," + e.getMessage();
+                LOGGER.error("导入Ecue失败", e);
             } catch (Exception e) {
                 LOGGER.error("导入Ecue失败", e);
                 this.status = "导入失败，请确认文件格式(xls,xlsx)是否正确。" + e.getMessage();
@@ -146,7 +148,12 @@ public class ExcelCenter{
             }
         }
 
-        private void doImport(EcueExcelReader reader) throws IOException {
+        /**
+         * 
+         * @param reader
+         * @throws Exception
+         */
+        private void doImport(EcueExcelReader reader) throws Exception {
             List<SubSystemInfo> ecues = new LinkedList<>();
             SubSystemInfo ecue = reader.readLine();
             while (ecue != null) {
@@ -154,13 +161,18 @@ public class ExcelCenter{
             	ecue = reader.readLine();
             }
             if(ecues.size() > 0){
-	            this.status = "解析完成，开始导入...";
+	            this.status = "解析完成，正在导入...";
 	            //插入新数据
-	            for (int i = 0; i < ecues.size(); i++) {
+	            /*for (int i = 0; i < ecues.size(); i++) {
 	            	SubSystemInfo one = ecues.get(i);
-	            	subSystemMapper.insert(one);
+	            	if(checkData(one)) {
+		            	subSystemService.insert(one);
+	            	}else {
+	        	    	throw new JobException(this.status);
+	            	}
     	            this.status = "已导入 " + (i+1) + " 条记录";
-	            }
+	            }*/
+	            subSystemService.checkAndBatchInsert(ecues);
             	this.status = "导入完成! (共" + ecues.size() + "条数据）";
             }else{
             	if(reader.getMessage() != null){
@@ -170,6 +182,8 @@ public class ExcelCenter{
             	}
             }
 		}
+        
+        
         
 		@Override
         public String getStatus() {
@@ -229,14 +243,14 @@ public class ExcelCenter{
 
             int offset = 0;
             int batchSize = 100;
-            int count = subSystemMapper.countAll();
+            int count = subSystemService.countAll();
             int actualCount = 0;
 
             EcueExcelWriter writer = new EcueExcelWriter(file);
             try {
                 while (true) {
                     this.status = "正在导出 " + offset + " / " + count;
-                    List<SubSystemInfo> ecues = subSystemMapper.findAll(offset, batchSize);
+                    List<SubSystemInfo> ecues = subSystemService.findAll(offset, batchSize);
                     offset += batchSize;
                     actualCount += ecues.size();
                     if (!ecues.isEmpty()) {

@@ -21,5 +21,6 @@ public interface SubSystemService {
 	int insert(SubSystemInfo subSystemInfo);
 	int update(SubSystemInfo subSystemInfo);
 	int detele(int id);
+	void checkAndBatchInsert(List<SubSystemInfo> subs);
 	SubSystemInfo findById(int id);
 }

@@ -10,8 +10,10 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bj.dao.mapper.SubSystemMapper;
+import com.bj.job.JobException;
 import com.bj.pojo.SubSystemInfo;
 
 /**
@@ -76,7 +78,7 @@ public class SubSystemServiceImpl implements SubSystemService {
 		}
 		return result;
 	}
-
+	
 	@Override
 	public int countByIp(String ip) {
 		return subSystemInfoMapper.countByIp(ip);
@@ -94,7 +96,62 @@ public class SubSystemServiceImpl implements SubSystemService {
 
 	@Override
 	public int countByBoxIpExcept(String ip, int id) {
-		// TODO Auto-generated method stub
 		return subSystemInfoMapper.countByBoxIpExcept(ip,id);
 	}
+
+	@Override
+	@Transactional
+	public void checkAndBatchInsert(List<SubSystemInfo> subs) {
+		if(subs != null) {
+			for(int i=0; i<subs.size(); i++) {
+				SubSystemInfo subSystemInfo = subs.get(i);
+				String result = checkData(subSystemInfo);
+				if(result == null) {
+					this.insertNoSendMsg(subSystemInfo);
+				}else {
+					throw new JobException(result);
+				}
+			}
+			batchSendMsg(subs);
+		}
+	}
+	
+	private int insertNoSendMsg(SubSystemInfo subSystemInfo) {
+		if(subSystemInfo.getContent_width() == null) {
+			subSystemInfo.setContent_width(subSystemInfo.getWidth());
+		}
+		if(subSystemInfo.getContent_height() == null) {
+			subSystemInfo.setContent_height(subSystemInfo.getHeight());
+		}
+		return subSystemInfoMapper.insert(subSystemInfo);
+	}
+	
+	private void batchSendMsg(List<SubSystemInfo> subs) {
+		if(subs != null) {
+			for(int i=0; i<subs.size(); i++) {
+				SubSystemInfo subSystemInfo = subs.get(i);
+				sendMessageService.onlySendMessage(subSystemInfo.format("add"));
+			}
+		}
+	}
+	/**
+     * 
+     * @param subSystemInfo
+     * @return
+     */
+    private String checkData(SubSystemInfo subSystem) {
+    	if(!subSystem.getBoxIp().isEmpty()) {
+    		if(this.countByIp(subSystem.getBoxIp()) > 0) {
+    			return "导入失败，["+subSystem.getBoxIp()+"]BOX IP地址与其它系统冲突！";
+        	}else if(this.countByBoxIp(subSystem.getBoxIp()) > 0){
+        		return "导入失败，["+subSystem.getBoxIp()+"]BOX IP地址与其它系统BOX IP地址冲突！";
+        	}
+    	}
+    	if(this.countByIp(subSystem.getIp()) > 0) {
+    		return "导入失败，["+subSystem.getIp()+"]IP地址与其它系统冲突！";
+    	}else if(this.countByBoxIp(subSystem.getIp()) > 0){
+    		return "导入失败，["+subSystem.getIp()+"]IP地址与其它系统BOX IP地址冲突！";
+    	}
+    	return null;
+    }
 }

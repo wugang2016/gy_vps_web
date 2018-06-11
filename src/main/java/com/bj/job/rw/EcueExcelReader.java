@@ -140,7 +140,6 @@ public class EcueExcelReader implements Closeable {
             String cellValue = null;
             if (null != cell) {
             	cellValue = getStringCellValue(cell);
-            	System.out.println("cellValue="+cellValue);
                 if ((i == 2 || i >= 4) && cellValue.indexOf(".") != -1) {
                 	cellValue = cellValue.split("\\.")[0];
                 }
