@@ -109,7 +109,7 @@
                         <td>
                         	<form id="delForm_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/split/{{id}}/delete" onsubmit="return delCheck()">
 	                            <a href="{{ctx.contextPath}}/task/split/{{id}}/view" data-toggle="modal" data-target="#myModal">详细</a>
-	                            <span id="ff_{{id}}">{{#isDispatch}}<a href="{{ctx.contextPath}}/task/split/{{id}}/dispatch" target="self">分发</a>{{/isDispatch}}</span>
+	                            <span id="ff_{{id}}">{{#isDispatch}}<a href="{{ctx.contextPath}}/task/split/{{id}}/dispatch" target="_self">分发</a>{{/isDispatch}}</span>
 	                            <span id="xz_{{id}}">{{#isDispatch}}<a href="#" data-toggle="modal" data-target="#downloadModal" data-id="{{id}}">下载</a>{{/isDispatch}}</span>
 	                            <span id="sc_{{id}}">{{#isDelete}}<a href="#" onclick="$('#delForm_{{id}}').submit()">删除</a>{{/isDelete}}</span>
                             </form>
