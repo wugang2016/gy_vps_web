@@ -1,4 +1,8 @@
 /** admin - signin */
+html {
+  font-family: '微软雅黑', 'Microsoft YaHei', 'Helvetica Neue LT Pro', 'PT Sans', 'Arial', 'sans-serif';
+  /**font-family:"Helvetica Neue LT Pro", "PT Sans", "Arial", "Microsoft YaHei", "sans-serif";  **/
+}
 body {
   padding-top: 70px;
 }
@@ -6,6 +10,32 @@ body.signin {
   padding-top: 40px;
   padding-bottom: 40px;
   background-color: #eee;
+}
+.navbar {
+  padding-top:8px;
+  background-color: #fff;
+  border-color: #ccc;
+  -moz-box-shadow: 0px 2px 2px #ccc; /* 老的 Firefox */
+  box-shadow: 0px 2px 2px #ccc;
+  height: 65px;
+}
+.logo{
+	color:#FF6600;
+	line-height:35px; 
+	font-weight:bold; 
+	font-size:1.6em;
+}
+.logo-2{
+	color:#666666;
+	font-weight:bold;
+	font-size:1.6em;
+}
+.logo-sub{
+	color:#A7A8AA;
+	line-height:5px; 
+	display: block; 
+	padding-top: 0px; 
+	font-size: 1.15em;
 }
 .form-signin {
   max-width: 330px;
@@ -66,7 +96,7 @@ body.signin {
     padding-right: 20px;
 }
 .nav-sidebar > .active {
-  background-color: #ff8000;
+  background-color: #f60;
 }
 .nav-sidebar > .active > a, .nav-sidebar > .active > a:hover, .nav-sidebar > .active > a:focus {
     color: #fff;
@@ -127,7 +157,7 @@ body.signin {
 	width:320px
 }
 .btn-primary{
-  background-color: #ff8040;
+  background-color: #f60;
   border-color: #ff8000;
 }
 .btn-primary:hover {
@@ -172,7 +202,7 @@ body.signin {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-  background-color: #ff8000;
+  background-color: #f60;
   border-color: #ea7500;
 }
 
