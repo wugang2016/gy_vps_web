@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>编辑ECUE - 欧司朗视频切割软件</title>
+    <title>编辑e:cue - 欧司朗视频切割软件</title>
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.css">
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrapValidator.min.css">
     <!--[if lt IE 9]>
@@ -56,7 +56,7 @@
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <div class="page-header">
-                <h1>ECUE设备管理
+                <h1>e:cue设备管理
                     <small>编辑</small>
                 </h1>
             </div>
@@ -64,14 +64,14 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">设备名称</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="name" placeholder="ECUE设备名称" value="{{#subSystem}}{{#name}}{{.}}{{/name}}{{/subSystem}}" required>
+                        <input type="text" class="form-control"  name="name" placeholder="e:cue设备名称" value="{{#subSystem}}{{#name}}{{.}}{{/name}}{{/subSystem}}" required>
                         {{#nameErr}}<span class="error">{{.}}</span>{{/nameErr}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">设备IP地址</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="ip" placeholder="ECUE设备IP地址" value="{{#subSystem}}{{#ip}}{{.}}{{/ip}}{{/subSystem}}" required ipv4="true">
+                        <input type="text" class="form-control"  name="ip" placeholder="e:cue设备IP地址" value="{{#subSystem}}{{#ip}}{{.}}{{/ip}}{{/subSystem}}" required ipv4="true">
                         {{#ipErr}}<span class="error">{{.}}</span>{{/ipErr}}
                     </div>
                 </div>

@@ -74,6 +74,9 @@ public class RealplayTaskController {
     
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
+    
+    @Value("${bijie.realplay.support.default.template}")
+    private boolean supportDefaultTemplate;
 
     @GetMapping("/realplay/list")
     public String goList(Map<String, Object> model,
@@ -95,10 +98,14 @@ public class RealplayTaskController {
         model.put("pagination", pagination);
         
         //default now
-//    	List<SplitTemplates> templates = splitTemplatesService.findDefaultTemplates();
-//    	templates.addAll(splitTemplatesService.findAll(0, 200));
+        List<SplitTemplates> templates = null;
+        if(supportDefaultTemplate) {
+        	templates = splitTemplatesService.findDefaultTemplatesByType(1);
+        	templates.addAll(splitTemplatesService.findAll(0, 200));
+        }else {
+        	templates = splitTemplatesService.findAll(0, 200);
+        }
         
-        List<SplitTemplates> templates = splitTemplatesService.findAll(0, 200);
     	List<SubSystemInfo> lists = subSystemService.findAll(0, 200);
     	model.put("subSystems", lists);
         model.put("templates", templates);
@@ -134,10 +141,14 @@ public class RealplayTaskController {
 
     @GetMapping("/realplay/new")
     public String goNew(Map<String, Object> model) {
-    	//have default now
-//    	List<SplitTemplates> templates = splitTemplatesService.findDefaultTemplates();
-//    	templates.addAll(splitTemplatesService.findAll(0, 200));
-    	List<SplitTemplates> templates = splitTemplatesService.findAll(0, 200);
+    	List<SplitTemplates> templates = null;
+    	if(supportDefaultTemplate) {
+        	templates = splitTemplatesService.findDefaultTemplatesByType(1);
+        	templates.addAll(splitTemplatesService.findAll(0, 200));
+        }else {
+        	templates = splitTemplatesService.findAll(0, 200);
+        }
+    	
     	List<SubSystemInfo> lists = subSystemService.findAll(0, 200);
     	model.put("subSystems", lists);
         model.put("templates", templates);

@@ -96,6 +96,7 @@ public class SplitTaskController {
     @GetMapping("/split/new")
     public String goNew(Map<String, Object> model) {
     	List<SplitTemplates> templates = splitTemplatesService.findAll(0, 200);
+    	templates.addAll(splitTemplatesService.findDefaultTemplatesByType(2));
         model.put("templates", templates);
         return "task/split/new";
     }
@@ -119,7 +120,9 @@ public class SplitTaskController {
         	for(FieldError error:result.getFieldErrors()){
             	model.put(error.getField()+"Err", error.getDefaultMessage());
         	}
+        	//List<SplitTemplates> templates = splitTemplatesService.findDefaultTemplatesByType(2);
         	List<SplitTemplates> templates = splitTemplatesService.findAll(0, 200);
+        	templates.addAll(splitTemplatesService.findDefaultTemplatesByType(2));
             model.put("templates", templates);
         	model.put("splitTask", splitTask);
             return "task/split/new";

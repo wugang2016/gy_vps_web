@@ -87,7 +87,7 @@
 			                    <thead>
 			                    <tr>
 			                        <!--<th>#ID</th> -->
-			                        <th>ECUE主机</th>
+			                        <th>e:cue主机</th>
 			                        <th>左上角横坐标</th>
 			                        <th>左上角纵坐标</th>
 			                        <th>区域宽度</th>
@@ -205,7 +205,7 @@
 			<div class="modal-body form-horizontal">
 				<!-- 内容 -->
 				<div class="form-group">
-                    <label for="inputCode" class="col-sm-3 control-label">ECUE主控名称</label>
+                    <label for="inputCode" class="col-sm-3 control-label">e:cue主控名称</label>
                     <div class="col-sm-9">
                         <select class="form-control" name="subSystem_id">
                         	{{#subSystems}}
@@ -236,7 +236,7 @@
                     <div class="col-sm-9">
 						<div class="checkbox">
 					        <label>
-								<input type="checkbox" id="copyFromSubSystem">复制ECUE主控的源视频分辨率
+								<input type="checkbox" id="copyFromSubSystem">复制e:cue主控的源视频分辨率
 					        </label>
 				      </div>
                     </div>
@@ -453,7 +453,7 @@ function setArea(){
 			$('#areaJson').val(JSON.stringify(area_json));
 			formData.revalidateField('areaJson');
 		}else{
-			alert("该ECUE主控已存在，不可重复添加！");
+			alert("该e:cue主控已存在，不可重复添加！");
 		}
 	}
 }
