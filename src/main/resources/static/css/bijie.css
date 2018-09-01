@@ -217,3 +217,7 @@ body.signin {
 .text-ccc {
   color: #ccc;
 }
+
+.form-control:focus {
+  border-color: #ff8000;
+}
