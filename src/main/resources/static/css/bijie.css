@@ -19,16 +19,22 @@ body.signin {
   box-shadow: 0px 2px 2px #ccc;
   height: 65px;
 }
+a{
+	color:#FF6600;
+}
 .logo{
 	color:#FF6600;
-	line-height:35px; 
+	line-height:50px; 
 	font-weight:bold; 
 	font-size:1.6em;
 }
+.logo-s{
+	color:#868686;
+	font-size:1.7em;
+}
 .logo-2{
-	color:#666666;
-	font-weight:bold;
-	font-size:1.6em;
+	color:#868686;
+	font-size:1.2em;
 }
 .logo-sub{
 	color:#A7A8AA;
