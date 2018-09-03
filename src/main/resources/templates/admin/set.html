@@ -26,9 +26,9 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
             	<li><a href="#">
-            		<span class="badge" id="cpu">CPU: 00.00%</span>
-            		<span class="badge" id="mem">MEM: 00.00%</span>
-            		<span class="badge" id="disk">DISK: 00.00%</span>
+            		<!-- <span class="badge" id="cpu">CPU: 00.00%</span> -->
+            		<!-- <span class="badge" id="mem">MEM: 00.00%</span> -->
+            		<!-- <span class="badge" id="disk">DISK: 00.00%</span> -->
             	</a></li>
                 <!-- <li><a target="blank" href="{{ctx.contextPath}}/admin/login">高级设置</a></li> -->
                 <li><a href="#" onclick="logout()">[注销]</a></li>
@@ -54,45 +54,222 @@
             </ul>
         </div>
 
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-xs-12 col-xs-offset-2 main">
             {{#message}}
 	        <p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}" role="alert">
 	        	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
 	        {{/message}}
 	        
-	        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	         	<!-- ###############################视频码率设置################################# -->
-	            <div class="page-header">
-	                <h3>视频码率设置
-	                    <small>切割视频码率参数</small>
-	                </h3>
-	            </div>
-	            <form id="form1" class="form-horizontal" action="{{ctx.contextPath}}/admin/setML" method="post">
-	                <div class="form-group">
-	                    <label for="inputCode" class="col-sm-3 control-label">1080P码率(kbps)</label>
-	                    <div class="col-sm-9">
-	                        <input type="number" class="form-control w_300"  name="b1080" placeholder="1080P码率(kbps)" value="{{#b1080}}{{.}}{{/b1080}}" required>
-	                    </div>
-	                </div>
-	                <div class="form-group">
-	                    <label for="inputName" class="col-sm-3 control-label">720P码率(kbps)</label>
-	                    <div class="col-sm-9">
-	                        <input type="number" class="form-control w_300"  name="b720" placeholder="720P码率(kbps)" value="{{#b720}}{{.}}{{/b720}}" required>
-	                    </div>
-	                </div>
-	                <div class="form-group">
-	                    <label for="inputName" class="col-sm-3 control-label">小于720P码率(kbps)</label>
-	                    <div class="col-sm-9">
-	                        <input type="number" class="form-control w_300"  name="b4cif" placeholder="小于720P码率(kbps)" value="{{#b4cif}}{{.}}{{/b4cif}}" required>
-	                    </div>
-	                </div>
-	                <div class="form-group">
-	                    <div class="col-sm-offset-3 col-sm-9">
-	                        <button type="submit" class="btn btn-primary">提 交</button>
-	                    </div>
-	                </div>
-	         	</form>
-	         	
+	        <div class="col-xs-10 main">
+	        	<ul id="myTab" class="nav nav-tabs">
+				    <li class="active"><a href="#tab1" data-toggle="tab">服务器状态</a></li>
+				    <li><a href="#tab2" data-toggle="tab">修改管理密码</a></li>
+				    <li><a href="#tab3" data-toggle="tab">修改任务密码</a></li>
+				    <li><a href="#tab4" data-toggle="tab">视频码率设置</a></li>
+				    <li><a href="#tab5" data-toggle="tab">授权信息</a></li>
+				    <li><a href="#tab6" data-toggle="tab">系统管理</a></li>
+				</ul>
+				<div id="myTabContent" class="tab-content">
+				    <div class="tab-pane fade in active" id="tab1">
+				        <p>
+				         	<div class="page-header">
+				                <h3>服务器状态
+				                    <small>硬件状态</small>
+				                </h3>
+				            </div>
+				        	<form id="sys" class="form-horizontal">
+				                <div class="form-group">
+				                    <label for="inputCode" class="col-sm-3 control-label">CPU使用率</label>
+				                    <div class="col-sm-9">
+				                        <span class="badge" id="cpu">CPU: 00.00%</span>
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <label for="inputName" class="col-sm-3 control-label">内存使用率</label>
+				                    <div class="col-sm-9">
+				                        <span class="badge" id="mem">MEM: 00.00%</span>
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <label for="inputName" class="col-sm-3 control-label">硬盘使用率</label>
+				                    <div class="col-sm-9">
+				                        <span class="badge" id="disk">DISK: 00.00%</span>
+				                    </div>
+				                </div>
+				         	</form>
+				        </p>
+				    </div>
+				    <div class="tab-pane fade" id="tab2">
+				        <p>
+				         	<div class="page-header">
+				                <h3>修改管理密码
+				                    <small>高级设置登录密码</small>
+				                </h3>
+				            </div>
+				        	<form id="form2" class="form-horizontal" action="{{ctx.contextPath}}/admin/setPwd" method="post">
+				                <div class="form-group">
+				                    <label for="inputCode" class="col-sm-3 control-label">旧密码</label>
+				                    <div class="col-sm-9">
+				                        <input type="password" class="form-control w_300" name="oldPassword" placeholder="旧密码" required>
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <label for="inputName" class="col-sm-3 control-label">新密码</label>
+				                    <div class="col-sm-9">
+				                        <input type="password" class="form-control w_300"  name="password" placeholder="新密码" required  minlength="6" maxlength="32">
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <label for="inputName" class="col-sm-3 control-label">重复新密码</label>
+				                    <div class="col-sm-9">
+				                        <input type="password" class="form-control w_300" name="password2" placeholder="重复新密码" required  minlength="6" maxlength="32">
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <div class="col-sm-offset-3 col-sm-9">
+				                        <button type="submit" class="btn btn-primary">提 交</button>
+				                    </div>
+				                </div>
+				         	</form>
+				        </p>
+				    </div>
+				    <div class="tab-pane fade" id="tab3">
+				        <p>
+				         	<div class="page-header">
+				                <h3>修改任务密码
+				                    <small>任务下发密码</small>
+				                </h3>
+				            </div>
+				        	<form id="form3" class="form-horizontal" action="{{ctx.contextPath}}/admin/setTaskPwd" method="post">
+				                <div class="form-group">
+				                    <label for="inputCode" class="col-sm-3 control-label">旧密码</label>
+				                    <div class="col-sm-9">
+				                        <input type="password" class="form-control w_300" name="oldTaskPassword" placeholder="旧密码" required>
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <label for="inputName" class="col-sm-3 control-label">新密码</label>
+				                    <div class="col-sm-9">
+				                        <input type="password" class="form-control w_300"  name="taskPassword" placeholder="新密码" required  minlength="6" maxlength="32">
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <label for="inputName" class="col-sm-3 control-label">重复新密码</label>
+				                    <div class="col-sm-9">
+				                        <input type="password" class="form-control w_300" name="taskPassword2" placeholder="重复新密码" required  minlength="6" maxlength="32">
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <div class="col-sm-offset-3 col-sm-9">
+				                        <button type="submit" class="btn btn-primary">提 交</button>
+				                    </div>
+				                </div>
+				         	</form>
+				        </p>
+				    </div>
+				    <div class="tab-pane fade" id="tab4">
+				        <p>
+				            <div class="page-header">
+				                <h3>视频码率设置
+				                    <small>切割视频码率参数</small>
+				                </h3>
+				            </div>
+				        	<form id="form1" class="form-horizontal" action="{{ctx.contextPath}}/admin/setML" method="post">
+				                <div class="form-group">
+				                    <label for="inputCode" class="col-sm-3 control-label">1080P码率(kbps)</label>
+				                    <div class="col-sm-9">
+				                        <input type="number" class="form-control w_300"  name="b1080" placeholder="1080P码率(kbps)" value="{{#b1080}}{{.}}{{/b1080}}" required>
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <label for="inputName" class="col-sm-3 control-label">720P码率(kbps)</label>
+				                    <div class="col-sm-9">
+				                        <input type="number" class="form-control w_300"  name="b720" placeholder="720P码率(kbps)" value="{{#b720}}{{.}}{{/b720}}" required>
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <label for="inputName" class="col-sm-3 control-label">小于720P码率(kbps)</label>
+				                    <div class="col-sm-9">
+				                        <input type="number" class="form-control w_300"  name="b4cif" placeholder="小于720P码率(kbps)" value="{{#b4cif}}{{.}}{{/b4cif}}" required>
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <div class="col-sm-offset-3 col-sm-9">
+				                        <button type="submit" class="btn btn-primary">提 交</button>
+				                    </div>
+				                </div>
+				         	</form>
+				        </p>
+				    </div>
+				    <div class="tab-pane fade" id="tab5">
+				        <p>
+				        	<div class="page-header">
+			                <h3>License
+			                    <small>授权信息</small>
+			                </h3>
+			            </div>
+						<form id="form4" class="form-horizontal" action="{{ctx.contextPath}}/admin/upload_license" method="post" enctype="multipart/form-data">
+				            <div class="form-group">
+				                <label for="inputCode" class="col-sm-3 control-label">激活状态</label>
+				                <div class="col-sm-9 form-control-static">
+				                	<span id="active">-</span>&nbsp;
+				                	<a href="#" onclick="handLoadSQ()">重新获取</a>
+				                	<span id="loading"></span>
+				                </div>
+				            </div>
+				            <div class="form-group">
+				                <label for="inputCode" class="col-sm-3 control-label">有效时间</label>
+				                <div class="col-sm-9 form-control-static" id="expire_time">-</div>
+				            </div>
+				            <div class="form-group">
+				                <label for="inputCode" class="col-sm-3 control-label">文件切割功能</label>
+				                <div class="col-sm-9 form-control-static" id="file_split">-</div>
+				            </div>
+				            <div class="form-group">
+				                <label for="inputCode" class="col-sm-3 control-label">文件实时播放功能</label>
+				                <div class="col-sm-9 form-control-static" id="file_realtime_play">-</div>
+				            </div>
+				            <div class="form-group">
+				                <label for="inputCode" class="col-sm-3 control-label">Android实时播放功能</label>
+				                <div class="col-sm-9 form-control-static" id="android_realtime_play">-</div>
+				            </div>
+				            <div class="form-group">
+				                <label for="inputCode" class="col-sm-3 control-label">机器码</label>
+				                <div class="col-sm-9 form-control-static" id="uuid">-</div>
+				            </div>
+				            <div class="form-group">
+				                <label for="inputCode" class="col-sm-3 control-label"></label>
+				                <div class="col-sm-9 form-control-static">
+				                    <label title="License文件选择" class="btn btn-primary fileinput-button" style="width:200px">
+				                 		<i class="glyphicon glyphicon-upload"></i>
+				                    	<span>上传License文件</span>
+				               			<input type="file" name="file">
+				                     </label>
+				                </div>
+				            </div>
+						</form>
+				        </p>
+				    </div>
+				    <div class="tab-pane fade" id="tab6">
+				        <p>
+				        	<div class="page-header">
+				                <h3>系统管理
+				                    <small>系统管理</small>
+				                </h3>
+				            </div>
+				            <div class="form-horizontal" >
+					            <div class="form-group">
+					                <div class="col-sm-offset-3 col-sm-9">
+					                    <button type="button" class="btn btn-primary" onclick="rebootCheck()">重启系统</button>
+					                	<p id="reboot_line"></p>
+					                </div>
+					            </div>
+				            </div>
+				        </p>
+				    </div>
+				</div>
+	        
+	        
 	         	<!-- ###############################视频码率设置#################################
 	            <div class="page-header">
 	                <h3>Android实时流参数设置
@@ -120,131 +297,6 @@
 	                </div>
 	         	</form> -->
 	         	
-	         	<!-- ###############################管理员密码修改################################# -->
-	         	<div class="page-header">
-	                <h3>修改管理密码
-	                    <small>高级设置登录密码</small>
-	                </h3>
-	            </div>
-	            <form id="form2" class="form-horizontal" action="{{ctx.contextPath}}/admin/setPwd" method="post">
-	                <div class="form-group">
-	                    <label for="inputCode" class="col-sm-3 control-label">旧密码</label>
-	                    <div class="col-sm-9">
-	                        <input type="password" class="form-control w_300" name="oldPassword" placeholder="旧密码" required>
-	                    </div>
-	                </div>
-	                <div class="form-group">
-	                    <label for="inputName" class="col-sm-3 control-label">新密码</label>
-	                    <div class="col-sm-9">
-	                        <input type="password" class="form-control w_300"  name="password" placeholder="新密码" required  minlength="6" maxlength="32">
-	                    </div>
-	                </div>
-	                <div class="form-group">
-	                    <label for="inputName" class="col-sm-3 control-label">重复新密码</label>
-	                    <div class="col-sm-9">
-	                        <input type="password" class="form-control w_300" name="password2" placeholder="重复新密码" required  minlength="6" maxlength="32">
-	                    </div>
-	                </div>
-	                <div class="form-group">
-	                    <div class="col-sm-offset-3 col-sm-9">
-	                        <button type="submit" class="btn btn-primary">提 交</button>
-	                    </div>
-	                </div>
-	         	</form>
-	         	
-	         	<!-- ###############################任务密码修改################################# -->
-	         	<div class="page-header">
-	                <h3>修改任务密码
-	                    <small>任务下发密码</small>
-	                </h3>
-	            </div>
-	            <form id="form3" class="form-horizontal" action="{{ctx.contextPath}}/admin/setTaskPwd" method="post">
-	                <div class="form-group">
-	                    <label for="inputCode" class="col-sm-3 control-label">旧密码</label>
-	                    <div class="col-sm-9">
-	                        <input type="password" class="form-control w_300" name="oldTaskPassword" placeholder="旧密码" required>
-	                    </div>
-	                </div>
-	                <div class="form-group">
-	                    <label for="inputName" class="col-sm-3 control-label">新密码</label>
-	                    <div class="col-sm-9">
-	                        <input type="password" class="form-control w_300"  name="taskPassword" placeholder="新密码" required  minlength="6" maxlength="32">
-	                    </div>
-	                </div>
-	                <div class="form-group">
-	                    <label for="inputName" class="col-sm-3 control-label">重复新密码</label>
-	                    <div class="col-sm-9">
-	                        <input type="password" class="form-control w_300" name="taskPassword2" placeholder="重复新密码" required  minlength="6" maxlength="32">
-	                    </div>
-	                </div>
-	                <div class="form-group">
-	                    <div class="col-sm-offset-3 col-sm-9">
-	                        <button type="submit" class="btn btn-primary">提 交</button>
-	                    </div>
-	                </div>
-	         	</form>
-	         	
-	         	<!-- ###############################任务密码修改################################# -->
-	         	<div class="page-header">
-	                <h3>License
-	                    <small>授权信息</small>
-	                </h3>
-	            </div>
-				<form id="form4" class="form-horizontal" action="{{ctx.contextPath}}/admin/upload_license" method="post" enctype="multipart/form-data">
-		            <div class="form-group">
-		                <label for="inputCode" class="col-sm-3 control-label">激活状态</label>
-		                <div class="col-sm-9 form-control-static">
-		                	<span id="active">-</span>&nbsp;
-		                	<a href="#" onclick="handLoadSQ()">重新获取</a>
-		                	<span id="loading"></span>
-		                </div>
-		            </div>
-		            <div class="form-group">
-		                <label for="inputCode" class="col-sm-3 control-label">有效时间</label>
-		                <div class="col-sm-9 form-control-static" id="expire_time">-</div>
-		            </div>
-		            <div class="form-group">
-		                <label for="inputCode" class="col-sm-3 control-label">文件切割功能</label>
-		                <div class="col-sm-9 form-control-static" id="file_split">-</div>
-		            </div>
-		            <div class="form-group">
-		                <label for="inputCode" class="col-sm-3 control-label">文件实时播放功能</label>
-		                <div class="col-sm-9 form-control-static" id="file_realtime_play">-</div>
-		            </div>
-		            <div class="form-group">
-		                <label for="inputCode" class="col-sm-3 control-label">Android实时播放功能</label>
-		                <div class="col-sm-9 form-control-static" id="android_realtime_play">-</div>
-		            </div>
-		            <div class="form-group">
-		                <label for="inputCode" class="col-sm-3 control-label">机器码</label>
-		                <div class="col-sm-9 form-control-static" id="uuid">-</div>
-		            </div>
-		            <div class="form-group">
-		                <label for="inputCode" class="col-sm-3 control-label"></label>
-		                <div class="col-sm-9 form-control-static">
-		                    <label title="License文件选择" class="btn btn-primary fileinput-button" style="width:200px">
-		                 		<i class="glyphicon glyphicon-upload"></i>
-		                    	<span>上传License文件</span>
-		               			<input type="file" name="file">
-		                     </label>
-		                </div>
-		            </div>
-				</form>
-				
-				<!-- ###############################系统管理################################# -->
-	         	<div class="page-header">
-	                <h3>系统管理
-	                    <small>系统管理</small>
-	                </h3>
-	            </div>
-	            <div class="form-horizontal" >
-		            <div class="form-group">
-		                <div class="col-sm-offset-3 col-sm-9">
-		                    <button type="button" class="btn btn-primary" onclick="rebootCheck()">重启系统</button>
-		                	<p id="reboot_line"></p>
-		                </div>
-		            </div>
-	            </div>
 	         </div>
         </div>
     </div>
