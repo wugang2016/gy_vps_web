@@ -34,25 +34,26 @@ a:hover{
 }
 .logo-s{
 	color:#b6b6b6;
-	font-size:1.7em;
+	font-size:1.6em;
  	position: fixed;
- 	top:13px;
+ 	top:16px;
  	left:105px;
 }
 .logo-2{
 	color:#868686;
 	font-weight:bold; 
-	font-size:1.3em;
+	font-size:1.7em;
  	position: fixed;
- 	top:24px;
+ 	top:18px;
  	left:115px;
 }
 .logo-3{
 	color:#868686;
-	font-size:1.3em;
+	font-weight:bold;
+	font-size:1.4em;
  	position: fixed;
- 	top:24px;
- 	left:240px;
+ 	top:21px;
+ 	left:275px;
 }
 .logo-sub{
 	color:#A7A8AA;

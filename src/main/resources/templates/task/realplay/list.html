@@ -108,7 +108,7 @@
                         	<form id="delForm1_{{id}}" class="form-horizontal" method="post" action="{{ctx.contextPath}}/task/realplay/{{id}}/delete" onsubmit="return delCheck()">
 	                            <span id="js_{{id}}">{{#allowStop}}<a href="#" data-toggle="modal" data-target="#stopModal" data-id="{{id}}">结束播放</a>{{/allowStop}}</span>
 	                            <span id="bf_{{id}}">{{#allowReplay}}<a href="#" data-toggle="modal" data-target="#replayModal" data-id="{{id}}" data-templatetype="{{#splitTemplate.type}}{{.}}{{/splitTemplate.type}}" data-repeate="{{#repeate}}true{{/repeate}}">再次播放</a>{{/allowReplay}}</span>
-	                            <span id="sc_{{id}}">{{#isDelete}}<a href="#" onclick="$('#delForm1_{{id}}').submit()">删除</a>{{/isDelete}}</span>
+	                            <!-- <span id="sc_{{id}}">{{#isDelete}}<a href="#" onclick="$('#delForm1_{{id}}').submit()">删除</a>{{/isDelete}}</span> -->
                             </form>
                         </td>
                     </tr>

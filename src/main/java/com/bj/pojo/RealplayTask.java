@@ -56,6 +56,7 @@ public class RealplayTask extends BaseTask{
 	
 	public String getMaxPlayTimeStr() {
 		String formatTime = "";
+		if(maxPlayTime == null)maxPlayTime = 0;
 		int second = maxPlayTime;
 		if(second > 0) {
 	        long hours = second / 3600;            //转换小时
