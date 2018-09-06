@@ -20,7 +20,7 @@
 <nav class="navbar navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-           <div><span class="logo">OSRAM</span><span class="logo-s"> | </span><span class="logo-2"> Video Splitter 照明视频切分软件</span> </div>
+           <div><span class="logo"><img src="/css/img/logo-1.png" height="18" width="82"></span><span class="logo-s"> | </span><span class="logo-2"> Video Splitter</span><span class="logo-3"> 照明视频切分软件</span></div>
            
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -30,7 +30,7 @@
             		<!-- <span class="badge" id="mem">MEM: 00.00%</span> -->
             		<!-- <span class="badge" id="disk">DISK: 00.00%</span> -->
             	</a></li>
-                <!-- <li><a target="blank" href="{{ctx.contextPath}}/admin/login">高级设置</a></li> -->
+                <!-- <li><a target="blank" href="{{ctx.contextPath}}/admin/set">高级设置</a></li> --><li><a href="#" onclick="logout()">[注销]</a></li>
             </ul>
         </div>
     </div>
@@ -49,7 +49,7 @@
                         <li class="active"><a href="{{ctx.contextPath}}/manage/android_template/list">互动模板</a></li>
                     </ul>
                 </li>
-                <li><a href="{{ctx.contextPath}}/admin/login">管理中心</a></li>
+                <li><a href="{{ctx.contextPath}}/admin/set">管理中心</a></li>
            	</ul>
         </div>
 
@@ -248,7 +248,7 @@
 	</div><!-- /.modal -->
 </div>
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
-<script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script>
+<script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script><script src="{{ctx.contextPath}}/js/bijie.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrapValidator.min.js"></script>
 <script>
 var formData;

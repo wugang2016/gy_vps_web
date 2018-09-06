@@ -52,11 +52,12 @@ public class AdminController {
     
     @GetMapping(value= {"","/","/login","/setML","/setPwd","/setDoPwd"})
     public String goLogin(HttpServletRequest request) {
-		request.getSession().removeAttribute(LOGIN_PASS);
-        return "admin/login";
+		//request.getSession().removeAttribute(LOGIN_PASS);
+		//request.getSession().removeAttribute(Contants.SESSION_COMMON_KEY);
+        return "admin/login_old";
     }
     
-    @PostMapping("/login")
+    @PostMapping({"/login","login_old"})
     public String doLogin(Map<String, Object> model,
             HttpServletRequest request,
             @RequestParam(value = "password") String password,
@@ -67,27 +68,35 @@ public class AdminController {
         	SysUser sysUser = sysUserService.findByUsername(LOGIN_NAME);
         	if(sysUser != null && BaseUtil.md5(password).equals(sysUser.getPassword())){
                 LOGGER.info("成功登录高级设置页面");
+        		request.getSession().setAttribute(Contants.SESSION_COMMON_KEY, sysUser);
         		request.getSession().setAttribute(LOGIN_PASS, true);
         		request.getSession().setAttribute("vrifyCode","");  
                 loginedInit(model);
-            	return "admin/set";
+                return "redirect:/task/split/list";
         	}else {
             	model.put("hasError", true);
             	model.put("message", "错误的密码"); 
-            	return "admin/login";
+            	return "admin/login_old";
         	}
         }else{
         	model.put("hasError", true);
         	model.put("message", "错误的验证码"); 
-        	return "admin/login";
+        	return "admin/login_old";
         }
     }
     
     @GetMapping("/logout")
-    public String doLogin(Map<String, Object> model,
+    public String doLogout(Map<String, Object> model,
             HttpServletRequest request) {
 		request.getSession().removeAttribute(LOGIN_PASS);
-        return "admin/login";
+		request.getSession().removeAttribute(Contants.SESSION_COMMON_KEY);
+        return "admin/login_old";
+	}
+    
+    @GetMapping("/set")
+    public String goSet(Map<String, Object> model,
+            HttpServletRequest request) {
+        return "admin/set";
 	}
     
     @PostMapping("/setML")
@@ -96,7 +105,7 @@ public class AdminController {
             @RequestParam(value = "b1080") String b1080,
             @RequestParam(value = "b720") String b720,
             @RequestParam(value = "b4cif") String b4cif) {
-    	if(!isLogin(request)) {return "admin/login";}
+    	//if(!isLogin(request)) {return "admin/login";}
     	if(BaseUtil.isEmpty(b1080) || BaseUtil.isEmpty(b720) || BaseUtil.isEmpty(b4cif)) {
         	model.put("hasError", true);
         	model.put("message", "参数不可为空"); 
@@ -115,7 +124,7 @@ public class AdminController {
             HttpServletRequest request,
             @RequestParam(value = "tsModeLeftwidth") String tsModeLeftwidth,
             @RequestParam(value = "tsModeShiftwidth") String tsModeShiftwidth) {
-    	if(!isLogin(request)) {return "admin/login";}
+    	//if(!isLogin(request)) {return "admin/login";}
     	if(BaseUtil.isEmpty(tsModeLeftwidth) || BaseUtil.isEmpty(tsModeShiftwidth)) {
         	model.put("hasError", true);
         	model.put("message", "参数不可为空"); 
@@ -132,7 +141,7 @@ public class AdminController {
     public @ResponseBody String reboot(Map<String, Object> model,
     		HttpServletRequest request)
     {
-    	if(!isLogin(request)) {return "admin/login";}
+    	//if(!isLogin(request)) {return "admin/login";}
     	return BaseUtil.exec("reboot");
     }
     
@@ -142,7 +151,7 @@ public class AdminController {
             @RequestParam(value = "oldPassword") String oldPassword,
             @RequestParam(value = "password") String password,
             @RequestParam(value = "password2") String password2) {
-    	if(!isLogin(request)) {return "admin/login";}
+    	//if(!isLogin(request)) {return "admin/login";}
     	if(oldPassword != null && oldPassword.trim().length() > 0 && oldPassword.equals(password)) {
         	model.put("hasError", true);
         	model.put("message", "新密码不能与旧密码相同"); 
@@ -171,7 +180,7 @@ public class AdminController {
             @RequestParam(value = "oldTaskPassword") String oldTaskPassword,
             @RequestParam(value = "taskPassword") String taskPassword,
             @RequestParam(value = "taskPassword2") String taskPassword2) {
-    	if(!isLogin(request)) {return "admin/login";}
+    	//if(!isLogin(request)) {return "admin/login";}
     	if(oldTaskPassword != null && oldTaskPassword.trim().length() > 0 && oldTaskPassword.equals(taskPassword)) {
         	model.put("hasError", true);
         	model.put("message", "新密码不能与旧密码相同"); 
@@ -197,7 +206,7 @@ public class AdminController {
     public String upload(Map<String, Object> model,
             HttpServletRequest request,
             final @RequestParam("file") MultipartFile file) throws IOException {
-    	if(!isLogin(request)) {return "admin/login";}
+    	//if(!isLogin(request)) {return "admin/login";}
     	if(file.getSize() <= 0) {
     		model.put("hasError", true);
     		model.put("message", "缺少License文件！");

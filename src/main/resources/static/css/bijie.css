@@ -25,19 +25,34 @@ a{
 a:hover{
 	color:#000;
 }
+
 .logo{
 	color:#FF6600;
 	line-height:50px; 
-	font-weight:bold; 
-	font-size:1.6em;
+/* 	font-weight:bold; 
+	font-size:1.6em; */
 }
 .logo-s{
 	color:#b6b6b6;
 	font-size:1.7em;
+ 	position: fixed;
+ 	top:13px;
+ 	left:105px;
 }
 .logo-2{
 	color:#868686;
-	font-size:1.2em;
+	font-weight:bold; 
+	font-size:1.3em;
+ 	position: fixed;
+ 	top:24px;
+ 	left:115px;
+}
+.logo-3{
+	color:#868686;
+	font-size:1.3em;
+ 	position: fixed;
+ 	top:24px;
+ 	left:240px;
 }
 .logo-sub{
 	color:#A7A8AA;

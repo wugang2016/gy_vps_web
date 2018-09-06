@@ -8,6 +8,9 @@ package com.bj.util;
  *
  */
 public class Contants {
+	//session用户key
+	public static final String SESSION_COMMON_KEY = "ssu";
+	
 	public static final int FILE_NAME_LENGTH = 12;
 	public static final String PIC_FILE_SUB_PATH = "pic";
 	public static final String VIDEO_FILE_SUB_PATH = "video";

@@ -15,7 +15,7 @@ public class IndexController {
 	
     @GetMapping({"", "/"})
     public String index() {
-        return "redirect:/task/split/list";
+        return "redirect:/admin/login";
     }
 	
     @GetMapping("/manage/logs_download")
