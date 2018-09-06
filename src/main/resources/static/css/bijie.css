@@ -22,6 +22,9 @@ body.signin {
 a{
 	color:#FF6600;
 }
+a:hover{
+	color:#000;
+}
 .logo{
 	color:#FF6600;
 	line-height:50px; 
