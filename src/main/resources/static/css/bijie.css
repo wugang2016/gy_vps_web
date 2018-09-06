@@ -4,6 +4,7 @@ html {
   /**font-family:"Helvetica Neue LT Pro", "PT Sans", "Arial", "Microsoft YaHei", "sans-serif";  **/
 }
 body {
+  font-family: '微软雅黑', 'Microsoft YaHei', 'Helvetica Neue LT Pro', 'PT Sans', 'Arial', 'sans-serif';
   padding-top: 70px;
 }
 body.signin {
@@ -42,9 +43,9 @@ a:hover{
 .logo-2{
 	color:#868686;
 	font-weight:bold; 
-	font-size:1.7em;
+	font-size:1.6em;
  	position: fixed;
- 	top:18px;
+ 	top:19px;
  	left:115px;
 }
 .logo-3{
@@ -52,8 +53,8 @@ a:hover{
 	font-weight:bold;
 	font-size:1.4em;
  	position: fixed;
- 	top:21px;
- 	left:275px;
+ 	top:20px;
+ 	left:280px;
 }
 .logo-sub{
 	color:#A7A8AA;
