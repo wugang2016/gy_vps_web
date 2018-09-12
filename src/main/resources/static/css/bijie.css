@@ -247,3 +247,7 @@ a:hover{
 .form-control:focus {
   border-color: #ff8000;
 }
+
+.test1 {
+  border-color: #db5700;
+}

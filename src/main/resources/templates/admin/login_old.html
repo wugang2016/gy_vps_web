@@ -10,36 +10,113 @@
     <script src="{{ctx.contextPath}}/js/vendor/respond.min.js"></script>
     <![endif]-->
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bijie.css">
-    <style></style>
+    <style>
+        body{
+          padding-top: 0px;
+        }
+        .table1{
+		  background-color: #f60;
+          width: 100%;
+        }
+        .table2{
+          width: 100%;
+        }
+        .table3{
+		  background-color: #ffc993;
+          width: 100%;
+        }
+        .table4{
+		  background-color: #f60;
+          width: 360px;
+          height: 100%;
+        }
+    	.top1 {
+		  background-color: #ffc993;
+		  border-color: #ffc993;
+		  -moz-box-shadow: 0px 2px 2px #ffc993; /* 老的 Firefox */
+		  box-shadow: 0px 2px 50px #ffc993;
+		}
+		.btn-primary{
+		  background-color: #db5700;
+		  border-color: #db5700;
+		}
+		.input-text{
+			border-radius: 6px;
+			border-color:#db5700;
+			border-width:1px;
+			height: 28px;
+		}
+		
+    </style>
 </head>
 
-<body class="signin">
-<div class="container">
-    <form class="form-signin" action="{{ctx.contextPath}}/admin/login" method="post">
-        <h2 class="form-signin-heading">管理登录</h2>
+<body>
+<table class="table1">
+	<tr class="top1" height="20"></tr>
+</table>
+<table class="table2">
+	<tr height="180" >
+		<td align="right" width="40%">
+			<img src="/css/img/logo-1.png" height="18" width="82">
+		</td>
+		<td>
+			<span style="color:#b6b6b6;font-size:1.8em;">&nbsp;|</span>
+			<span style="color:#9a9a9a;font-weight:bold;font-size:1.6em;">Video Splitter</span>
+			<span style="color:#9a9a9a;font-weight:bold;font-size:1.4em;"> 照明视频切分软件</span>
+		</td>
+	</tr>
+	<tr height="20"><td colspan="3" align="center">
         {{#message}}
-        <p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}" role="alert">
-        	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
+        <span class="text-danger">
+        	<em>系统提示：</em>{{message}}
+        </span>
         {{/message}}
-        <div class="form-group">
-	        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="管理密码" required autofocus>
-        </div>
-        <div class="form-group">
-	        <div class="row">
-			    <div class="col-xs-6">
-	        		<input type="text" id="inputVCode" name="vrifyCode" class="form-control" placeholder="验证码"> 
-			    </div>
-			    <div class="col-xs-6">
-	        		<img alt="验证码" onclick = "this.src='/defaultKaptcha?d='+new Date()*1" src="/defaultKaptcha" />
-			    </div>
-			</div>
-        </div>
-        <div class="form-group">
-        	<button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
-        </div>
-    </form>
-
-</div> <!-- /container -->
+        &nbsp;
+	</td></tr>
+</table>
+<table class="table3">
+	<tr height="225">
+		<td width="33.333333%"></td>
+		<td width="33.333333%" align="center">
+			<form action="{{ctx.contextPath}}/admin/login" method="post">
+			<table class="table4">
+				<tr height="45"><td style="font-weight:bold;font-size:1.6em">&nbsp;用户登录</td></tr>
+				<tr height="45"><td>
+					<table>
+						<tr>
+							<td align="right" style="width:140px;font-weight:bold;color:#fff">用户名&nbsp;&nbsp;</td>
+							<td align="left"><input type="text" name="username" placeholder=" 输入用户名" class="input-text" style="width:160px;" required></td>
+						</tr>
+					</table>
+				</td></tr>
+				<tr height="45"><td>
+					<table>
+						<tr>
+							<td align="right" style="width:140px;font-weight:bold;color:#fff">密码&nbsp;&nbsp;</td>
+							<td align="left"><input type="text" name="password" placeholder=" 输入密码" class="input-text" style="width:160px;" required></td>
+						</tr>
+					</table>
+				</td></tr>
+				<tr height="45"><td>
+					<table>
+						<tr>
+							<td align="right" style="width:140px;font-weight:bold;color:#fff">验证码&nbsp;&nbsp;</td>
+							<td align="left"><input type="text" name="vrifyCode" placeholder=" 输入验证码" class="input-text" style="width:80px;" required></td>
+							<td align="left">
+								&nbsp;<img alt="验证码" height="28px" width="70px" onclick = "this.src='/defaultKaptcha?d='+new Date()*1" src="/defaultKaptcha" />
+							</td>
+						</tr>
+					</table>
+				</td></tr>
+				<tr height="45"><td  align="center">
+					<button class="btn btn-primary" type="submit">登 录</button>
+				</td></tr>
+			</table>
+			</form>
+		</td>
+		<td width="33.333333%"></td>
+	</tr>
+</table>
 <script src="{{ctx.contextPath}}/js/jquery-1.11.3.min.js"></script>
 <script src="{{ctx.contextPath}}/js/bootstrap.min.js"></script><script src="{{ctx.contextPath}}/js/bijie.js"></script>
 <script>

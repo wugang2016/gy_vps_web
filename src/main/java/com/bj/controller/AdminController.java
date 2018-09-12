@@ -60,12 +60,13 @@ public class AdminController {
     @PostMapping({"/login","login_old"})
     public String doLogin(Map<String, Object> model,
             HttpServletRequest request,
+            @RequestParam(value = "username") String username,
             @RequestParam(value = "password") String password,
             @RequestParam(value = "vrifyCode") String vrifyCode) {
     	String captchaId = (String) request.getSession().getAttribute("vrifyCode");    
         LOGGER.info("vrifyCode: {}/{}", vrifyCode, captchaId);
         if(captchaId != null && captchaId.equals(vrifyCode)) {  
-        	SysUser sysUser = sysUserService.findByUsername(LOGIN_NAME);
+        	SysUser sysUser = sysUserService.findByUsername(username);
         	if(sysUser != null && BaseUtil.md5(password).equals(sysUser.getPassword())){
                 LOGGER.info("成功登录高级设置页面");
         		request.getSession().setAttribute(Contants.SESSION_COMMON_KEY, sysUser);
@@ -75,7 +76,7 @@ public class AdminController {
                 return "redirect:/task/split/list";
         	}else {
             	model.put("hasError", true);
-            	model.put("message", "错误的密码"); 
+            	model.put("message", "错误的用户名或密码"); 
             	return "admin/login_old";
         	}
         }else{
