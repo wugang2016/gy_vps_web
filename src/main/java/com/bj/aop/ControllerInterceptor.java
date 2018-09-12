@@ -29,15 +29,20 @@ public class ControllerInterceptor {
     @Around("execution(* com.bj..*Controller..*(..))")
     public Object logServiceAccess(ProceedingJoinPoint pjp) throws Throwable {
     	//验证
+    	String className = pjp.getTarget().getClass().getName();
     	HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
     	if (!NO_LOGIN_METHODS.contains(pjp.getSignature().getName()) 
     			&& request.getSession().getAttribute(Contants.SESSION_COMMON_KEY) == null){
-	    	throw new SessionTimeoutException(pjp.getSignature().getName() + "() session is lost!");
+    		if(className.contains("com.bj.controller.TemplateController")) {
+    			
+    		}else {
+    			throw new SessionTimeoutException(pjp.getSignature().getName() + "() session is lost!");
+    		}
     	}
     	
         long start = System.currentTimeMillis();
 
-        String className = pjp.getTarget().getClass().getName();
+        
         String fullMethodName = className + "." + pjp.getSignature().getName();
 
         boolean needLog = true;

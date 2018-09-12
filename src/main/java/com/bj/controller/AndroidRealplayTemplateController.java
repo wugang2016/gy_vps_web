@@ -135,11 +135,7 @@ public class AndroidRealplayTemplateController {
 			androidRealplayTemplate.setPicPath(path + File.separator +  newFileName);
     	}
     	if(file2.getSize() <= 0){//签名界面缩略图
-    		redirectAttributes.addFlashAttribute("hasError", true);
-    		redirectAttributes.addFlashAttribute("message", "签名界面缩略图缺失！");
-            redirectAttributes.addFlashAttribute("areaJson", areaJson);
-        	redirectAttributes.addFlashAttribute("androidRealplayTemplate", androidRealplayTemplate);
-            return "redirect:/manage/android_template/new";
+    		androidRealplayTemplate.setMiniPicPath("");
     	} else {
 			String ext = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf("."));
 			String newFileName = BaseUtil.getStrRandom(Contants.FILE_NAME_LENGTH) + ext;
