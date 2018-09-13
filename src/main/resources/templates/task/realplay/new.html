@@ -187,6 +187,12 @@ $(function() {
 		}
 	});
 	$('#templateId').val({{#realplayTask}}{{#realplayTask.splitTemplate}}{{realplayTask.splitTemplate.id}}{{/realplayTask.splitTemplate}}{{/realplayTask}});
+	var type = $('#templateId').find("option:selected").attr("data-type");
+	if(type === "1"){
+		$('#ecueBox').show();
+	}else{
+		$('#ecueBox').hide();
+	}
     $("#form").bootstrapValidator({
    		fields:{taskPassword:{validators:{
 			remote:{
@@ -207,7 +213,7 @@ $(function() {
     initMaxPlayTime();
 });
 function initMaxPlayTime(){
-	$(modalId).find("select[name='mmTime']").val("30");//初始化30分钟
+	$('#max_time').find("select[name='mmTime']").val("30");//初始化30分钟
 	/* if($("input[name='repeate']").prop("checked")){
 		$('#max_time').show(200);
 	}else{

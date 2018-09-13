@@ -420,6 +420,12 @@ $(function() {
 	$('#goplayModal').find("input[name='repeate']").on('change', function(){
 		//initMaxPlayTime('#goplayModal');
 	})
+	var type = $('#goplayModal').find('#splitTemplateId').find("option:selected").attr("data-type");
+	if(type === "1"){
+		$('#goplayModal').find('#ecueBox').show();
+	}else{
+		$('#goplayModal').find('#ecueBox').hide();
+	}
 });
 function initMaxPlayTime(modalId){
 	$(modalId).find("select[name='mmTime']").val("30");//初始化30分钟
