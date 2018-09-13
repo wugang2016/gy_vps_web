@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>高级设置 - 欧司朗视频切割软件</title>
+    <title>高级设置 - 欧司朗照明视频切分软件</title>
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bootstrapValidator.min.css">
     <!--[if lt IE 9]>
@@ -12,7 +12,16 @@
     <![endif]-->
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/jquery.fileupload.css">
     <link rel="stylesheet" href="{{ctx.contextPath}}/css/bijie.css">
-    <style></style>
+    <style>
+    #tab1 .form-group{
+    	height: 35px;
+    	margin-bottom: 0px;
+    }
+    #tab5 .form-group{
+    	height: 32px;
+    	margin-bottom: 0px;
+    }
+    </style>
 </head>
 
 <body>
@@ -73,26 +82,26 @@
 				    <div class="tab-pane fade in active" id="tab1">
 				        <p>
 				         	<div class="page-header">
-				                <h3>服务器状态
+				                <h3>&nbsp;&nbsp;服务器状态
 				                    <small>硬件状态</small>
 				                </h3>
 				            </div>
 				        	<form id="sys" class="form-horizontal">
 				                <div class="form-group">
 				                    <label for="inputCode" class="col-sm-3 control-label">CPU使用率</label>
-				                    <div class="col-sm-9">
+				                    <div class="col-sm-9" style="margin-top: 6px">
 				                        <span class="badge" id="cpu">CPU: 00.00%</span>
 				                    </div>
 				                </div>
 				                <div class="form-group">
 				                    <label for="inputName" class="col-sm-3 control-label">内存使用率</label>
-				                    <div class="col-sm-9">
+				                    <div class="col-sm-9" style="margin-top: 6px">
 				                        <span class="badge" id="mem">MEM: 00.00%</span>
 				                    </div>
 				                </div>
 				                <div class="form-group">
 				                    <label for="inputName" class="col-sm-3 control-label">硬盘使用率</label>
-				                    <div class="col-sm-9">
+				                    <div class="col-sm-9" style="margin-top: 6px">
 				                        <span class="badge" id="disk">DISK: 00.00%</span>
 				                    </div>
 				                </div>
@@ -102,7 +111,7 @@
 				    <div class="tab-pane fade" id="tab2">
 				        <p>
 				         	<div class="page-header">
-				                <h3>修改管理密码
+				                <h3>&nbsp;&nbsp;修改管理密码
 				                    <small>高级设置登录密码</small>
 				                </h3>
 				            </div>
@@ -136,7 +145,7 @@
 				    <div class="tab-pane fade" id="tab3">
 				        <p>
 				         	<div class="page-header">
-				                <h3>修改任务密码
+				                <h3>&nbsp;&nbsp;修改任务密码
 				                    <small>任务下发密码</small>
 				                </h3>
 				            </div>
@@ -170,7 +179,7 @@
 				    <div class="tab-pane fade" id="tab4">
 				        <p>
 				            <div class="page-header">
-				                <h3>视频码率设置
+				                <h3>&nbsp;&nbsp;视频码率设置
 				                    <small>切割视频码率参数</small>
 				                </h3>
 				            </div>
@@ -204,7 +213,7 @@
 				    <div class="tab-pane fade" id="tab5">
 				        <p>
 				        	<div class="page-header">
-			                <h3>License
+			                <h3>&nbsp;&nbsp;License
 			                    <small>授权信息</small>
 			                </h3>
 			            </div>
@@ -253,7 +262,7 @@
 				    <div class="tab-pane fade" id="tab6">
 				        <p>
 				        	<div class="page-header">
-				                <h3>系统管理
+				                <h3>&nbsp;&nbsp;系统管理
 				                    <small>系统管理</small>
 				                </h3>
 				            </div>

@@ -72,7 +72,6 @@ public class AdminController {
         		request.getSession().setAttribute(Contants.SESSION_COMMON_KEY, sysUser);
         		request.getSession().setAttribute(LOGIN_PASS, true);
         		request.getSession().setAttribute("vrifyCode","");  
-                loginedInit(model);
                 return "redirect:/task/split/list";
         	}else {
             	model.put("hasError", true);
@@ -97,6 +96,7 @@ public class AdminController {
     @GetMapping("/set")
     public String goSet(Map<String, Object> model,
             HttpServletRequest request) {
+        loginedInit(model);
         return "admin/set";
 	}
     
