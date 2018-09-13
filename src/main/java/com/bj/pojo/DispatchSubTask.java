@@ -78,10 +78,13 @@ public class DispatchSubTask extends BaseTask  {
 	}
 	
 	public String getErrMsg() {
-		String msg = ErrorMessage.getProperty(this.errCode+"");
-		if(msg == null && this.errCode != null) {
-			msg = this.errCode+"";
+		if(SubTaskStatus.values()[status].isOver()) {
+			String msg = ErrorMessage.getProperty(this.errCode+"");
+			if(msg == null && this.errCode != null) {
+				msg = this.errCode+"";
+			}
+			return msg;
 		}
-		return msg;
+		return "";
 	}
 }

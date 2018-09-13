@@ -31,6 +31,11 @@ public enum TaskStatus {
 		return this.compareTo(FAILED) == 0;
 	}
 	
+	public boolean isOver() {
+		return (this.compareTo(SUCCESS) == 0 || this.compareTo(FAILED) == 0);
+	}
+	
+	
 	public boolean allowDelete() {
 		return (this.compareTo(SUCCESS) == 0 || this.compareTo(FAILED) == 0);
 	}
