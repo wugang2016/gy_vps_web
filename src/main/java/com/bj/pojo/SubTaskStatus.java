@@ -35,6 +35,10 @@ public enum SubTaskStatus {
 		return (this.compareTo(SUCCESS) == 0 || this.compareTo(FAILED) == 0);
 	}
 	
+	public boolean isOver() {
+		return (this.compareTo(SUCCESS) == 0 || this.compareTo(FAILED) == 0);
+	}
+	
 	public boolean allowDispatch() {
 		return this.compareTo(SUCCESS) == 0;
 	}

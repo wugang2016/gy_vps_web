@@ -117,9 +117,12 @@ public class DispatchTask extends BaseTask{
 	}
 	
 	public String getErrMsg() {
-		String msg = ErrorMessage.getProperty(this.errCode+"");
-		if(msg == null && this.errCode != null) {
-			msg = this.errCode+"";
+		String msg = "";
+		if(TaskStatus.values()[status].isOver()) {
+			msg = ErrorMessage.getProperty(this.errCode+"");
+			if(msg == null && this.errCode != null) {
+				msg = this.errCode+"";
+			}
 		}
 		return msg;
 	}
