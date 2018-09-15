@@ -94,25 +94,25 @@ public class SubSystemController {
     	if(!subSystem.getBoxIp().isEmpty()) {
     		if(subSystemService.countByIp(subSystem.getBoxIp()) > 0) {
         		redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "BOX IP地址与其它系统冲突！");
+                redirectAttributes.addFlashAttribute("message", "解码器IP地址与其它e:cue设备IP地址冲突！");
                 return "redirect:/manage/sub_system/list";
         	}
     		else if(subSystemService.countByBoxIp(subSystem.getBoxIp()) > 0)
         	{
         		redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "BOX IP地址与其它系统BOX IP地址冲突！");
+                redirectAttributes.addFlashAttribute("message", "解码器IP地址与其它系统解码器IP地址冲突！");
                 return "redirect:/manage/sub_system/list";
         	}
     	}
 
     	if(subSystemService.countByIp(subSystem.getIp()) > 0) {
     		redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "IP地址与其它系统冲突！");
+            redirectAttributes.addFlashAttribute("message", "设备IP地址与其它e:cue设备IP地址冲突！");
     	}
     	else if(subSystemService.countByBoxIp(subSystem.getIp()) > 0)
     	{
     		redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "IP地址与其它系统BOX IP地址冲突！");
+            redirectAttributes.addFlashAttribute("message", "设备IP地址与其它解码器IP地址冲突！");
     	}
     	else {
     		if(file.getSize() > 0) {
@@ -159,25 +159,25 @@ public class SubSystemController {
     	if(!subSystem.getBoxIp().isEmpty()) {
     		if(subSystemService.countByIp(subSystem.getBoxIp()) > 0) {
         		redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "BOX IP地址与其它系统冲突！");
+                redirectAttributes.addFlashAttribute("message", "解码器IP地址与其它e:cue设备IP地址冲突！");
                 return "redirect:/manage/sub_system/list";
         	}
     		else if(subSystemService.countByBoxIpExcept(subSystem.getBoxIp(),subSystem.getId()) > 0)
         	{
         		redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "BOX IP地址与其它系统BOX IP地址冲突！");
+                redirectAttributes.addFlashAttribute("message", "解码器IP地址与其它系统解码器IP地址冲突！");
                 return "redirect:/manage/sub_system/list";
         	}
     	}
     	
     	if(subSystemService.countByIpExcept(subSystem.getIp(),subSystem.getId()) > 0) {
     		redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "IP地址与其它系统冲突！");
+            redirectAttributes.addFlashAttribute("message", "设备IP地址与其它e:cue设备IP地址冲突！");
     	}
     	else if(subSystemService.countByBoxIp(subSystem.getIp())> 0)
     	{
     		redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "IP地址与其它系统BOX IP地址冲突！");
+            redirectAttributes.addFlashAttribute("message", "设备IP地址与其它解码器IP地址冲突！");
     	}
     	else {
     		if(file.getSize() > 0) {
@@ -203,7 +203,7 @@ public class SubSystemController {
     							final RedirectAttributes redirectAttributes) throws IOException {
     	if(fileAreaService.countBySysId(id) > 0) {
     		redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "该系统被文件切割模板占用，请先调整对应模板后再操作!");
+            redirectAttributes.addFlashAttribute("message", "该设备被文件切割模板占用，请先调整对应模板后再操作!");
     	} else {
     		if(subSystemService.detele(id) > 0){
                 redirectAttributes.addFlashAttribute("message", "删除成功！");

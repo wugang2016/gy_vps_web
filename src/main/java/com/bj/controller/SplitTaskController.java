@@ -217,7 +217,7 @@ public class SplitTaskController {
 	    	}
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "有分发任务使用此切割任务，禁止删除！");
+            redirectAttributes.addFlashAttribute("message", "分发任务正使用该切割任务，禁止删除！");
     	}
         return "redirect:/task/split/list";
     }

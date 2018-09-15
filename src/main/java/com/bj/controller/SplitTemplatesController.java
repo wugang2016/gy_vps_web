@@ -191,12 +191,12 @@ public class SplitTemplatesController {
     							final RedirectAttributes redirectAttributes) throws IOException {
     	if(splitTaskService.countByTemplateId(id) > 0) {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "有切割任务使用此模板，禁止删除！");
+            redirectAttributes.addFlashAttribute("message", "切割任务使用此模板，禁止删除！");
             return "redirect:/manage/split_templates/list";
     	}
     	if(realplayTaskService.countByTemplateId(id) > 0) {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "有实时文件播放任务使用此模板，禁止删除！");
+            redirectAttributes.addFlashAttribute("message", "实时文件播放任务使用此模板，禁止删除！");
             return "redirect:/manage/split_templates/list";
     	}
     	
