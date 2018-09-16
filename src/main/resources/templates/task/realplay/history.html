@@ -308,9 +308,14 @@ function stopPlay(){
 	        data:{taskPassword:taskPwd},
 	        success: function(data){
 	            if(data == "1"){
-	            	alert("请求已发送！");
-	            	location.reload();
+	            	$('#stopModal').find("#msg").html("请求已发送!");
+	            	$('#stopModal').find(".alert").removeClass("alert-danger");
+	            	$('#stopModal').find(".alert").addClass("alert-success");
+	            	$('#stopModal').find(".alert").show();
+	            	setTimeout("location.reload()",1000);
 	            }else{
+	            	$('#stopModal').find(".alert").removeClass("alert-success");
+	            	$('#stopModal').find(".alert").addClass("alert-danger");
 	            	$('#stopModal').find(".alert").show();
 	            	$('#stopModal').find("#msg").html(data);
 	            }
@@ -336,9 +341,14 @@ function replay(){
 	        data:{repeate:repeate,hh:hh,mm:mm,ss:ss,taskPassword:taskPwd,subSystemIds:subSystemIds},
 	        success: function(data){
 	            if(data == "1"){
-	            	alert("请求已发送！");
-	            	location.reload();
+	            	$('#replayModal').find("#msg").html("请求已发送!");
+	            	$('#replayModal').find(".alert").removeClass("alert-danger");
+	            	$('#replayModal').find(".alert").addClass("alert-success");
+	            	$('#replayModal').find(".alert").show();
+	            	setTimeout("location.reload()",1000);
 	            }else{
+	            	$('#replayModal').find(".alert").removeClass("alert-success");
+	            	$('#replayModal').find(".alert").addClass("alert-danger");
 	            	$('#replayModal').find(".alert").show();
 	            	$('#replayModal').find("#msg").html(data);
 	            }

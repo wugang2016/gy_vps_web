@@ -30,7 +30,7 @@ public class KaptchaConfig {
         properties.setProperty("kaptcha.textproducer.font.color", "0,0,255");   //字体颜色
         properties.setProperty("kaptcha.image.width", "120");  //验证码宽度
         properties.setProperty("kaptcha.image.height", "43");  //验证码高度
-        properties.setProperty("kaptcha.textproducer.font.size", "30");  //字体大小
+        properties.setProperty("kaptcha.textproducer.font.size", "34");  //字体大小
         properties.setProperty("kaptcha.session.key", "code");  //session key
         properties.setProperty("kaptcha.background.clear.from", "248,248,248");  //验证码背景颜色渐变，开始颜色
         properties.setProperty("kaptcha.background.clear.to", "248,248,248");  //验证码背景颜色渐变，结束颜色

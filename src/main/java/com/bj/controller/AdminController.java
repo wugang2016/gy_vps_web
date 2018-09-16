@@ -271,4 +271,10 @@ public class AdminController {
     private void updateAndSendMsg(String key, String value) {
 		sysParamService.updateValue(key,value);
     }
+    
+    @GetMapping("/about")
+    public String goAbout(Map<String, Object> model,
+            HttpServletRequest request) {
+        return "admin/about";
+	}
 }

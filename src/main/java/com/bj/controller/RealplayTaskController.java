@@ -81,6 +81,7 @@ public class RealplayTaskController {
     @GetMapping("/realplay/list")
     public String goList(Map<String, Object> model,
             HttpServletRequest request,
+            @RequestParam(value = "tab", defaultValue = "1") int tab,
             @RequestParam(value = "a", defaultValue = "0") int refresh,
             @RequestParam(value = "p", defaultValue = "1") int page) {
     	//最近任务
@@ -112,6 +113,7 @@ public class RealplayTaskController {
         if(refresh > 0) {
             model.put("refresh", refresh);
         }
+        model.put("tab", tab);
         initSelectTime(model);
         return "task/realplay/list";
     }
