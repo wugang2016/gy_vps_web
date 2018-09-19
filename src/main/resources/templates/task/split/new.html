@@ -58,6 +58,10 @@
             <p class="alert {{#hasError}}alert-danger{{/hasError}}{{^hasError}}alert-success{{/hasError}}" role="alert">
             	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>{{message}}</p>
             {{/message}}
+            <p id="errMsg" class="alert alert-danger" style="display:none">
+            	<a href="#" class="close" data-dismiss="alert">&times;</a><em>系统提示：</em>
+            	<span id="msg"></span>
+            </p>
             <div class="page-header">
                 <h1>切割任务
                     <small>新增</small>
@@ -228,14 +232,16 @@ function goSubmit(){
 	        success: function(data){
 	        	data = eval("("+data+")");
 				if(data.error_code == 0){
+					$('#errMsg').hide();
 					$("#submiting").html("<img src='/css/img/small-loading.gif'>上传中,请稍候...");
 					$('#areaJson').val(JSON.stringify(area_json));
 		    		$("input[name='taskPassword']").val($.md5($("input[name='taskPassword']").val()));
 		    		$("#form").data('bootstrapValidator').disableSubmitButtons(true).defaultSubmit();
 				}else{
 					$("#submiting").html("");
+					$('#msg').html(data.msg);
+					$('#errMsg').show();
 					$('#form').bootstrapValidator('disableSubmitButtons', false);
-					alert(data.msg);
 				}
 	        }
 	    });
