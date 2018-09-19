@@ -236,6 +236,9 @@ function goSubmit(){
 		$("#submiting").html("<img src='/css/img/small-loading.gif'>上传中,请稍候...");
 		$("input[name='taskPassword']").val($.md5($("input[name='taskPassword']").val()));
 		formData.disableSubmitButtons(true).defaultSubmit();
+		$('#form').find('input,select,textarea').each(function(){
+			$(this).attr("disabled","true");
+		});
 	}else{
 		$('#form').bootstrapValidator('disableSubmitButtons', false);
 	}

@@ -74,7 +74,7 @@
                 <div class="form-group">
                     <label for="inputName" class="col-sm-2 control-label">视频切割区域</label>
                     <div class="col-sm-10">
-						<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal">新增切割区域</button>
+						<a href="#" class="btn btn-primary"  data-toggle="modal" data-target="#myModal">新增切割区域</a>
                 		<input type="hidden" name="areaJson" id="areaJson" data-bv-excluded="false"/>
                     </div>
                 </div>
@@ -168,6 +168,7 @@
                     <div class="col-sm-offset-2 col-sm-10">
                         <input type="submit" class="btn btn-primary" value="保 存"/>
                         <a href="{{ctx.contextPath}}/manage/android_template/list" class="btn btn-default">返 回</a>
+                        <span id="submiting"></span>
                     </div>
                 </div>
             </form>
@@ -274,6 +275,9 @@ $(function() {
     $("#form").bootstrapValidator({
    		fields:{areaJson:{validators:{
    			notEmpty: {}}}}
+    }).on('success.form.bv', function (e) {
+        e.preventDefault();
+        goSubmit();
     });
     $(".modal-content").bootstrapValidator();
     formData = $("#form").data('bootstrapValidator');
@@ -428,6 +432,17 @@ function deleteArea(index){
 		$('#areaJson').val("");
 		formData.revalidateField('areaJson');
 	}
+}
+
+function goSubmit(){
+	$("#submiting").html("<img src='/css/img/small-loading.gif'>上传中,请稍后...");
+	$("#form").data('bootstrapValidator').disableSubmitButtons(true).defaultSubmit();
+	$('#form').find('input,select,textarea,a').each(function(){
+		if($(this).html() != '返 回'){
+			$(this).attr("disabled","true");
+			$(this).click(function(){return false;});
+		}
+	});
 }
 </script>
 </body>

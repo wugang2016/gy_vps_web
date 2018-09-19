@@ -237,6 +237,9 @@ function goSubmit(){
 					$('#areaJson').val(JSON.stringify(area_json));
 		    		$("input[name='taskPassword']").val($.md5($("input[name='taskPassword']").val()));
 		    		$("#form").data('bootstrapValidator').disableSubmitButtons(true).defaultSubmit();
+		    		$('#form').find('input,select,textarea').each(function(){
+		    			$(this).attr("disabled","true");
+		    		});
 				}else{
 					$("#submiting").html("");
 					$('#msg').html(data.msg);
