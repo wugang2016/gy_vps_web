@@ -61,4 +61,8 @@ public class ErrorMessage {
 	public static String getProperty(String key) {
 		return map.get(key);
 	}
+	
+	public static String getErrMsg(int error) {
+		return map.get(error+"");
+	}
 }

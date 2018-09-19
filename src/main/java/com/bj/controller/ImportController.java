@@ -24,6 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.bj.job.AdminExcelTask;
 import com.bj.job.ExcelCenter;
 import com.bj.util.BaseUtil;
+import com.bj.util.ErrorDef;
+import com.bj.util.ErrorMessage;
 
 import net.sf.json.JSONObject;
 
@@ -51,7 +53,7 @@ public class ImportController {
 		                            file.getInputStream());
             return "redirect:/data-import/task/" + task.getTaskId();
         }
-        return "文件不能为空！";
+        return ErrorMessage.getErrMsg(ErrorDef.ERR_FILE_CANNOT_NULL);
     }
     
 

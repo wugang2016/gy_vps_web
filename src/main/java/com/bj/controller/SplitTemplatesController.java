@@ -31,6 +31,8 @@ import com.bj.service.RealplayTaskService;
 import com.bj.service.SplitTaskService;
 import com.bj.service.SplitTemplatesService;
 import com.bj.service.SubSystemService;
+import com.bj.util.ErrorDef;
+import com.bj.util.ErrorMessage;
 import com.bj.util.Pagination;
 
 import net.sf.json.JSONArray;
@@ -103,7 +105,8 @@ public class SplitTemplatesController {
             }
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "至少新增一条切割区域！");
+//            redirectAttributes.addFlashAttribute("message", "至少新增一条切割区域！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_FILE_SPLIT_TEMPLATE_NO_SPLIT_AREA));
             redirectAttributes.addFlashAttribute("splitTemplates", splitTemplates);
             return "redirect:/manage/split_templates/new";
     	}
@@ -116,10 +119,12 @@ public class SplitTemplatesController {
 				}
 				fileAreaService.batchInsert(areaList);
 			}
-            redirectAttributes.addFlashAttribute("message", "保存成功！");
+//            redirectAttributes.addFlashAttribute("message", "保存成功！");
+			redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_SAVE_SUCCESS));
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "保存失败！");
+//            redirectAttributes.addFlashAttribute("message", "保存失败！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_SAVE_FAILED));
     	}
     	
         return "redirect:/manage/split_templates/list";
@@ -162,7 +167,8 @@ public class SplitTemplatesController {
             }
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "至少新增一条切割区域！");
+//            redirectAttributes.addFlashAttribute("message", "至少新增一条切割区域！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_FILE_SPLIT_TEMPLATE_NO_SPLIT_AREA));
             redirectAttributes.addFlashAttribute("splitTemplates", splitTemplates);
             return "redirect:/manage/split_templates/"+splitTemplates.getId()+"/edit";
     	}
@@ -176,10 +182,11 @@ public class SplitTemplatesController {
 				}
 				fileAreaService.batchInsert(areaList);
 			}
-            redirectAttributes.addFlashAttribute("message", "保存成功！");
+			redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_SAVE_SUCCESS));
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "保存失败！");
+//            redirectAttributes.addFlashAttribute("message", "保存失败！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_SAVE_FAILED));
     	}
     	
         return "redirect:/manage/split_templates/list";
@@ -191,26 +198,30 @@ public class SplitTemplatesController {
     							final RedirectAttributes redirectAttributes) throws IOException {
     	if(splitTaskService.countByTemplateId(id) > 0) {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "切割任务使用此模板，禁止删除！");
+//            redirectAttributes.addFlashAttribute("message", "切割任务使用此模板，禁止删除！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_FILE_SPLIT_TEMPLATE_DELETE_FAILED_EXISTEDFILESPLITTASK));
             return "redirect:/manage/split_templates/list";
     	}
-    	if(realplayTaskService.countByTemplateId(id) > 0) {
-            redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "实时文件播放任务使用此模板，禁止删除！");
-            return "redirect:/manage/split_templates/list";
-    	}
-    	
+//    	if(realplayTaskService.countByTemplateId(id) > 0) {
+//            redirectAttributes.addFlashAttribute("hasError", true);
+//            redirectAttributes.addFlashAttribute("message", "实时文件播放任务使用此模板，禁止删除！");
+//            return "redirect:/manage/split_templates/list";
+//    	}
+//    	
     	//先删除模板对应的切割区域
     	if(fileAreaService.deteleByTemplateId(id) >= 0) {
 			if(splitTemplatesService.delete(id) > 0){
-	            redirectAttributes.addFlashAttribute("message", "删除成功！");
+//	            redirectAttributes.addFlashAttribute("message", "删除成功！");
+	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_DELETE_SUCCESS));
 	    	}else{
 	            redirectAttributes.addFlashAttribute("hasError", true);
-	            redirectAttributes.addFlashAttribute("message", "删除失败！");
+//	            redirectAttributes.addFlashAttribute("message", "删除失败！");
+	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DELETE_FAILED));
 	    	}
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "删除对应切割区域失败！");
+//            redirectAttributes.addFlashAttribute("message", "删除对应切割区域失败！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_FILE_SPLIT_TEMPLATE_DELETE_SPLIT_AREA_FAILED));
     	}
         return "redirect:/manage/split_templates/list";
     }

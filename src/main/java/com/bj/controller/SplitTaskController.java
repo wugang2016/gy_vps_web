@@ -43,6 +43,8 @@ import com.bj.service.SplitTemplatesService;
 import com.bj.service.SysParamService;
 import com.bj.util.BaseUtil;
 import com.bj.util.Contants;
+import com.bj.util.ErrorDef;
+import com.bj.util.ErrorMessage;
 import com.bj.util.Pagination;
 
 import net.sf.json.JSONArray;
@@ -117,7 +119,7 @@ public class SplitTaskController {
     							final RedirectAttributes redirectAttributes) throws IOException {
     	if(!sysParamService.validTaskPassword(splitTask.getTaskPassword())) {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "任务密码错误！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_TASK_PASS_ERROR));
             redirectAttributes.addFlashAttribute("splitTask", splitTask);
             return "redirect:/task/split/new";
     	}
@@ -136,7 +138,8 @@ public class SplitTaskController {
     	
     	if(file.getSize() <= 0) {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "缺少切割视频文件！");
+//            redirectAttributes.addFlashAttribute("message", "缺少切割视频文件！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_FILE_SPLIT_TASK_NEW_FAILED_NOVIDEO));
             redirectAttributes.addFlashAttribute("splitTask", splitTask);
             return "redirect:/task/split/new";
     	}else {
@@ -156,7 +159,8 @@ public class SplitTaskController {
             }
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "所选模板未添加切割区域！");
+//            redirectAttributes.addFlashAttribute("message", "所选模板未添加切割区域！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_FILE_SPLIT_TASK_NEW_FAILED_TEMPLATE_NO_AREA));
             redirectAttributes.addFlashAttribute("splitTask", splitTask);
             return "redirect:/task/split/new";
     	}
@@ -178,10 +182,12 @@ public class SplitTaskController {
 				subTask.setStatus(SubTaskStatus.PENDING.index());
 				splitSubTaskService.insert(subTask);
 			}
-            redirectAttributes.addFlashAttribute("message", "保存成功！");
+//            redirectAttributes.addFlashAttribute("message", "保存成功！");
+			redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_SAVE_SUCCESS));
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "保存失败！");
+//            redirectAttributes.addFlashAttribute("message", "保存失败！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_SAVE_FAILED));
     	}
         return "redirect:/task/split/list";
     }
@@ -216,14 +222,17 @@ public class SplitTaskController {
 					}
 				}
 				
-	            redirectAttributes.addFlashAttribute("message", "删除成功！");
+//	            redirectAttributes.addFlashAttribute("message", "删除成功！");
+				redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_DELETE_SUCCESS));
 	    	}else{
 	            redirectAttributes.addFlashAttribute("hasError", true);
-	            redirectAttributes.addFlashAttribute("message", "删除失败！");
+//	            redirectAttributes.addFlashAttribute("message", "删除失败！");
+	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DELETE_FAILED));
 	    	}
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "分发任务正使用该切割任务，禁止删除！");
+//            redirectAttributes.addFlashAttribute("message", "分发任务正使用该切割任务，禁止删除！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_FILE_SPLIT_TASK_DELETE_FAILED_EXISTEDDISPATCHTASK));
     	}
         return "redirect:/task/split/list";
     }

@@ -26,6 +26,8 @@ import com.bj.service.SysParamService;
 import com.bj.service.SysUserService;
 import com.bj.util.BaseUtil;
 import com.bj.util.Contants;
+import com.bj.util.ErrorDef;
+import com.bj.util.ErrorMessage;
 
 /**
  * @author LQK
@@ -75,12 +77,15 @@ public class AdminController {
                 return "redirect:/task/split/list";
         	}else {
             	model.put("hasError", true);
-            	model.put("message", "错误的用户名或密码"); 
+//            	model.put("message", "错误的用户名或密码"); 
+            	model.put("message", ErrorMessage.getErrMsg(ErrorDef.ERR_LOGIN_USER_OR_PASS_ERR)); 
+            	
             	return "admin/login_old";
         	}
         }else{
         	model.put("hasError", true);
-        	model.put("message", "错误的验证码"); 
+//        	model.put("message", "错误的验证码"); 
+        	model.put("message", ErrorMessage.getErrMsg(ErrorDef.ERR_LOGIN_VERIFY_CODE_ERR)); 
         	return "admin/login_old";
         }
     }
@@ -109,13 +114,15 @@ public class AdminController {
     	//if(!isLogin(request)) {return "admin/login";}
     	if(BaseUtil.isEmpty(b1080) || BaseUtil.isEmpty(b720) || BaseUtil.isEmpty(b4cif)) {
         	model.put("hasError", true);
-        	model.put("message", "参数不可为空"); 
+//        	model.put("message", "参数不可为空"); 
+        	model.put("message", ErrorMessage.getErrMsg(ErrorDef.ERR_PARA_NULL)); 
         	return "admin/set";
     	}
 		updateAndSendMsg(Contants.KEY_BITERATE_1080P, b1080);
 		updateAndSendMsg(Contants.KEY_BITERATE_720P, b720);
 		updateAndSendMsg(Contants.KEY_BITERATE_4CIF, b4cif);
-    	model.put("message", "修改参数成功"); 
+//    	model.put("message", "修改成功"); 
+    	model.put("message", ErrorMessage.getErrMsg(ErrorDef.INFO_MODIFY_SUCCESS)); 
     	loginedInit(model);
     	return "admin/set";
     }
@@ -128,12 +135,14 @@ public class AdminController {
     	//if(!isLogin(request)) {return "admin/login";}
     	if(BaseUtil.isEmpty(tsModeLeftwidth) || BaseUtil.isEmpty(tsModeShiftwidth)) {
         	model.put("hasError", true);
-        	model.put("message", "参数不可为空"); 
+//        	model.put("message", "参数不可为空"); 
+        	model.put("message", ErrorMessage.getErrMsg(ErrorDef.ERR_PARA_NULL)); 
         	return "admin/set";
     	}
 		updateAndSendMsg(Contants.KEY_ANDROID_TSMODE_LEFTWIDTH, tsModeLeftwidth);
 		updateAndSendMsg(Contants.KEY_ANDROID_TSMODE_SHIFTWIDTH, tsModeShiftwidth);
-    	model.put("message", "修改参数成功"); 
+//    	model.put("message", "修改成功"); 
+    	model.put("message", ErrorMessage.getErrMsg(ErrorDef.INFO_MODIFY_SUCCESS)); 
     	loginedInit(model);
     	return "admin/set";
     }
@@ -155,22 +164,26 @@ public class AdminController {
     	//if(!isLogin(request)) {return "admin/login";}
     	if(oldPassword != null && oldPassword.trim().length() > 0 && oldPassword.equals(password)) {
         	model.put("hasError", true);
-        	model.put("message", "新密码不能与旧密码相同"); 
+//        	model.put("message", "新密码不能与旧密码相同"); 
+        	model.put("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ADMIN_PASS_ERR_SAMEWTIHOLD)); 
         	return "admin/set";
     	}
     	
     	if(password == null || password.trim().length() == 0 || !password.equals(password2)) {
         	model.put("hasError", true);
-        	model.put("message", "新密码与重复新密码不相同"); 
+//        	model.put("message", "新密码与重复新密码不相同"); 
+        	model.put("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ADMIN_PASS_ERR_NOTSAMEWTIHREPATE)); 
         	return "admin/set";
     	}
     	SysUser sysUser = sysUserService.findByUsername(LOGIN_NAME);
     	if(sysUser != null && BaseUtil.md5(oldPassword.trim()).equals(sysUser.getPassword())) {
     		sysUserService.updatePassword(BaseUtil.md5(password.trim()));
-        	model.put("message", "修改管理员密码成功"); 
+//        	model.put("message", "修改成功"); 
+        	model.put("message", ErrorMessage.getErrMsg(ErrorDef.INFO_MODIFY_SUCCESS)); 
     	}else {
         	model.put("hasError", true);
-        	model.put("message", "错误的旧密码"); 
+//        	model.put("message", "错误的旧密码"); 
+        	model.put("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ADMIN_PASS_ERR_OLDPASS_ERR)); 
     	}
     	return "admin/set";
     }
@@ -184,21 +197,25 @@ public class AdminController {
     	//if(!isLogin(request)) {return "admin/login";}
     	if(oldTaskPassword != null && oldTaskPassword.trim().length() > 0 && oldTaskPassword.equals(taskPassword)) {
         	model.put("hasError", true);
-        	model.put("message", "新密码不能与旧密码相同"); 
+//        	model.put("message", "新密码不能与旧密码相同"); 
+        	model.put("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ADMIN_PASS_ERR_SAMEWTIHOLD)); 
         	return "admin/set";
     	}
     	if(taskPassword == null || taskPassword.trim().length() == 0 || !taskPassword.equals(taskPassword2)) {
         	model.put("hasError", true);
-        	model.put("message", "新密码与重复新密码不相同"); 
+//        	model.put("message", "新密码与重复新密码不相同"); 
+        	model.put("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ADMIN_PASS_ERR_NOTSAMEWTIHREPATE)); 
         	return "admin/set";
     	}
     	String value = sysParamService.findByKey(Contants.KEY_TASK_PASSWORD);
     	if(BaseUtil.md5(oldTaskPassword.trim()).equals(value)) {
     		updateAndSendMsg(Contants.KEY_TASK_PASSWORD, BaseUtil.md5(taskPassword.trim()));
-        	model.put("message", "修改任务密码成功"); 
+//        	model.put("message", "修改成功"); 
+    		model.put("message", ErrorMessage.getErrMsg(ErrorDef.INFO_MODIFY_SUCCESS)); 
     	}else {
         	model.put("hasError", true);
-        	model.put("message", "错误的旧密码"); 
+//        	model.put("message", "错误的旧密码"); 
+        	model.put("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ADMIN_PASS_ERR_OLDPASS_ERR)); 
     	}
     	return "admin/set";
     }
@@ -210,13 +227,15 @@ public class AdminController {
     	//if(!isLogin(request)) {return "admin/login";}
     	if(file.getSize() <= 0) {
     		model.put("hasError", true);
-    		model.put("message", "缺少License文件！");
+//    		model.put("message", "缺少License文件");
+    		model.put("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ADMIN_NO_LICENSE_FILE)); 
         	return "admin/set";
     	}else {
 			//BaseUtil.doSaveFile(vpsHomeDir + File.separator + Contants.LICENSE_FILE_SUB_PATH, file, null);
     		BaseUtil.doSaveFile(vpsHomeDir, file, null);
     	}
-    	model.put("message", "上传成功"); 
+//    	model.put("message", "上传成功"); 
+    	model.put("message", ErrorMessage.getErrMsg(ErrorDef.INFO_UPLADE_SUCCESS)); 
     	return "admin/set";
     }
 

@@ -36,6 +36,8 @@ import com.bj.service.FileAreaService;
 import com.bj.service.SubSystemService;
 import com.bj.util.BaseUtil;
 import com.bj.util.Contants;
+import com.bj.util.ErrorDef;
+import com.bj.util.ErrorMessage;
 import com.bj.util.FileTypeUtil;
 import com.bj.util.FileTypeUtil.FileType;
 import com.bj.util.Pagination;
@@ -94,25 +96,26 @@ public class SubSystemController {
     	if(!subSystem.getBoxIp().isEmpty()) {
     		if(subSystemService.countByIp(subSystem.getBoxIp()) > 0) {
         		redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "解码器IP地址与其它e:cue设备IP地址冲突！");
+//                redirectAttributes.addFlashAttribute("message", "解码器IP地址与其它e:cue设备IP地址冲突！");
+        		redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ECUE_BOXIP_SAMEWTIH_OTHER_ECUEIP));
                 return "redirect:/manage/sub_system/list";
         	}
     		else if(subSystemService.countByBoxIp(subSystem.getBoxIp()) > 0)
         	{
         		redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "解码器IP地址与其它系统解码器IP地址冲突！");
+                redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ECUE_BOXIP_SAMEWTIH_OTHER_BOXIP));
                 return "redirect:/manage/sub_system/list";
         	}
     	}
 
     	if(subSystemService.countByIp(subSystem.getIp()) > 0) {
     		redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "设备IP地址与其它e:cue设备IP地址冲突！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ECUE_ECUEIP_SAMEWTIH_OTHER_ECUEIP));
     	}
     	else if(subSystemService.countByBoxIp(subSystem.getIp()) > 0)
     	{
     		redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "设备IP地址与其它解码器IP地址冲突！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ECUE_ECUEIP_SAMEWTIH_OTHER_BOXIP));
     	}
     	else {
     		if(file.getSize() > 0) {
@@ -123,10 +126,12 @@ public class SubSystemController {
     			subSystem.setPicPath(path + File.separator +  newFileName);
     		}
     		if(subSystemService.insert(subSystem) > 0){
-                redirectAttributes.addFlashAttribute("message", "保存成功！");
+//                redirectAttributes.addFlashAttribute("message", "保存成功！");
+                redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_SAVE_SUCCESS));
         	}else{
                 redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "保存失败！");
+//                redirectAttributes.addFlashAttribute("message", "保存失败！");
+                redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_SAVE_FAILED));
         	}
     	}
     	
@@ -159,25 +164,29 @@ public class SubSystemController {
     	if(!subSystem.getBoxIp().isEmpty()) {
     		if(subSystemService.countByIp(subSystem.getBoxIp()) > 0) {
         		redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "解码器IP地址与其它e:cue设备IP地址冲突！");
+//                redirectAttributes.addFlashAttribute("message", "解码器IP地址与其它e:cue设备IP地址冲突！");
+                redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ECUE_BOXIP_SAMEWTIH_OTHER_ECUEIP));
                 return "redirect:/manage/sub_system/list";
         	}
     		else if(subSystemService.countByBoxIpExcept(subSystem.getBoxIp(),subSystem.getId()) > 0)
         	{
         		redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "解码器IP地址与其它系统解码器IP地址冲突！");
+//                redirectAttributes.addFlashAttribute("message", "解码器IP地址与其它系统解码器IP地址冲突！");
+        		redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ECUE_BOXIP_SAMEWTIH_OTHER_BOXIP));
                 return "redirect:/manage/sub_system/list";
         	}
     	}
     	
     	if(subSystemService.countByIpExcept(subSystem.getIp(),subSystem.getId()) > 0) {
     		redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "设备IP地址与其它e:cue设备IP地址冲突！");
+//            redirectAttributes.addFlashAttribute("message", "设备IP地址与其它e:cue设备IP地址冲突！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ECUE_ECUEIP_SAMEWTIH_OTHER_ECUEIP));
     	}
     	else if(subSystemService.countByBoxIp(subSystem.getIp())> 0)
     	{
     		redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "设备IP地址与其它解码器IP地址冲突！");
+//            redirectAttributes.addFlashAttribute("message", "设备IP地址与其它解码器IP地址冲突！");
+    		redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ECUE_ECUEIP_SAMEWTIH_OTHER_BOXIP));
     	}
     	else {
     		if(file.getSize() > 0) {
@@ -188,10 +197,12 @@ public class SubSystemController {
     			subSystem.setPicPath(path + File.separator +  newFileName);
     		}
     		if(subSystem.getId() != null && subSystemService.update(subSystem) > 0){
-                redirectAttributes.addFlashAttribute("message", "保存成功！");
+//                redirectAttributes.addFlashAttribute("message", "保存成功！");
+                redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_SAVE_SUCCESS));
         	}else{
                 redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "保存失败！");
+//                redirectAttributes.addFlashAttribute("message", "保存失败！");
+                redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_SAVE_FAILED));
         	}
     	}
         return "redirect:/manage/sub_system/list";
@@ -203,13 +214,16 @@ public class SubSystemController {
     							final RedirectAttributes redirectAttributes) throws IOException {
     	if(fileAreaService.countBySysId(id) > 0) {
     		redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "该设备被文件切割模板占用，请先调整对应模板后再操作!");
+//            redirectAttributes.addFlashAttribute("message", "该设备被文件切割模板占用，请先调整对应模板后再操作!");
+    		redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ECUE_DELETE_FAIELD_EXISTEDFILESPLITTEMPLATE));
     	} else {
     		if(subSystemService.detele(id) > 0){
-                redirectAttributes.addFlashAttribute("message", "删除成功！");
+//                redirectAttributes.addFlashAttribute("message", "删除成功！");
+    			redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_DELETE_SUCCESS));
         	}else{
                 redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "删除失败！");
+//                redirectAttributes.addFlashAttribute("message", "删除失败！");
+                redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DELETE_FAILED));
         	}
     	}
         return "redirect:/manage/sub_system/list";

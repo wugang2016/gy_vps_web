@@ -41,6 +41,8 @@ import com.bj.service.SubSystemService;
 import com.bj.service.SysParamService;
 import com.bj.util.BaseUtil;
 import com.bj.util.Contants;
+import com.bj.util.ErrorDef;
+import com.bj.util.ErrorMessage;
 import com.bj.util.Pagination;
 
 import net.sf.json.JSONObject;
@@ -167,13 +169,15 @@ public class RealplayTaskController {
     							final RedirectAttributes redirectAttributes) throws IOException {
     	if(!sysParamService.validTaskPassword(realplayTask.getTaskPassword())) {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "任务密码错误！");
+//            redirectAttributes.addFlashAttribute("message", "任务密码错误！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_TASK_PASS_ERROR));
             redirectAttributes.addFlashAttribute("realplayTask", realplayTask);
             return "redirect:/task/realplay/new";
     	}
     	if(file.getSize() <= 0) {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "缺少视频文件！");
+//            redirectAttributes.addFlashAttribute("message", "缺少视频文件！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_FILE_REALPLAY_NEW_NO_VIDEO));
             redirectAttributes.addFlashAttribute("realplayTask", realplayTask);
             return "redirect:/task/realplay/new";
     	}else {
@@ -192,13 +196,15 @@ public class RealplayTaskController {
 			fileResourceService.insert(realplayTask.getFileResource());
     		if(realplayTaskService.insert(realplayTask) <= 0){
                 redirectAttributes.addFlashAttribute("hasError", true);
-                redirectAttributes.addFlashAttribute("message", "保存失败！");
+//                redirectAttributes.addFlashAttribute("message", "保存失败！");
+                redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_SAVE_FAILED));
                 return "redirect:/task/realplay/list";
         	}
     	}else {
 			fileResourceService.insert(realplayTask.getFileResource());
     	}    	
-        redirectAttributes.addFlashAttribute("message", "保存成功！");
+//        redirectAttributes.addFlashAttribute("message", "保存成功！");
+        redirectAttributes.addFlashAttribute("message",ErrorMessage.getErrMsg(ErrorDef.INFO_SAVE_SUCCESS));
         return "redirect:/task/realplay/list";
     }
 
@@ -226,10 +232,12 @@ public class RealplayTaskController {
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {
 		if(realplayTaskService.delete(id) > 0){
-            redirectAttributes.addFlashAttribute("message", "删除成功！");
+//            redirectAttributes.addFlashAttribute("message", "删除成功！");
+			redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_DELETE_SUCCESS));
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "删除失败！");
+//            redirectAttributes.addFlashAttribute("message", "删除失败！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DELETE_FAILED));
     	}
         return "redirect:/task/realplay/list";
     }
@@ -238,23 +246,39 @@ public class RealplayTaskController {
     @PostMapping("/realplay/file/{id}/delete")
     public String doDeleteFile(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {
-    	if(realplayTaskService.findByFileId(id).size() <= 0){
-    		FileResource file = fileResourceService.findById(id);
-			if(fileResourceService.delete(id) > 0){
-				if(file != null) {
-					String filepath = uploadFileDir + File.separator + file.getFilePath();
-					BaseUtil.deleteFile(filepath);
-					LOGGER.info("delete file:"+filepath);
-				}
-	            redirectAttributes.addFlashAttribute("message", "删除成功！");
-	    	}else{
-	            redirectAttributes.addFlashAttribute("hasError", true);
-	            redirectAttributes.addFlashAttribute("message", "删除失败！");
-	    	}
-    	}else {
+    	//去掉约束历史记录的
+    	FileResource file = fileResourceService.findById(id);
+		if(fileResourceService.delete(id) > 0){
+			if(file != null) {
+				String filepath = uploadFileDir + File.separator + file.getFilePath();
+				BaseUtil.deleteFile(filepath);
+				LOGGER.info("delete file:"+filepath);
+			}
+//            redirectAttributes.addFlashAttribute("message", "删除成功！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_DELETE_SUCCESS));
+    	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "存在播放任务，删除失败！");
+//            redirectAttributes.addFlashAttribute("message", "删除失败！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DELETE_FAILED));
     	}
+		
+//    	if(realplayTaskService.findByFileId(id).size() <= 0){
+//    		FileResource file = fileResourceService.findById(id);
+//			if(fileResourceService.delete(id) > 0){
+//				if(file != null) {
+//					String filepath = uploadFileDir + File.separator + file.getFilePath();
+//					BaseUtil.deleteFile(filepath);
+//					LOGGER.info("delete file:"+filepath);
+//				}
+//	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_DELETE_SUCCESS));
+//	    	}else{
+//	            redirectAttributes.addFlashAttribute("hasError", true);
+//	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DELETE_FAILED));
+//	    	}
+//    	}else {
+//            redirectAttributes.addFlashAttribute("hasError", true);
+//            redirectAttributes.addFlashAttribute("message", "存在播放任务，删除失败！");
+//    	}
         return "redirect:/task/realplay/list";
     }
 
@@ -263,7 +287,7 @@ public class RealplayTaskController {
             final @RequestParam("taskPassword") String taskPassword,
 			final RedirectAttributes redirectAttributes) throws IOException {
     	if(!sysParamService.validTaskPassword(taskPassword)) {
-            return "任务密码错误";
+    		return ErrorMessage.getErrMsg(ErrorDef.ERR_TASK_PASS_ERROR);
     	}
     	RealplayTask realplayTask = realplayTaskService.findById(id);
     	realplayTaskService.stopPlay(realplayTask);
@@ -281,7 +305,7 @@ public class RealplayTaskController {
             final @RequestParam(value = "subSystemIds", defaultValue = "") Integer[] subSystemIds,
 			final RedirectAttributes redirectAttributes) throws IOException {
     	if(!sysParamService.validTaskPassword(taskPassword)) {
-            return "任务密码错误";
+            return ErrorMessage.getErrMsg(ErrorDef.ERR_TASK_PASS_ERROR);
     	}
     	RealplayTask realplayTask = realplayTaskService.findById(id);
     	realplayTask.setRepeate(repeate);
@@ -308,7 +332,7 @@ public class RealplayTaskController {
             final @RequestParam(value = "subSystemIds", defaultValue = "") Integer[] subSystemIds,
 			final RedirectAttributes redirectAttributes) throws IOException {
     	if(!sysParamService.validTaskPassword(taskPassword)) {
-            return "任务密码错误";
+            return ErrorMessage.getErrMsg(ErrorDef.ERR_TASK_PASS_ERROR);
     	}
     	FileResource fileResource = fileResourceService.findById(fileId);
     	SplitTemplates splitTemplates = splitTemplatesService.findById(templateId);

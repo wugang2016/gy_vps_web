@@ -40,6 +40,8 @@ import com.bj.service.AndroidRealplayTemplateService;
 import com.bj.service.SubSystemService;
 import com.bj.util.BaseUtil;
 import com.bj.util.Contants;
+import com.bj.util.ErrorDef;
+import com.bj.util.ErrorMessage;
 import com.bj.util.FileTypeUtil;
 import com.bj.util.FileTypeUtil.FileType;
 import com.bj.util.Pagination;
@@ -115,7 +117,9 @@ public class AndroidRealplayTemplateController {
             }
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "至少新增一条切割区域！");
+//            redirectAttributes.addFlashAttribute("message", "至少新增一条切割区域！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ANDROID_REAL_TEMPLATE_NO_SPLIT_AREA));
+            
             redirectAttributes.addFlashAttribute("areaJson", areaJson);
             redirectAttributes.addFlashAttribute("androidRealplayTemplate", androidRealplayTemplate);
             return "redirect:/manage/android_template/new";
@@ -123,7 +127,8 @@ public class AndroidRealplayTemplateController {
     	
     	if(file1.getSize() <= 0){//签名界面效果图
     		redirectAttributes.addFlashAttribute("hasError", true);
-    		redirectAttributes.addFlashAttribute("message", "签名界面效果图缺失！");
+//    		redirectAttributes.addFlashAttribute("message", "签名界面效果图缺失！");
+    		redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ANDROID_REAL_TEMPLATE_NO_BACKPIC));
             redirectAttributes.addFlashAttribute("areaJson", areaJson);
         	redirectAttributes.addFlashAttribute("androidRealplayTemplate", androidRealplayTemplate);
             return "redirect:/manage/android_template/new";
@@ -145,7 +150,8 @@ public class AndroidRealplayTemplateController {
     	}
     	if(file3.getSize() <= 0){//签名界面签名框图片
     		redirectAttributes.addFlashAttribute("hasError", true);
-    		redirectAttributes.addFlashAttribute("message", "签名界面签名框图片缺失！");
+//    		redirectAttributes.addFlashAttribute("message", "签名界面签名框图片缺失！");
+    		redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ANDROID_REAL_TEMPLATE_NO_LINEPIC));
             redirectAttributes.addFlashAttribute("areaJson", areaJson);
         	redirectAttributes.addFlashAttribute("androidRealplayTemplate", androidRealplayTemplate);
             return "redirect:/manage/android_template/new";
@@ -158,7 +164,8 @@ public class AndroidRealplayTemplateController {
     	}
     	if(file4.getSize() <= 0){//签名界面背景视频
     		redirectAttributes.addFlashAttribute("hasError", true);
-    		redirectAttributes.addFlashAttribute("message", "签名界面背景视频缺失！");
+//    		redirectAttributes.addFlashAttribute("message", "签名界面背景视频缺失！");
+    		redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ANDROID_REAL_TEMPLATE_NO_BACKVIDEO));
             redirectAttributes.addFlashAttribute("areaJson", areaJson);
         	redirectAttributes.addFlashAttribute("androidRealplayTemplate", androidRealplayTemplate);
             return "redirect:/manage/android_template/new";
@@ -176,10 +183,12 @@ public class AndroidRealplayTemplateController {
 				}
 				androidRealplayAreaService.batchInsert(areaList);
 			}
-            redirectAttributes.addFlashAttribute("message", "保存成功！");
+//            redirectAttributes.addFlashAttribute("message", "保存成功！");
+			redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_SAVE_SUCCESS));
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "保存失败！");
+//            redirectAttributes.addFlashAttribute("message", "保存失败！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_SAVE_FAILED));
     	}
         return "redirect:/manage/android_template/list";
     }
@@ -228,7 +237,8 @@ public class AndroidRealplayTemplateController {
             }
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "至少新增一条切割区域！");
+//            redirectAttributes.addFlashAttribute("message", "至少新增一条切割区域！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ANDROID_REAL_TEMPLATE_NO_SPLIT_AREA));
             redirectAttributes.addFlashAttribute("areaJson", areaJson);
             redirectAttributes.addFlashAttribute("androidRealplayTemplate", androidRealplayTemplate);
             return "redirect:/manage/android_template/edit";
@@ -306,10 +316,12 @@ public class AndroidRealplayTemplateController {
 				}
 			}
 		
-            redirectAttributes.addFlashAttribute("message", "保存成功！");
+//            redirectAttributes.addFlashAttribute("message", "保存成功！");
+			redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_SAVE_SUCCESS));
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "保存失败！");
+//            redirectAttributes.addFlashAttribute("message", "保存失败！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_SAVE_FAILED));
     	}
     	
         return "redirect:/manage/android_template/list";
@@ -352,14 +364,18 @@ public class AndroidRealplayTemplateController {
 					}
 				}
 				
-	            redirectAttributes.addFlashAttribute("message", "删除成功！");
+//	            redirectAttributes.addFlashAttribute("message", "删除成功！");
+				redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_DELETE_SUCCESS));
+				
 	    	}else{
 	            redirectAttributes.addFlashAttribute("hasError", true);
-	            redirectAttributes.addFlashAttribute("message", "删除失败！");
+//	            redirectAttributes.addFlashAttribute("message", "删除失败！");
+	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DELETE_FAILED));
 	    	}
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "删除对应切割区域失败！");
+//            redirectAttributes.addFlashAttribute("message", "删除对应切割区域失败！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ANDROID_REAL_TEMPLATE_DELETE_SPLIT_AREA_FAILED));
     	}
         return "redirect:/manage/android_template/list";
     }

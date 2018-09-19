@@ -38,6 +38,8 @@ import com.bj.service.FileAreaService;
 import com.bj.service.SplitTaskService;
 import com.bj.service.SysParamService;
 import com.bj.util.BaseUtil;
+import com.bj.util.ErrorDef;
+import com.bj.util.ErrorMessage;
 import com.bj.util.Pagination;
 
 import net.sf.json.JSONArray;
@@ -99,7 +101,8 @@ public class DispatchTaskController {
     							final RedirectAttributes redirectAttributes) throws IOException {
     	if(!sysParamService.validTaskPassword(dispatchTask.getTaskPassword())) {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "任务密码错误！");
+//            redirectAttributes.addFlashAttribute("message", "任务密码错误！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_TASK_PASS_ERROR));
             redirectAttributes.addFlashAttribute("dispatchTask", dispatchTask);
             redirectAttributes.addFlashAttribute("splitSubTaskJson", splitSubTaskJson);
             return "redirect:/task/dispatch/new";
@@ -126,7 +129,8 @@ public class DispatchTaskController {
             }
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "至少选择一条下发任务！");
+//            redirectAttributes.addFlashAttribute("message", "至少选择一条下发任务！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DISPATCH_TASK_NO_SUBTASK));
             redirectAttributes.addFlashAttribute("dispatchTask", dispatchTask);
             redirectAttributes.addFlashAttribute("splitSubTaskJson", splitSubTaskJson);
             return "redirect:/task/dispatch/new";
@@ -145,10 +149,12 @@ public class DispatchTaskController {
 				subTask.setStatus(SubTaskStatus.PENDING.index());
 				dispatchSubTaskService.insert(subTask);
 			}
-            redirectAttributes.addFlashAttribute("message", "保存成功！");
+//            redirectAttributes.addFlashAttribute("message", "保存成功！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_SAVE_SUCCESS));
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "保存失败！");
+//            redirectAttributes.addFlashAttribute("message", "保存失败！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_SAVE_FAILED));
     	}
         return "redirect:/task/dispatch/list";
     }
@@ -177,10 +183,12 @@ public class DispatchTaskController {
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {    	
 		if(dispatchTaskService.delete(id) > 0){
-            redirectAttributes.addFlashAttribute("message", "删除成功！");
+//            redirectAttributes.addFlashAttribute("message", "删除成功！");
+			redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_DELETE_SUCCESS));
     	}else{
             redirectAttributes.addFlashAttribute("hasError", true);
-            redirectAttributes.addFlashAttribute("message", "删除失败！");
+//            redirectAttributes.addFlashAttribute("message", "删除失败！");
+            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DELETE_FAILED));
     	}
         return "redirect:/task/dispatch/list";
     }
@@ -197,7 +205,7 @@ public class DispatchTaskController {
     public @ResponseBody String dispatchFailedAgain(@PathVariable("taskId") int taskId,
             final @RequestParam("taskPassword") String taskPassword) throws IOException {
     	if(!sysParamService.validTaskPassword(taskPassword)) {
-            return "任务密码错误";
+            return ErrorMessage.getErrMsg(ErrorDef.ERR_TASK_PASS_ERROR);
     	}
     	DispatchTask dispatchTask = dispatchTaskService.findById(taskId);
     	List<DispatchSubTask> dispatchSubTaskList = dispatchSubTaskService.findByTaskId(taskId);
@@ -223,7 +231,7 @@ public class DispatchTaskController {
     public @ResponseBody String dispatchAgain(@PathVariable("taskId") int taskId,
             final @RequestParam("taskPassword") String taskPassword) throws IOException {
     	if(!sysParamService.validTaskPassword(taskPassword)) {
-            return "任务密码错误";
+            return ErrorMessage.getErrMsg(ErrorDef.ERR_TASK_PASS_ERROR);
     	}
     	DispatchTask dispatchTask = dispatchTaskService.findById(taskId);
     	List<DispatchSubTask> dispatchSubTaskList = dispatchSubTaskService.findByTaskId(taskId);
