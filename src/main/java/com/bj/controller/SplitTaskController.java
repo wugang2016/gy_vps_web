@@ -74,6 +74,12 @@ public class SplitTaskController {
     @Resource
     private JobService jobService ;
     
+    @Value("${bijie.send.udp.ip}")
+    private String ip;
+
+    @Value("${bijie.send.udp.port}")
+    private int port;
+    
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
 
@@ -273,5 +279,17 @@ public class SplitTaskController {
     		return "-1"; //文件已经不存在
     	}
     }
-    
+
+    @PostMapping("/split/ecue_status")
+    public @ResponseBody String queryCUEStatus() throws IOException {
+    	try {
+	    	String result = BaseUtil.udpSend(ip, port, "{\"opt\":\"query_task_busy_status\"}");
+	    	JSONObject obj = JSONObject.fromObject(result);
+	    	obj.put("msg", BaseUtil.getErrMsg(obj.get("error_code")==null?"":obj.get("error_code").toString()));
+	        return obj.toString();
+    	}catch(Exception e) {
+    		LOGGER.error("UDP接口无响应! {}",e.getMessage());
+            return "{\"msg\":\"UDP接口无响应！\",\"error_code\":-1}";
+    	}
+    }
 }

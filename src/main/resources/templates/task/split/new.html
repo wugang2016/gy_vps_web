@@ -219,10 +219,26 @@ function goSubmit(){
 	    		}
 	    	})
 		});
-		$('#areaJson').val(JSON.stringify(area_json));
-		$("#submiting").html("<img src='/css/img/small-loading.gif'>上传中,请稍候...");
-		$("input[name='taskPassword']").val($.md5($("input[name='taskPassword']").val()));
-		$("#form").data('bootstrapValidator').disableSubmitButtons(true).defaultSubmit();
+		$("#submiting").html("<img src='/css/img/small-loading.gif'>状态检查中,请稍候...");
+	    $.ajax({
+	        url: "/task/split/ecue_status",
+	        type: "POST",
+	        async: true,
+	        dataType: "text",
+	        success: function(data){
+	        	data = eval("("+data+")");
+				if(data.error_code == 0){
+					$("#submiting").html("<img src='/css/img/small-loading.gif'>上传中,请稍候...");
+					$('#areaJson').val(JSON.stringify(area_json));
+		    		$("input[name='taskPassword']").val($.md5($("input[name='taskPassword']").val()));
+		    		$("#form").data('bootstrapValidator').disableSubmitButtons(true).defaultSubmit();
+				}else{
+					$("#submiting").html("");
+					$('#form').bootstrapValidator('disableSubmitButtons', false);
+					alert(data.msg);
+				}
+	        }
+	    });
 	}else{
 		$('#form').bootstrapValidator('disableSubmitButtons', false);
 	}

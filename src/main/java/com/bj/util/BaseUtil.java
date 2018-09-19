@@ -281,6 +281,14 @@ public class BaseUtil {
             return false;
         }
     }
+	
+	public static String getErrMsg(String errCode) {
+		String msg = ErrorMessage.getProperty(errCode+"");
+		if(msg == null && errCode != null) {
+			msg = errCode+"";
+		}
+		return msg;
+	}
     
 	public static void main(String[] args) throws IOException, InterruptedException {
 	}
