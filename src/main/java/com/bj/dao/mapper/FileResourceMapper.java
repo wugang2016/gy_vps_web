@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.bj.pojo.FileResource;
 
@@ -25,15 +26,15 @@ public interface FileResourceMapper {
             @Result(property = "fileDesc", column = "file_desc")})
     FileResource findById(@Param("id") int id);
 	
-    @Select("SELECT * FROM tbl_file_src order by src_file_id desc " +
-            "LIMIT #{offset}, #{rowCount} ")
+    @Select("SELECT * FROM tbl_file_src where type != 255 order by src_file_id desc " +
+            "LIMIT #{offset}, #{rowCount}")
     @Results(value = {
             @Result(property = "id", column = "src_file_id"),
             @Result(property = "filePath", column = "file_path"),
             @Result(property = "fileDesc", column = "file_desc")})
     List<FileResource> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
 
-    @Select("SELECT count(1) FROM tbl_file_src")
+    @Select("SELECT count(1) FROM tbl_file_src where type != 255")
     int countAll();
 
     @Delete("DELETE FROM tbl_file_src where src_file_id=#{id}")
@@ -48,4 +49,11 @@ public interface FileResourceMapper {
             "   (#{filePath}, #{fileDesc}, #{type})")
     @Options(useGeneratedKeys=true,keyColumn="src_file_id")
     int insert(FileResource fileResource);
+
+    @Update("UPDATE tbl_file_src t set" +
+    		"   t.filePath = #{filePath}, " +
+    		"   t.fileDesc = #{fileDesc}, " +
+    		"   t.type = #{type} where t.src_file_id=#{id}"
+    		)
+	int update(FileResource fileResource);
 }

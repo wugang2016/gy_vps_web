@@ -202,22 +202,44 @@ public class SplitTemplatesController {
             redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_FILE_SPLIT_TEMPLATE_DELETE_FAILED_EXISTEDFILESPLITTASK));
             return "redirect:/manage/split_templates/list";
     	}
-//    	if(realplayTaskService.countByTemplateId(id) > 0) {
+    	boolean refrenceByRelayplay = false;
+    	if(realplayTaskService.countByTemplateId(id) > 0) {
 //            redirectAttributes.addFlashAttribute("hasError", true);
 //            redirectAttributes.addFlashAttribute("message", "实时文件播放任务使用此模板，禁止删除！");
 //            return "redirect:/manage/split_templates/list";
-//    	}
-//    	
+    		refrenceByRelayplay = true;
+    	}
+    	
     	//先删除模板对应的切割区域
     	if(fileAreaService.deteleByTemplateId(id) >= 0) {
-			if(splitTemplatesService.delete(id) > 0){
-//	            redirectAttributes.addFlashAttribute("message", "删除成功！");
-	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_DELETE_SUCCESS));
-	    	}else{
-	            redirectAttributes.addFlashAttribute("hasError", true);
-//	            redirectAttributes.addFlashAttribute("message", "删除失败！");
-	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DELETE_FAILED));
-	    	}
+    		if(!refrenceByRelayplay) {
+    			if(splitTemplatesService.delete(id) > 0){
+//    	            redirectAttributes.addFlashAttribute("message", "删除成功！");
+    	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_DELETE_SUCCESS));
+    	    	}else{
+    	            redirectAttributes.addFlashAttribute("hasError", true);
+//    	            redirectAttributes.addFlashAttribute("message", "删除失败！");
+    	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DELETE_FAILED));
+    	    	}
+    		}else {
+    			SplitTemplates tmt = splitTemplatesService.findById(id);
+    			if(tmt!=null) {
+    				tmt.setType(255);
+        			if(splitTemplatesService.update(tmt) > 0){
+//        	            redirectAttributes.addFlashAttribute("message", "删除成功！");
+        	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.INFO_DELETE_SUCCESS));
+        	    	}else{
+        	            redirectAttributes.addFlashAttribute("hasError", true);
+//        	            redirectAttributes.addFlashAttribute("message", "删除失败！");
+        	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DELETE_FAILED));
+        	    	}
+    			}else {
+    				redirectAttributes.addFlashAttribute("hasError", true);
+//     	            edirectAttributes.addFlashAttribute("message", "删除失败！");
+     	            redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_DELETE_FAILED));
+    			}
+    		}
+			
     	}else {
             redirectAttributes.addFlashAttribute("hasError", true);
 //            redirectAttributes.addFlashAttribute("message", "删除对应切割区域失败！");

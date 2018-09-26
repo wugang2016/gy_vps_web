@@ -6,7 +6,7 @@ public class FileResource {
 	
 	private Integer id;
 	private String filePath;
-	private Integer type;
+	private Integer type;  //255:deleted 0:realplay file
 	private String fileDesc;
 	
 	private Boolean goPlay;

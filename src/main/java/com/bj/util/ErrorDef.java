@@ -73,6 +73,8 @@ public class ErrorDef {
 	
 	//file realplay task page error
 	public static final int ERR_FILE_REALPLAY_NEW_NO_VIDEO = -4300;
+	public static final int ERR_FILE_REALPLAY_VIDEO_DELETED = -4301;
+	public static final int ERR_FILE_REALPLAY_TEMPLATE_DELETED = -4302;
 	
 	//file split task page err
 	public static final int ERR_FILE_SPLIT_TASK_DELETE_FAILED_EXISTEDDISPATCHTASK = -4400;

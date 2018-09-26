@@ -21,7 +21,7 @@ public class SplitTemplates {
 	@NotBlank(message = "描述不能为空")	
 	@Size(min = 1, max = 255, message = "描述长度最大为255字节")
 	private String desc;
-	private Integer type;
+	private Integer type;  //0:正常切割模板 1:默认模板 2:0切割模板 255:已被删除的模板
 	
 	private List<FileArea> fileAreas;
 	/**

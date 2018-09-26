@@ -248,7 +248,9 @@ public class RealplayTaskController {
     							final RedirectAttributes redirectAttributes) throws IOException {
     	//去掉约束历史记录的
     	FileResource file = fileResourceService.findById(id);
-		if(fileResourceService.delete(id) > 0){
+    	file.setType(255); //255:mark file deleted
+
+		if(fileResourceService.update(file) > 0){
 			if(file != null) {
 				String filepath = uploadFileDir + File.separator + file.getFilePath();
 				BaseUtil.deleteFile(filepath);
@@ -308,6 +310,15 @@ public class RealplayTaskController {
             return ErrorMessage.getErrMsg(ErrorDef.ERR_TASK_PASS_ERROR);
     	}
     	RealplayTask realplayTask = realplayTaskService.findById(id);
+    	if(realplayTask.getFileResource() != null) {
+    		if(realplayTask.getFileResource().getType() != 0) {
+    			return ErrorMessage.getErrMsg(ErrorDef.ERR_FILE_REALPLAY_VIDEO_DELETED);
+    		}
+    	}
+    	if(realplayTask.getSplitTemplate().getType() == 255) {
+    		return ErrorMessage.getErrMsg(ErrorDef.ERR_FILE_REALPLAY_TEMPLATE_DELETED);
+    	}
+    	
     	realplayTask.setRepeate(repeate);
     	realplayTask.setHhTime(hhTime);
     	realplayTask.setMmTime(mmTime);

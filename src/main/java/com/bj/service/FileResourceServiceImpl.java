@@ -51,5 +51,11 @@ public class FileResourceServiceImpl implements FileResourceService {
 	public int insert(FileResource fileResource) {
 		return fileResourceMapper.insert(fileResource);
 	}
+
+	@Override
+	public int update(FileResource fileResource) {
+		// TODO Auto-generated method stub
+		return fileResourceMapper.update(fileResource);
+	}
 	
 }
