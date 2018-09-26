@@ -85,14 +85,15 @@ public class ExportController {
     	List<File> fileList = new ArrayList<>();
 		ApplicationHome home = new ApplicationHome(getClass());
 	    File jarFile = home.getSource();
-	    File webLogsDir = new File(jarFile.getParentFile().getPath() + File.separator + "logs");
-		fileList.add(webLogsDir);
+//	    File webLogsDir = new File(jarFile.getParentFile().getPath() + File.separator + "logs");
+//		fileList.add(webLogsDir);
     	File vpsFileDir = new File(vpsLogsDir);
     	if(vpsFileDir.exists()) {
     		fileList.add(vpsFileDir);
-    	}else if(!webLogsDir.exists()) {
-    		return "-1";
     	}
+//    	}else if(!webLogsDir.exists()) {
+//    		return "-1";
+//    	}
 		String zipPath = Contants.DOWNLOAD_TEMP_DIR + BaseUtil.getStrRandom(Contants.FILE_NAME_LENGTH) + ".zip";
 		File zipFileDir = new File(Contants.DOWNLOAD_TEMP_DIR);
 		if(!zipFileDir.exists()) {
