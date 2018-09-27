@@ -51,8 +51,8 @@ public interface FileResourceMapper {
     int insert(FileResource fileResource);
 
     @Update("UPDATE tbl_file_src t set" +
-    		"   t.filePath = #{filePath}, " +
-    		"   t.fileDesc = #{fileDesc}, " +
+    		"   t.file_path = #{filePath}, " +
+    		"   t.file_desc = #{fileDesc}, " +
     		"   t.type = #{type} where t.src_file_id=#{id}"
     		)
 	int update(FileResource fileResource);
