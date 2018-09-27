@@ -63,9 +63,9 @@ public class SplitTemplatesController {
     public String goList(Map<String, Object> model,
             HttpServletRequest request,
             @RequestParam(value = "p", defaultValue = "1") int page) {
-    	int count = splitTemplatesService.countAll();
-    	List<SplitTemplates> subs = splitTemplatesService.findAll((page - 1) * Pagination.DEFAULT_PAGE_SIZE, Pagination.DEFAULT_PAGE_SIZE);
-    	subs.addAll(splitTemplatesService.findDefaultTemplatesByType(2));
+    	int count = splitTemplatesService.countAllNotDefault();
+    	List<SplitTemplates> subs = splitTemplatesService.findAllNotDefault((page - 1) * Pagination.DEFAULT_PAGE_SIZE, Pagination.DEFAULT_PAGE_SIZE);
+//    	subs.addAll(splitTemplatesService.findDefaultTemplatesByType(2));
         Pagination pagination = new Pagination(request, page, count, Pagination.DEFAULT_PAGE_SIZE);
         model.put("splitTemplates", subs);
         model.put("pagination", pagination);

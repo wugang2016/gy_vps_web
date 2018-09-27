@@ -61,4 +61,16 @@ public class SplitTemplatesServiceImpl implements SplitTemplatesService {
 	public List<SplitTemplates> findDefaultTemplatesByType(int type) {
 		return splitTemplatesMapper.findDefaultTemplatesByType(type);
 	}
+
+	@Override
+	public List<SplitTemplates> findAllNotDefault(int offset, int rowCount) {
+		// TODO Auto-generated method stub
+		return splitTemplatesMapper.findAllNotDefault(offset,rowCount);
+	}
+
+	@Override
+	public int countAllNotDefault() {
+		// TODO Auto-generated method stub
+		return splitTemplatesMapper.countAllNotDefault();
+	}
 }

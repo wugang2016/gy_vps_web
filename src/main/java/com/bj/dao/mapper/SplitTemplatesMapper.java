@@ -34,6 +34,16 @@ public interface SplitTemplatesMapper {
     @Results(value = {
             @Result(property = "id", column = "template_id")})
     List<SplitTemplates> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
+    
+    
+    @Select("SELECT * FROM tbl_file_split_template where (type = 0 or type = 2) order by template_id desc " +
+            "LIMIT #{offset}, #{rowCount} ")
+    @Results(value = {
+            @Result(property = "id", column = "template_id")})
+	List<SplitTemplates> findAllNotDefault(@Param("offset") int offset, @Param("rowCount") int rowCount);
+    
+    @Select("SELECT count(1) FROM tbl_file_split_template where (type = 0 or type = 2)")
+    int countAllNotDefault();
 
     @Select("SELECT count(1) FROM tbl_file_split_template where type = 0")
     int countAll();

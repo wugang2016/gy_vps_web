@@ -13,11 +13,13 @@ import com.bj.pojo.SplitTemplates;
  */
 public interface SplitTemplatesService {
 	List<SplitTemplates> findAll(int offset,  int rowCount);
+	List<SplitTemplates> findAllNotDefault(int offset,  int rowCount);
 	int countAll();
 	int insert(SplitTemplates splitTemplates);
 	int update(SplitTemplates splitTemplates);
 	int delete(int id);
 	SplitTemplates findById(int id);
     List<SplitTemplates> findDefaultTemplatesByType(int type);
+	int countAllNotDefault();
  
 }
