@@ -21,7 +21,7 @@
 <nav class="navbar navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-           <div><span class="logo"><img src="/css/img/logo-1.png" height="18" width="82"></span><span class="logo-s"> | </span><span class="logo-2"> Video Splitter</span><span class="logo-3"> 照明视频切分软件</span></div>
+           <div><span class="logo"><img src="/css/img/title.png" height="28" width="420"></span></div>
            
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -121,7 +121,35 @@
 		                    {{/realplayTasks}}
 		                    </tbody>
 		                </table>
-		                {{#showMore?}}<div class="text-right"><a href="{{ctx.contextPath}}/task/realplay/history">>>更多历史任务</a></div>{{/showMore?}}
+		                {{#pagination_task}}
+		                <nav aria-label="Page navigation" class="text-center">
+		                    <ul class="pagination">
+		                        {{#hasPreviousPage}}
+		                        <li>
+		                            <a href="{{previousPageUri}}" aria-label="Previous">
+		                                <span aria-hidden="true">&laquo;</span>
+		                            </a>
+		                        </li>
+		                        {{/hasPreviousPage}}
+		                        {{#pageList}}
+		                        {{#isCurrent}}
+		                        <li class="active"><a>{{pageNo}}</a></li>
+		                        {{/isCurrent}}
+		                        {{^isCurrent}}
+		                        <li><a href="{{pageUri}}">{{pageNo}}</a></li>
+		                        {{/isCurrent}}
+		                        {{/pageList}}
+		                        {{#hasNextPage}}
+		                        <li>
+		                            <a href="{{nextPageUri}}" aria-label="Next">
+		                                <span aria-hidden="true">&raquo;</span>
+		                            </a>
+		                        </li>
+		                        {{/hasNextPage}}
+		                    </ul>
+		                </nav>
+		                {{/pagination_task}}
+		                <!-- {{#showMore?}}<div class="text-right"><a href="{{ctx.contextPath}}/task/realplay/history">>>更多历史任务</a></div>{{/showMore?}} -->
 		            </div>
          		</div>   
      		

@@ -85,12 +85,17 @@ public class RealplayTaskController {
             HttpServletRequest request,
             @RequestParam(value = "tab", defaultValue = "1") int tab,
             @RequestParam(value = "a", defaultValue = "0") int refresh,
-            @RequestParam(value = "p", defaultValue = "1") int page) {
+            @RequestParam(value = "p", defaultValue = "1") int page,
+            @RequestParam(value = "p0", defaultValue = "1") int pageTask) {
     	//最近任务
-    	int showNum = 5;
+    	//int showNum = 5;
     	int count = realplayTaskService.countAll();
-    	List<RealplayTask> realplayTasks = realplayTaskService.findAll(0, "down", 0, showNum);
-        model.put("showMore?", count > showNum);
+    	//List<RealplayTask> realplayTasks = realplayTaskService.findAll(0, "down", 0, showNum);
+    	List<RealplayTask> realplayTasks = realplayTaskService.findAll(0, "down", (pageTask - 1) * Pagination.DEFAULT_PAGE_SIZE, Pagination.DEFAULT_PAGE_SIZE);
+        Pagination pagination_task = new Pagination(request, pageTask, count, Pagination.DEFAULT_PAGE_SIZE);
+        pagination_task.setPageParameter("p0");
+        model.put("pagination_task", pagination_task);
+        //model.put("showMore?", count > showNum);
         model.put("realplayTasks", realplayTasks);
         
         //文件管理

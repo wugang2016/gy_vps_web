@@ -25,6 +25,10 @@ public class Pagination {
     private int currentPageNo;
     private int totalPageNo;
     private List<Page> pageList;
+    
+    public void setPageParameter(String pageParameter) {
+    	this.pageParameter = pageParameter;
+    }
 
     public Pagination(HttpServletRequest request, int currentPageNo, int totalItemCount, int pageItemCount) {
         this(request, currentPageNo, (totalItemCount + pageItemCount - 1) / pageItemCount);
