@@ -69,14 +69,14 @@
             </div>
             <form class="form-horizontal" method="post" id="form" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="inputCode" class="col-sm-2 control-label">任务名称</label>
+                    <label for="inputCode" class="col-sm-2 control-label">切割任务名称</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="taskName" placeholder="任务名称" value="{{#splitTask}}{{#taskName}}{{.}}{{/taskName}}{{/splitTask}}"  required maxlength="30">
+                        <input type="text" class="form-control"  name="taskName" placeholder="切割任务名称" value="{{#splitTask}}{{#taskName}}{{.}}{{/taskName}}{{/splitTask}}"  required maxlength="30">
                         {{#taskNameErr}}<span class="error">{{.}}</span>{{/taskNameErr}}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputName" class="col-sm-2 control-label">文件切割模板</label>
+                    <label for="inputName" class="col-sm-2 control-label">切割模板名称</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="splitTemplate.id" id="templateId" onchange="changeTemplate()">
                         	{{#templates}}
@@ -93,7 +93,7 @@
 			                    <thead>
 			                    <tr>
 			                        <!--<th>#ID</th> -->
-			                        <th>e:cue主机</th>
+			                        <th>e:cue设备</th>
 			                        <th>左上角横坐标</th>
 			                        <th>左上角纵坐标</th>
 			                        <th>区域宽度</th>
@@ -107,11 +107,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputCode" class="col-sm-2 control-label">视频文件</label>
+                    <label for="inputCode" class="col-sm-2 control-label">源视频文件</label>
                     <div class="col-sm-10">
 	                    <label class="btn btn-primary fileinput-button" style="width:200px" data-placement="auto right" data-trigger="manual">
 	                 		<i class="glyphicon glyphicon-upload"></i>
-	                    	<span>视频文件选择</span>
+	                    	<span>源视频文件选择</span>
 	               			<input type="file" name="file" accept="video/x-ms-wmv">
 	                     </label>
                     </div>

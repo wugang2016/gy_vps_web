@@ -58,7 +58,7 @@
                     <ul style="display: block;">
                         <li class="active"><a href="{{ctx.contextPath}}/admin/set">高级设置</a></li>
                         <li><a href="{{ctx.contextPath}}/manage/logs_download">日志下载</a></li>
-                         <!--<li><a href="{{ctx.contextPath}}/admin/about">关于</a></li> -->
+                        <li><a href="{{ctx.contextPath}}/admin/about">关于</a></li>
                     </ul>
                 </li>
             </ul>
@@ -113,7 +113,7 @@
 				        <p>
 				         	<div class="page-header">
 				                <h3>&nbsp;&nbsp;修改管理密码
-				                    <small>高级设置登录密码</small>
+				                    <small>系统登录密码</small>
 				                </h3>
 				            </div>
 				        	<form id="form2" class="form-horizontal" action="{{ctx.contextPath}}/admin/setPwd" method="post">
@@ -147,7 +147,7 @@
 				        <p>
 				         	<div class="page-header">
 				                <h3>&nbsp;&nbsp;修改任务密码
-				                    <small>任务下发密码</small>
+				                    <small>任务执行密码</small>
 				                </h3>
 				            </div>
 				        	<form id="form3" class="form-horizontal" action="{{ctx.contextPath}}/admin/setTaskPwd" method="post">
@@ -214,8 +214,8 @@
 				    <div class="tab-pane fade" id="tab5">
 				        <p>
 				        	<div class="page-header">
-			                <h3>&nbsp;&nbsp;License
-			                    <small>授权信息</small>
+			                <h3>&nbsp;&nbsp;授权信息
+			                    <small>License</small>
 			                </h3>
 			            </div>
 						<form id="form4" class="form-horizontal" action="{{ctx.contextPath}}/admin/upload_license" method="post" enctype="multipart/form-data">
@@ -264,13 +264,13 @@
 				        <p>
 				        	<div class="page-header">
 				                <h3>&nbsp;&nbsp;系统管理
-				                    <small>系统管理</small>
+				                    <small>服务器管理</small>
 				                </h3>
 				            </div>
 				            <div class="form-horizontal" >
 					            <div class="form-group">
 					                <div class="col-sm-offset-3 col-sm-9">
-					                    <button type="button" class="btn btn-primary" onclick="rebootCheck()">重启系统</button>
+					                    <button type="button" class="btn btn-primary" onclick="rebootCheck()">重启服务器</button>
 					                	<p id="reboot_line"></p>
 					                </div>
 					            </div>

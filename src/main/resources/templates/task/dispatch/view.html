@@ -19,14 +19,14 @@
 		&times;
 	</button>
 	<h4 class="modal-title" id="myModalLabel">
-		任务详细信息
+		分发任务详细信息
 	</h4>
 </div>
 <div class="modal-body">
     <div class="row">
         <div class="main form-horizontal">
             <div class="form-group">
-                <label for="inputCode" class="col-sm-2 control-label">任务名称</label>
+                <label for="inputCode" class="col-sm-2 control-label">分发任务名称</label>
                 <div class="col-sm-10">
                     <p class="form-control-static">{{#dispatchTask}}{{#taskName}}{{.}}{{/taskName}}{{/dispatchTask}}</p>
                 </div>
@@ -53,8 +53,8 @@
                    <thead>
                    <tr>
                        <!--<th>#ID</th> -->
-                       <th>e:cue主机</th>
-                       <th>文件名称</th>
+                       <th>e:cue设备</th>
+                       <th>切割文件名称</th>
                        <th>分发状态</th>
                        <th>返回结果</th>
                        <!-- <th>左上角横坐标</th>
