@@ -33,12 +33,22 @@ public class AndroidRealplayArea implements Serializable {
 	//Column(name="template_id")
 	private Integer templateId;
 
+	private Integer mode;
+
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getMode() {
+		return mode;
+	}
+
+	public void setMode(Integer mode) {
+		this.mode = mode;
 	}
 
 	public Integer getX() {

@@ -59,10 +59,10 @@ public interface AndroidRealplayAreaMapper {
     
     @Insert("<script>" +
             "INSERT INTO tbl_android_realplay_area " +
-            "   (template_id,pos_x, pos_y, w, h,sub_sys_id) " +
+            "   (template_id,pos_x, pos_y, w, h,sub_sys_id,mode) " +
             "VALUES " +
             "<foreach item='androidRealplayAreas' collection='list' separator=','>" +
-            "   (#{androidRealplayAreas.templateId}, #{androidRealplayAreas.x}, #{androidRealplayAreas.y}, #{androidRealplayAreas.w}, #{androidRealplayAreas.h}, #{androidRealplayAreas.subSystem.id}) " +
+            "   (#{androidRealplayAreas.templateId}, #{androidRealplayAreas.x}, #{androidRealplayAreas.y}, #{androidRealplayAreas.w}, #{androidRealplayAreas.h}, #{androidRealplayAreas.subSystem.id}, #{androidRealplayAreas.mode}) " +
             "</foreach>" +
             "</script>")
     int batchInsert(@Param("list") List<AndroidRealplayArea> androidRealplayAreas);
@@ -73,6 +73,7 @@ public interface AndroidRealplayAreaMapper {
     		"   t.pos_y = #{y}, " +
     		"   t.w = #{w}, " +
     		"   t.h = #{h}, " +
+    		"   t.mode = #{mode}, " +
     		"   t.sub_sys_id = #{subSystem.id} " +
             "   where area_id=#{id}")
     int update(AndroidRealplayArea androidRealplayArea);

@@ -91,6 +91,7 @@
 			                        <th>左上角纵坐标</th>
 			                        <th>区域宽度</th>
 			                        <th>区域高度</th>
+			                        <th>模式</th>
 			                        <th>操作</th>
 			                    </tr>
 			                    </thead>
@@ -216,6 +217,15 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="inputName" class="col-sm-3 control-label">模式</label>
+                    <div class="col-sm-9">
+                        <select class="form-control" name="mode">
+                        	<option value="0">默认模式</option>
+                        	<option value="1">太升模式</option>
+                        </select>         
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="inputEditingEnd" class="col-sm-3 control-label"></label>
                     <div class="col-sm-9">
 						<div class="checkbox">
@@ -296,6 +306,7 @@ $('#myModal').on('show.bs.modal', function(event) {
 				$("select[name='subSystem_id']").val(obj.subSystem.id);
 				$("input[name='x']").val(obj.x);
 				$("input[name='y']").val(obj.y);
+				$("select[name='mode']").val(obj.mode);
 				$("input[name='width']").val(obj.w);
 				$("input[name='height']").val(obj.h);
 			}
@@ -368,6 +379,8 @@ function setArea(){
 			var y = $('input[name="y"]').val();
 			var width = $('input[name="width"]').val();
 			var height = $('input[name="height"]').val();
+			var mode = $('select[name="mode"]').val();
+			var mode_name = $('select[name="mode"]').find("option:selected").text();
 			
 			var index = $('#index').val();
 			var newAreaTD = "<td>" + subSystem_name + "<input type='hidden' id='ss_" + subSystem_id +"'></td><td>";
@@ -375,6 +388,7 @@ function setArea(){
 			newAreaTD += y + "</td><td>";
 			newAreaTD += width + "</td><td>";
 			newAreaTD += height + "</td><td>";
+			newAreaTD += mode_name + "</td><td>";
 			newAreaTD += "<a href='#' data-toggle='modal' data-target='#myModal' data-index='"+index+"' data-ssid='"+subSystem_id+"'>编辑</a> ";
 			newAreaTD += "<a href='#' onclick='deleteArea("+index+")'>删除</a></td>";
 	
@@ -387,6 +401,7 @@ function setArea(){
 						obj.y = y;
 						obj.w = width;
 						obj.h = height;
+						obj.mode = mode;
 					}
 				});
 			}else{ //新增
@@ -396,7 +411,7 @@ function setArea(){
 				var newTR = "<tr id='tr_"+index+"'>" + newAreaTD + "</tr>";
 				$('#area_div').append(newTR);
 				//存入json
-				area_json.push({"index1":index,"x":x,"y":y,"w":width,"h":height,"subSystem":{"id":subSystem_id}});
+				area_json.push({"index1":index,"x":x,"y":y,"w":width,"h":height,"mode":mode,"subSystem":{"id":subSystem_id}});
 			}
 					
 			//隐藏并清空
@@ -407,6 +422,7 @@ function setArea(){
 			$('input[name="y"]').val('');
 			$('input[name="width"]').val('');
 			$('input[name="height"]').val('');
+			$('select[name="mode"]').val('0');
 			$('#index').val("");
 			$('#ssid').val("");
 			

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class InfoMessage {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ErrorMessage.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(InfoMessage.class);
 	private static Properties props;
 	private static Map<String, String> map = new HashMap<>();
 
