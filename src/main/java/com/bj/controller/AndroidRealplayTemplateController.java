@@ -66,6 +66,12 @@ public class AndroidRealplayTemplateController {
     @Value("${bijie.upload.file.path}")
     private String uploadFileDir;
     
+    @Value("${bijie.send.udp.ip}")
+    private String ip;
+
+    @Value("${bijie.send.udp.port}")
+    private int port;
+    
     @GetMapping("/android_template/list")
     public String goList(Map<String, Object> model,
             HttpServletRequest request,
@@ -331,6 +337,11 @@ public class AndroidRealplayTemplateController {
     @PostMapping("/android_template/{id}/delete")
     public String doDelete(@PathVariable("id") int id,
     							final RedirectAttributes redirectAttributes) throws IOException {   
+    	if(!queryCanRemove(id)){
+    		redirectAttributes.addFlashAttribute("hasError", true);
+    		redirectAttributes.addFlashAttribute("message", ErrorMessage.getErrMsg(ErrorDef.ERR_ANDROID_REAL_TEMPLATE_DELETE_FAILED_EXITSE_REALTIME_TASK));
+    		return "redirect:/manage/android_template/list";
+    	}
     	
     	AndroidRealplayTemplate oldAndroidRealplayTemplate = androidRealplayTemplateService.findById(id);
     	//先删除模板对应的切割区域
@@ -440,5 +451,21 @@ public class AndroidRealplayTemplateController {
         	LOGGER.error(e.getMessage(),e);
 		}
         return new ResponseEntity<>(pic,he,HttpStatus.OK);  
+    }
+    
+    public boolean queryCanRemove(int id) throws IOException {
+    	try {
+    		String msg = "{\"opt\":\"can_rmv_anroid_template\",\"id\":";
+    		msg += id;
+    		msg += "}";
+	    	String result = BaseUtil.udpSend(ip, port, msg);
+	    	LOGGER.debug(result);
+	    	JSONObject obj = JSONObject.fromObject(result);
+	    	boolean isbusy = obj.getBoolean("is_busy");
+	        return !isbusy;
+    	}catch(Exception e) {
+    		LOGGER.error("UDP接口无响应! {}",e.getMessage());
+            return false;
+    	}
     }
 }

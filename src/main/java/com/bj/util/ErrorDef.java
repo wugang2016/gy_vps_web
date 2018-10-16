@@ -67,6 +67,8 @@ public class ErrorDef {
 	public static final int ERR_ANDROID_REAL_TEMPLATE_NO_BACKVIDEO = -4102;
 	public static final int ERR_ANDROID_REAL_TEMPLATE_NO_SPLIT_AREA = -4103;
 	public static final int ERR_ANDROID_REAL_TEMPLATE_DELETE_SPLIT_AREA_FAILED = -4104;
+	public static final int ERR_ANDROID_REAL_TEMPLATE_DELETE_FAILED_EXITSE_REALTIME_TASK = -4105;
+
 	
 	//dispatch task page error
 	public static final int ERR_DISPATCH_TASK_NO_SUBTASK = -4200;
